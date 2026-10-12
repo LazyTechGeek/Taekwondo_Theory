@@ -6063,6 +6063,7 @@ const CATS={quest:'Theory questions',cmd:'Commands & dojang',move:'Movements',sp
    terms, patterns (with optional YouTube video and start/end times) and belt meanings. Every row has a fixed ID
    (T_10th-Kup_01, P_1st-Dan_3, B_White); play buttons and videos are tied to those IDs, never to the spelling. */
 const GRADE_IX={};GRADES.forEach((G,i)=>GRADE_IX[G.name.toLowerCase()]=i);
+GRADES[GRADES.length-1].name='5th Dan\u00a0+';   // shown as "5th Dan +": nothing new is taught after 5th Dan, so it covers 5th Dan and above (the workbook still says 5th_Dan)
 const SYL=GRADES.map((G,g)=>({g,terms:[],belt:null,patterns:[],questions:[]}));
 const ALL=JSON.parse(document.getElementById('allTheory').textContent);
 const gradeIx=v=>GRADE_IX[String(v).replace(/[_-]+/g,' ').trim().toLowerCase()];   // "10th_Kup" -> 0
@@ -6903,7 +6904,7 @@ function openPat(){stopTimers();sgStop();PAT.mode='mine';renderPat();show('pat')
 function renderPat(){
   $('#patMode').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===PAT.mode));
   const list=SYL.filter(s=>s.patterns.length&&(PAT.mode==='all'||inScope(s.g)));
-  $('#patRange').textContent=PAT.mode==='all'?'All 24 patterns, 9th Kup to 5th Dan':`From your settings: ${gradeLabel()}`;
+  $('#patRange').textContent=PAT.mode==='all'?'All 24 patterns, 9th Kup to 5th Dan\u00a0+':`From your settings: ${gradeLabel()}`;
   const play='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.500v13l11-6.500z"/></svg>';
   $('#patBody').innerHTML=list.length?list.map(s=>`<div class="patGrade">${beltHTML(s.g)}${GRADES[s.g].name}<small>${BELT_NAMES[s.g]}</small></div>`+
     s.patterns.map(p=>`<article class="patCard ${s.g===S.grade?'mine':''}">
@@ -8076,8 +8077,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.61';
+const APP_VERSION='3.62';
 const VERSION_NOTES=[
+  ['3.62','5th Dan is now shown as "5th Dan +" everywhere, because it covers 5th Dan and above.'],
   ['3.61','Banner subtitle removed; banner slimmer with the logo centred beside the title.'],
   ['3.60','Theory questions from the Questions tab: Grade questions in each grade of the Study Guide, General Knowledge under the last grade shown, Hide answers with a silent Reveal, separate question and answer play buttons. Questions also appear in the quizzes and games (new Theory questions topic).'],
   ['3.52','Banner no longer repeats your grade (it is shown in Settings), so the banner is slimmer.'],
