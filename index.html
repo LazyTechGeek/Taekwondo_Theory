@@ -464,7 +464,7 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 #home .hH{font-family:var(--hd);font-weight:400;letter-spacing:.01em;margin:0;color:#fff;text-transform:none}
 
 /* Hero */
-.hHero{position:relative;overflow:hidden;border-radius:20px;padding:18px 16px 14px;margin:2px 0 14px;
+.hHero{position:relative;overflow:hidden;border-radius:20px;padding:16px 16px 16px;margin:2px 0 14px;
   background:radial-gradient(120% 90% at 0% 0%,#2a1630 0,transparent 55%),radial-gradient(110% 100% at 100% 100%,#10265e 0,transparent 60%),linear-gradient(160deg,#141c30,#0b1120);
   border:1px solid #2b3658;box-shadow:0 10px 30px #0008,inset 0 1px 0 #ffffff14}
 .hHero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--hred) 0 50%,var(--hblue) 50%)}
@@ -803,7 +803,6 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
         <p class="sub">Korean terminology &amp; patterns, 10th Kup to 5th Dan</p>
       </div>
     </div>
-    <div class="hNow" id="homeGrade"></div>
   </header>
 
   <!-- SETTINGS -->
@@ -6123,7 +6122,6 @@ const BELT_NAMES=['White Belt','Yellow Tag','Yellow Belt','Green Tag','Green Bel
 function renderHome(){
   $('#grades').innerHTML=GRADES.map((G,i)=>`<button class="gOpt ${i===S.grade?'on':''}" data-g="${i}" role="option" aria-selected="${i===S.grade}">${beltHTML(i)}<b>${G.name}</b><small>${BELT_NAMES[i]}</small></button>`).join('');
   $('#gSelBtn').innerHTML=`${beltHTML(S.grade)}<b>${GRADES[S.grade].name}</b><small>${BELT_NAMES[S.grade]}</small>`;
-  $('#homeGrade').innerHTML=`${beltHTML(S.grade)}<span>Training as <b>${GRADES[S.grade].name}</b>, ${BELT_NAMES[S.grade]}</span>`;
   $('#home').classList.toggle('simple',!!S.simple);$('#simpleBtn').setAttribute('aria-checked',S.simple?'true':'false');
   seg($('#scope'),SCOPES,'scope');
   seg($('#dir'),DIRS,'dir');
@@ -7920,8 +7918,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.51';
+const APP_VERSION='3.52';
 const VERSION_NOTES=[
+  ['3.52','Banner no longer repeats your grade (it is shown in Settings), so the banner is slimmer.'],
   ['3.51','Backup & Restore moved into Advanced settings. Balloon Pop: 6 right balloons to pop per question (13 balloons) instead of 4 (9).'],
   ['3.50','Settings: grade dropdown, Topics and Question direction under Advanced settings, Export / Import game data. Practice renamed Learn and Practice. Every Mini Game and Game Show starts from the main settings and has its own Questions choice (My grade, Up to my grade, All grades, Between grades). New topics: Movements, Sparring & self-defence.'],
   ['3.46','Dan-Gun pattern meaning now plays dan-gun.mp3.'],
