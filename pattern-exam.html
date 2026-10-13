@@ -3,98 +3,125 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Chon-Ji Video Quiz</title>
+<title>Chon-Ji Pattern Exam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Brush+Script&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
 <style>
-/* Layout: one column — the video on top, one panel underneath that switches between menu, question and result. */
+/* Layout: a dark dojang — the video framed like the mat, a black-belt strip for the title,
+   and answers on dobok-white cards with the score in a red seal stamp. Single dark theme by design. */
 :root {
-  --bg: #eef1f6; --panel: #ffffff; --ink: #14203a; --muted: #5a6680; --line: #d5dbe7;
-  --accent: #1d3f99; --accent-ink: #ffffff; --gold: #c99a00;
-  --good: #1e8a4c; --good-bg: #e3f4ea; --bad: #c23b2f; --bad-bg: #fbe7e5;
-  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
-  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: light;
+  --night: #101114;          /* hall at night */
+  --lacquer: #1b1c21;        /* panels */
+  --edge: #2f3038;
+  --dobok: #f4f2ec;          /* uniform white */
+  --ink: #16171b;            /* text on white */
+  --muted: #9a9ca8;
+  --seal: #c8281e;           /* red seal stamp */
+  --blue: #1f4fbf;           /* taegeuk blue */
+  --gold: #e0b43c;           /* black-belt bars */
+  --good: #2ea86a; --bad: #d8463a;
+  --display: "Black Han Sans", "Arial Black", Impact, sans-serif;
+  --brush: "Nanum Brush Script", "Brush Script MT", cursive;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0d1424; --panel: #162039; --ink: #e8ecf5; --muted: #9aa6c0; --line: #2a3658;
-  --accent: #4f7cf0; --accent-ink: #ffffff; --gold: #f2c200;
-  --good: #4fd08a; --good-bg: #123323; --bad: #ff7b6e; --bad-bg: #3a1a18; color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --bg: #0d1424; --panel: #162039; --ink: #e8ecf5; --muted: #9aa6c0; --line: #2a3658;
-  --accent: #4f7cf0; --accent-ink: #ffffff; --gold: #f2c200;
-  --good: #4fd08a; --good-bg: #123323; --bad: #ff7b6e; --bad-bg: #3a1a18; color-scheme: dark; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 16px/1.45 var(--body); padding: env(safe-area-inset-top, 0px) 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
-.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 14px; padding-block: 14px; }
-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-h1 { font: 800 30px/1 var(--display); letter-spacing: 0.02em; text-transform: uppercase; margin: 0; }
-h1 span { color: var(--gold); }
-.hud { display: flex; gap: 14px; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
-.hud b { color: var(--ink); }
-.video { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background:
+    radial-gradient(120% 60% at 50% 0%, #22232b 0%, transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0 2px, transparent 2px 120px),
+    var(--night);
+  color: var(--dobok); font: 16px/1.45 var(--body);
+  padding: env(safe-area-inset-top, 0px) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; padding-block: 16px; }
+
+/* title on a black belt */
+.belt { position: relative; background: #050506; border-radius: 6px; padding: 12px 16px 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        box-shadow: inset 0 2px 0 rgba(255,255,255,0.06), inset 0 -3px 0 rgba(0,0,0,0.6); }
+.belt::after { content: ""; position: absolute; right: 108px; top: 0; bottom: 0; width: 30px;
+               background: repeating-linear-gradient(90deg, var(--gold) 0 5px, transparent 5px 10px); opacity: 0.9; }
+.belt h1 { margin: 0; display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.belt .ko { font: 400 30px/1 var(--brush); color: var(--seal); }
+.belt .en { font: 400 26px/1 var(--display); letter-spacing: 0.04em; color: var(--dobok); text-transform: uppercase; }
+.seal { position: relative; z-index: 1; flex: none; width: 74px; height: 58px; border: 3px solid var(--seal); border-radius: 6px; color: var(--seal);
+        display: grid; place-items: center; transform: rotate(-4deg); background: rgba(200,40,30,0.08); }
+.seal small { font: 600 10px var(--body); letter-spacing: 0.18em; text-transform: uppercase; line-height: 1; margin-top: 4px; }
+.seal b { font: 400 26px/1 var(--display); font-variant-numeric: tabular-nums; margin-top: -6px; }
+.seal.bump { animation: bump 0.35s ease-out; }
+@keyframes bump { 40% { transform: rotate(-4deg) scale(1.15); } }
+
+/* the video, framed like the mat */
+.mat { padding: 8px; border-radius: 10px; background: linear-gradient(135deg, var(--blue), #163a8c); box-shadow: 0 0 0 3px var(--seal) inset; }
+.video { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 4px; overflow: hidden; }
 .video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
-.panel h2 { font: 800 22px/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; margin: 0; text-wrap: balance; }
-.panel p { margin: 0; color: var(--muted); }
-button { font: 700 16px var(--body); border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 12px 16px; cursor: pointer; }
-button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-size: 18px; padding: 14px 20px; }
-.primary:disabled { opacity: 0.5; cursor: default; }
+
+/* panels */
+.panel { background: var(--lacquer); border: 1px solid var(--edge); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+.eyebrow { font: 600 12px var(--body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.panel h2 { margin: 0; font: 400 26px/1.15 var(--display); letter-spacing: 0.02em; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); max-width: 60ch; }
+.rules { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: 15px; }
+.rules li { display: flex; gap: 10px; align-items: baseline; }
+.rules b { color: var(--dobok); font-variant-numeric: tabular-nums; min-width: 2.2em; }
+
+button { font: 700 16px var(--body); cursor: pointer; border-radius: 8px; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.start { justify-self: start; background: var(--seal); color: #fff; border: 0; padding: 14px 26px; font: 400 22px/1 var(--display); letter-spacing: 0.08em; text-transform: uppercase;
+         box-shadow: 0 4px 0 #7d140e; transition: transform 0.08s, box-shadow 0.08s; }
+.start:active { transform: translateY(3px); box-shadow: 0 1px 0 #7d140e; }
+.start:disabled { opacity: 0.5; cursor: default; }
+
 .options { display: grid; gap: 10px; }
-.opt { text-align: left; display: flex; gap: 12px; align-items: center; }
-.opt .k { font: 800 18px var(--display); width: 30px; height: 30px; border-radius: 6px; display: grid; place-items: center; background: var(--bg); flex: none; }
-.opt.wrong { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); cursor: default; }
-.opt.right { background: var(--good-bg); border-color: var(--good); color: var(--good); }
-.verdict { font: 800 22px var(--display); text-transform: uppercase; letter-spacing: 0.03em; min-height: 1.2em; }
+.opt { text-align: left; display: flex; gap: 14px; align-items: center; background: var(--dobok); color: var(--ink); border: 2px solid transparent; padding: 12px 14px; font: 600 16px var(--body); }
+.opt .k { font: 400 20px/1 var(--display); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--dobok); flex: none; }
+.opt:hover:not(:disabled) { border-color: var(--gold); }
+.opt.wrong { background: #3a1e1c; color: #f1b6b0; border-color: var(--bad); cursor: default; }
+.opt.wrong .k { background: var(--bad); }
+.opt.right { background: #183a29; color: #b7ecd0; border-color: var(--good); }
+.opt.right .k { background: var(--good); }
+.opt:disabled { cursor: default; }
+.verdict { font: 400 24px/1.1 var(--display); letter-spacing: 0.03em; min-height: 1.1em; }
 .verdict.good { color: var(--good); } .verdict.bad { color: var(--bad); }
-.eyebrow { font: 600 14px var(--display); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
-.big { font: 800 56px/1 var(--display); font-variant-numeric: tabular-nums; }
-.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-details { border-top: 1px solid var(--line); padding-top: 12px; }
-summary { cursor: pointer; font-weight: 700; }
-.stops { display: grid; gap: 8px; margin-top: 12px; }
-.stop { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: center; }
-.stop input { width: 100%; font: 16px var(--body); font-variant-numeric: tabular-nums; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
-.stop span { min-width: 0; font-size: 14px; }
-label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
-.note { font-size: 13px; color: var(--muted); }
-.err { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
-@media (prefers-reduced-motion: no-preference) { .panel { animation: rise 0.18s ease-out; } @keyframes rise { from { transform: translateY(6px); opacity: 0.6; } } }
+
+.watch { display: flex; align-items: center; gap: 12px; }
+.watch .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--seal); flex: none; }
+@media (prefers-reduced-motion: no-preference) { .watch .dot { animation: pulse 1.2s ease-in-out infinite; } @keyframes pulse { 50% { opacity: 0.25; } } }
+
+.big { font: 400 64px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--dobok); }
+.big small { font-size: 0.45em; color: var(--muted); }
+.err { border-color: var(--bad); }
+.err p { color: #f1b6b0; }
+@media (max-width: 420px) { .belt::after { right: 96px; } .belt .en { font-size: 22px; } .belt .ko { font-size: 26px; } }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Chon-Ji <span>·</span> what's next?</h1>
-    <div class="hud"><span>Time <b id="time">0:00.00</b></span><span>Score <b id="score">0</b></span></div>
+  <header class="belt">
+    <h1><span class="ko" lang="ko">천지</span><span class="en">Chon-Ji</span></h1>
+    <div class="seal" aria-label="Score"><small>Score</small><b id="score">0</b></div>
   </header>
 
-  <div class="video"><video id="player" src="videos/chon-ji.mp4" playsinline webkit-playsinline preload="auto" disablepictureinpicture></video></div>
+  <div class="mat"><div class="video"><video id="player" src="videos/chon-ji.mp4" playsinline webkit-playsinline preload="auto" disablepictureinpicture></video></div></div>
 
   <!-- MENU -->
   <section class="panel" id="menu">
     <div class="eyebrow">Pattern video test</div>
-    <h2 id="menuTitle">Watch Chon-Ji. It will stop twice and ask you for the next move.</h2>
-    <p id="menuText">Right first time scores a point. Each wrong answer loses a point, and the video waits until you pick the right one.</p>
-    <div class="row"><button class="primary" id="startBtn" disabled>Loading video…</button></div>
-    <details>
-      <summary>Pause points (for setting up)</summary>
-      <p class="note">Times are in seconds and can have decimals, e.g. 4.35. Change them here to fine-tune; your changes are remembered in this browser only.</p>
-      <div class="stops" id="stops"></div>
-      <div class="row" style="margin-top:12px">
-        <label class="check"><input type="checkbox" id="allStops"> Pause at every point (to check the timings)</label>
-        <button id="resetStops">Reset times</button>
-      </div>
-    </details>
+    <h2 id="menuTitle">Watch the pattern. When it stops, choose the next move.</h2>
+    <ul class="rules">
+      <li><b>3×</b> The video stops three times, at random moves.</li>
+      <li><b>+1</b> Right first time scores a point.</li>
+      <li><b>−1</b> Every wrong answer loses a point. The video waits until you get it right.</li>
+    </ul>
+    <button class="start" id="startBtn" disabled>Loading…</button>
   </section>
 
   <!-- QUESTION -->
   <section class="panel" id="question" hidden>
-    <div class="eyebrow" id="qCount">Question 1 of 2</div>
+    <div class="eyebrow" id="qCount">Question 1 of 3</div>
     <h2>What's the next move?</h2>
     <div class="options" id="options"></div>
     <div class="verdict" id="verdict" aria-live="polite"></div>
@@ -102,16 +129,14 @@ label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
 
   <!-- PLAYING -->
   <section class="panel" id="playing" hidden>
-    <div class="eyebrow">Watching</div>
-    <p>Keep watching. The video will stop and ask you what comes next.</p>
+    <div class="watch"><span class="dot"></span><p>Watch closely. It will stop and ask you what comes next.</p></div>
   </section>
 
   <!-- RESULT -->
   <section class="panel" id="result" hidden>
-    <div class="eyebrow">Pattern complete</div>
+    <div class="eyebrow">Baro — pattern complete</div>
     <div class="big" id="finalScore">0</div>
     <p id="finalText"></p>
-    <p class="note">Back to the menu in a moment…</p>
   </section>
 
   <section class="panel err" id="error" hidden><p id="errText"></p></section>
@@ -122,7 +147,7 @@ label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
 // ---------------- data (this is what would live in the spreadsheet) ----------------
 const START_AT = 36;         // seconds
 const END_AT = null;         // seconds; null = play to the end of the file
-const QUESTIONS_PER_RUN = 2;
+const QUESTIONS_PER_RUN = 3;
 // t = the moment just before the move starts; the answer is the move that comes next (hand is optional)
 const STOPS = [
   { t: 46, move: "Turn 180° right", tech: "low block" },
@@ -136,19 +161,18 @@ const HANDS = ["left", "right"];
 
 // ---------------- helpers ----------------
 const $ = id => document.getElementById(id);
-const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} } };
-const fmt = t => { t = Math.max(0, t || 0); const m = Math.floor(t / 60), s = t - m * 60; return `${m}:${s.toFixed(2).padStart(5, "0")}`; };
 const label = a => a.hand ? `${a.move} — ${a.hand} hand ${a.tech}` : `${a.move} — ${a.tech}`;
 const same = (a, b) => a.move === b.move && a.tech === b.tech && a.hand === b.hand;
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const pick = a => a[Math.floor(Math.random() * a.length)];
 function show(id) { for (const p of ["menu", "question", "playing", "result"]) $(p).hidden = p !== id; }
+function setScore(v) { const el = $("score"); el.textContent = v; const s = el.parentElement; s.classList.remove("bump"); void s.offsetWidth; s.classList.add("bump"); }
 
 // Wrong answers: change one or two parts of the right answer, so they all look believable
 function distractors(ans) {
   const out = [];
-  let guard = 0;
-  while (out.length < 3 && guard++ < 200) {
+  let tries = 0;
+  while (out.length < 3 && tries++ < 200) {
     const d = { ...ans };
     const parts = shuffle(ans.hand ? ["move", "tech", "hand"] : ["move", "tech"]).slice(0, Math.random() < 0.6 ? 1 : 2);
     for (const p of parts) d[p] = pick(p === "move" ? MOVES : p === "tech" ? TECHS : HANDS);
@@ -157,45 +181,28 @@ function distractors(ans) {
   return out;
 }
 
-// ---------------- pause-point editor ----------------
-let stops = STOPS.map(s => ({ ...s }));
-try { const saved = JSON.parse(store.get("chonji-stops") || "null"); if (Array.isArray(saved) && saved.length === STOPS.length) saved.forEach((t, i) => { if (typeof t === "number") stops[i].t = t; }); } catch (_) {}
-function renderStops() {
-  $("stops").innerHTML = "";
-  stops.forEach((s, i) => {
-    const row = document.createElement("div"); row.className = "stop";
-    row.innerHTML = `<input id="stop${i}" type="number" step="0.05" min="0" inputmode="decimal" aria-label="Pause point ${i + 1} in seconds"><span></span>`;
-    row.querySelector("input").value = s.t;
-    row.querySelector("span").textContent = label(s);
-    row.querySelector("input").addEventListener("change", e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { s.t = v; store.set("chonji-stops", JSON.stringify(stops.map(x => x.t))); } });
-    $("stops").appendChild(row);
-  });
-}
-$("resetStops").onclick = () => { stops = STOPS.map(s => ({ ...s })); store.set("chonji-stops", "null"); renderStops(); };
-renderStops();
-
 // ---------------- video player (plain MP4 from this site) ----------------
 const video = $("player");
-let player = {
+const player = {
   getCurrentTime: () => video.currentTime, getDuration: () => video.duration || 0,
   playVideo: () => { const p = video.play(); if (p && p.catch) p.catch(() => {}); }, pauseVideo: () => video.pause(),
   seekTo: t => { video.currentTime = t; }
 };
 let ready = false, game = null;
 function fail(msg) { $("errText").textContent = msg; $("error").hidden = false; }
-function markReady() { if (ready) return; ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Start"; }
+function markReady() { if (ready) return; ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Begin"; }
 video.addEventListener("loadedmetadata", () => { if (!game) video.currentTime = START_AT; markReady(); });
 if (video.readyState >= 1) markReady();
 video.addEventListener("error", () => fail("Couldn't load videos/chon-ji.mp4. Check the file is in the videos folder of the site."));
-setTimeout(markReady, 4000);   // some phones won't load anything until you tap, so allow Start anyway
+setTimeout(markReady, 4000);   // some phones won't load anything until you tap, so allow Begin anyway
+
 // ---------------- the game ----------------
 $("startBtn").onclick = () => {
   if (!ready) return;
-  const all = $("allStops").checked;
-  const chosen = (all ? stops.slice() : shuffle(stops).slice(0, QUESTIONS_PER_RUN)).sort((a, b) => a.t - b.t);
+  const chosen = shuffle(STOPS).slice(0, QUESTIONS_PER_RUN).sort((a, b) => a.t - b.t);
   game = { queue: chosen, asked: 0, total: chosen.length, score: 0, wrongs: 0, waiting: false, end: null };
   $("score").textContent = "0";
-  player.seekTo(START_AT, true);
+  player.seekTo(START_AT);
   player.playVideo();
   show("playing");
   requestAnimationFrame(tick);
@@ -203,10 +210,9 @@ $("startBtn").onclick = () => {
 
 function tick() {
   if (!game) return;
-  const t = player.getCurrentTime ? player.getCurrentTime() : 0;
-  $("time").textContent = fmt(t);
+  const t = player.getCurrentTime();
   if (!game.waiting) {
-    if (game.end === null) { const d = player.getDuration ? player.getDuration() : 0; if (d > 0) game.end = END_AT !== null ? END_AT : d - 0.4; }
+    if (game.end === null) { const d = player.getDuration(); if (d > 0) game.end = END_AT !== null ? END_AT : d - 0.4; }
     const next = game.queue[0];
     if (next && t >= next.t - 0.03) { player.pauseVideo(); game.queue.shift(); ask(next); }
     else if (game.end !== null && t >= game.end) { finish(); return; }
@@ -216,7 +222,7 @@ function tick() {
 
 function ask(stop) {
   game.waiting = true; game.wrongs = 0; game.asked++;
-  $("qCount").textContent = `Question ${game.asked} of ${game.total} · paused at ${fmt(stop.t)}`;
+  $("qCount").textContent = `Question ${game.asked} of ${game.total}`;
   $("verdict").textContent = ""; $("verdict").className = "verdict";
   const opts = shuffle([stop, ...distractors(stop)]);
   $("options").innerHTML = "";
@@ -235,28 +241,28 @@ function answer(btn, right) {
   if (!game || !game.waiting || btn.classList.contains("wrong")) return;
   if (!right) {
     game.wrongs++; game.score--; btn.classList.add("wrong");
-    $("verdict").textContent = game.wrongs === 1 ? "Incorrect · minus one point" : "Still incorrect · minus one point";
+    $("verdict").textContent = game.wrongs === 1 ? "Incorrect · −1" : "Still incorrect · −1";
     $("verdict").className = "verdict bad";
   } else {
     if (game.wrongs === 0) game.score++;
     btn.classList.add("right");
-    $("verdict").textContent = game.wrongs === 0 ? "Correct · plus one point" : "Correct · no point this time";
+    $("verdict").textContent = game.wrongs === 0 ? "Correct · +1" : "Correct · no point this time";
     $("verdict").className = "verdict good";
     $("options").querySelectorAll("button").forEach(b => b.disabled = true);
     setTimeout(() => { if (!game) return; game.waiting = false; show("playing"); player.playVideo(); }, 1100);
   }
-  $("score").textContent = game.score;
+  setScore(game.score);
 }
 
 function finish() {
   player.pauseVideo();
   const s = game.score, n = game.total; game = null;
-  $("finalScore").textContent = `${s} / ${n}`;
+  $("finalScore").innerHTML = `${s} <small>/ ${n}</small>`;
   $("finalText").textContent = s === n ? "Every answer right first time." : s > 0 ? "Some right first time. Have another go." : "Have another go and watch the moves closely.";
   show("result");
   setTimeout(() => {
     $("menuTitle").textContent = `Last go: ${s} out of ${n}. Ready for another?`;
-    $("startBtn").textContent = "Play again";
+    $("startBtn").textContent = "Go again";
     show("menu");
   }, 3500);
 }
