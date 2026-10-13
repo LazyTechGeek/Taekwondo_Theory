@@ -36,7 +36,7 @@ h1 span { color: var(--gold); }
 .hud { display: flex; gap: 14px; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
 .hud b { color: var(--ink); }
 .video { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
-.video > div, .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+.video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
 .panel h2 { font: 800 22px/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; margin: 0; text-wrap: balance; }
 .panel p { margin: 0; color: var(--muted); }
@@ -73,7 +73,7 @@ label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
     <div class="hud"><span>Time <b id="time">0:00.00</b></span><span>Score <b id="score">0</b></span></div>
   </header>
 
-  <div class="video"><div id="player"></div></div>
+  <div class="video"><video id="player" src="videos/chon-ji.mp4" playsinline webkit-playsinline preload="auto" disablepictureinpicture></video></div>
 
   <!-- MENU -->
   <section class="panel" id="menu">
@@ -120,16 +120,14 @@ label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
 <script>
 "use strict";
 // ---------------- data (this is what would live in the spreadsheet) ----------------
-const VIDEO_ID = "x4g7JMmD6gQ";
-const START_AT = 0;          // seconds
-const END_AT = null;         // seconds; null = stop 0.4 s before the video ends (avoids YouTube's end screen)
+const START_AT = 36;         // seconds
+const END_AT = null;         // seconds; null = play to the end of the file
 const QUESTIONS_PER_RUN = 2;
-// t = the moment just before the move starts; the answer is the move that comes next
+// t = the moment just before the move starts; the answer is the move that comes next (hand is optional)
 const STOPS = [
-  { t: 4,  move: "Turn 180° anticlockwise", tech: "middle block", hand: "right" },
-  { t: 7,  move: "Turn 90° clockwise",      tech: "low block",    hand: "left" },
-  { t: 13, move: "Turn 90° clockwise",      tech: "middle block", hand: "left" },
-  { t: 27, move: "Step backwards",          tech: "punch",        hand: "left" },
+  { t: 46, move: "Turn 180° anticlockwise", tech: "low block" },
+  { t: 49, move: "Turn 90° clockwise",      tech: "middle block" },
+  { t: 56, move: "Turn 90° clockwise",      tech: "middle block" },
 ];
 const MOVES = ["Step forward", "Step backwards", "Turn 90° clockwise", "Turn 90° anticlockwise", "Turn 180° clockwise", "Turn 180° anticlockwise"];
 const TECHS = ["low block", "middle block", "punch"];
@@ -139,7 +137,7 @@ const HANDS = ["left", "right"];
 const $ = id => document.getElementById(id);
 const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} } };
 const fmt = t => { t = Math.max(0, t || 0); const m = Math.floor(t / 60), s = t - m * 60; return `${m}:${s.toFixed(2).padStart(5, "0")}`; };
-const label = a => `${a.move} — ${a.hand} hand ${a.tech}`;
+const label = a => a.hand ? `${a.move} — ${a.hand} hand ${a.tech}` : `${a.move} — ${a.tech}`;
 const same = (a, b) => a.move === b.move && a.tech === b.tech && a.hand === b.hand;
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const pick = a => a[Math.floor(Math.random() * a.length)];
@@ -151,7 +149,7 @@ function distractors(ans) {
   let guard = 0;
   while (out.length < 3 && guard++ < 200) {
     const d = { ...ans };
-    const parts = shuffle(["move", "tech", "hand"]).slice(0, Math.random() < 0.6 ? 1 : 2);
+    const parts = shuffle(ans.hand ? ["move", "tech", "hand"] : ["move", "tech"]).slice(0, Math.random() < 0.6 ? 1 : 2);
     for (const p of parts) d[p] = pick(p === "move" ? MOVES : p === "tech" ? TECHS : HANDS);
     if (!same(d, ans) && !out.some(o => same(o, d))) out.push(d);
   }
@@ -175,33 +173,20 @@ function renderStops() {
 $("resetStops").onclick = () => { stops = STOPS.map(s => ({ ...s })); store.set("chonji-stops", "null"); renderStops(); };
 renderStops();
 
-// ---------------- YouTube player ----------------
-let player = null, ready = false, game = null;
+// ---------------- video player (plain MP4 from this site) ----------------
+const video = $("player");
+let player = {
+  getCurrentTime: () => video.currentTime, getDuration: () => video.duration || 0,
+  playVideo: () => { const p = video.play(); if (p && p.catch) p.catch(() => {}); }, pauseVideo: () => video.pause(),
+  seekTo: t => { video.currentTime = t; }
+};
+let ready = false, game = null;
 function fail(msg) { $("errText").textContent = msg; $("error").hidden = false; }
-const YT_ERRORS = {
-  2: "The video link isn't valid.",
-  5: "This browser can't play the video.",
-  100: "The video has been removed or made private.",
-  101: "The owner doesn't allow this video to be played on other websites.",
-  150: "The owner doesn't allow this video to be played on other websites.",
-  153: "YouTube won't play videos on a page opened straight from your computer. Put this file on a web host (for example GitHub Pages) and open it from there."
-};
-if (location.protocol === "file:") fail(YT_ERRORS[153]);
-window.onYouTubeIframeAPIReady = () => {
-  player = new YT.Player("player", {
-    videoId: VIDEO_ID,
-    playerVars: { controls: 0, rel: 0, playsinline: 1, modestbranding: 1, iv_load_policy: 3, disablekb: 1, fs: 0, start: Math.floor(START_AT), origin: location.origin },
-    events: {
-      onReady: () => { ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Start"; },
-      onError: e => fail(`Video problem (code ${e.data}): ${YT_ERRORS[e.data] || "YouTube couldn't play it."}`)
-    }
-  });
-};
-const tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-tag.onerror = () => fail("Couldn't reach YouTube. Check your internet connection and reload.");
-document.head.appendChild(tag);
-
+function markReady() { if (ready) return; ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Start"; }
+video.addEventListener("loadedmetadata", () => { if (!game) video.currentTime = START_AT; markReady(); });
+if (video.readyState >= 1) markReady();
+video.addEventListener("error", () => fail("Couldn't load videos/chon-ji.mp4. Check the file is in the videos folder of the site."));
+setTimeout(markReady, 4000);   // some phones won't load anything until you tap, so allow Start anyway
 // ---------------- the game ----------------
 $("startBtn").onclick = () => {
   if (!ready) return;
