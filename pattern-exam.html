@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Chon-Ji Pattern Exam</title>
+<title>Pattern Exam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Brush+Script&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
@@ -91,6 +91,11 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .watch .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--seal); flex: none; }
 @media (prefers-reduced-motion: no-preference) { .watch .dot { animation: pulse 1.2s ease-in-out infinite; } @keyframes pulse { 50% { opacity: 0.25; } } }
 
+.picker { display: flex; flex-wrap: wrap; gap: 10px; }
+.pat { background: transparent; color: var(--dobok); border: 2px solid var(--edge); padding: 10px 14px; display: flex; gap: 10px; align-items: baseline; }
+.pat .pk { font: 400 22px/1 var(--brush); color: var(--seal); }
+.pat .pe { font: 400 18px/1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; }
+.pat[aria-checked="true"] { border-color: var(--gold); background: rgba(224,180,60,0.1); }
 .big { font: 400 64px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--dobok); }
 .big small { font-size: 0.45em; color: var(--muted); }
 .err { border-color: var(--bad); }
@@ -101,16 +106,17 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 <body>
 <div class="wrap">
   <header class="belt">
-    <h1><span class="ko" lang="ko">천지</span><span class="en">Chon-Ji</span></h1>
+    <h1><span class="ko" lang="ko" id="titleKo">천지</span><span class="en" id="titleEn">Chon-Ji</span></h1>
     <div class="seal" aria-label="Score"><small>Score</small><b id="score">0</b></div>
   </header>
 
-  <div class="mat"><div class="video"><video id="player" src="videos/chon-ji.mp4" playsinline webkit-playsinline preload="auto" disablepictureinpicture></video></div></div>
+  <div class="mat"><div class="video"><video id="player" playsinline webkit-playsinline preload="auto" disablepictureinpicture></video></div></div>
 
   <!-- MENU -->
   <section class="panel" id="menu">
     <div class="eyebrow">Pattern video test</div>
-    <h2 id="menuTitle">Watch the pattern. When it stops, choose the next move.</h2>
+    <h2 id="menuTitle">Choose a pattern. Watch it, and when it stops, choose the next move.</h2>
+    <div class="picker" id="picker" role="radiogroup" aria-label="Pattern"></div>
     <ul class="rules">
       <li><b>3×</b> The video stops three times, at random moves.</li>
       <li><b>+1</b> Right first time scores a point.</li>
@@ -145,24 +151,55 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 <script>
 "use strict";
 // ---------------- data (this is what would live in the spreadsheet) ----------------
-const START_AT = 36;         // seconds
-const END_AT = null;         // seconds; null = play to the end of the file
+// Each stop: t = the moment just before the move starts; the answer is what comes next.
+// Wrong answers come from the pattern's own pool (and the other stops), never from another pattern.
 const QUESTIONS_PER_RUN = 3;
-// t = the moment just before the move starts; the answer is the move that comes next (hand is optional)
-const STOPS = [
-  { t: 46, move: "Turn 180° right", tech: "low block" },
-  { t: 49, move: "Turn 90° left",   tech: "middle block" },
-  { t: 55, move: "Turn 90° left",   tech: "middle block" },
-  { t: 62, move: "Step backwards",  tech: "punch", hand: "left" },
-];
 const MOVES = ["Step forward", "Step backwards", "Turn 90° left", "Turn 90° right", "Turn 180° left", "Turn 180° right"];
 const TECHS = ["low block", "middle block", "punch"];
 const HANDS = ["left", "right"];
+const PATTERNS = {
+  "chon-ji": {
+    name: "Chon-Ji", ko: "천지", file: "videos/chon-ji.mp4", start: 36, end: null,
+    // structured answers: wrong ones are made by changing the turn, technique or hand
+    stops: [
+      { t: 46, move: "Turn 180° right", tech: "low block" },
+      { t: 49, move: "Turn 90° left",   tech: "middle block" },
+      { t: 55, move: "Turn 90° left",   tech: "middle block" },
+      { t: 62, move: "Step backwards",  tech: "punch", hand: "left" },
+    ]
+  },
+  "yul-gok": {
+    name: "Yul-Gok", ko: "율곡", file: "videos/yul-gok.mp4", start: 60, end: null,
+    stops: [
+      { t: 69, answer: "Double punch" },
+      { t: 75, answer: "Hooking block > hooking block > obverse punch" },
+      { t: 82, answer: "Bending ready stance > side kick > front elbow strike" },
+      { t: 89, answer: "Twin knife-hand guarding block" },
+      { t: 96, answer: "Turn left > high outer forearm block" },
+    ],
+    pool: [
+      "Sitting stance > middle punch",
+      "Inner forearm side block > front snap kick",
+      "Turn right > high outer forearm block",
+      "Twin knife-hand block > straight fingertip thrust",
+      "Straight fingertip thrust",
+      "Bending ready stance > side kick > high backfist",
+      "Jump into X-stance > high backfist side strike",
+      "Double forearm high block",
+      "Hooking block > obverse punch",
+      "Turn right > twin knife-hand guarding block",
+      "Front elbow strike",
+      "Knife-hand middle guarding block",
+      "Rising block > middle punch",
+      "Side kick > front elbow strike",
+    ]
+  }
+};
 
 // ---------------- helpers ----------------
 const $ = id => document.getElementById(id);
-const label = a => a.hand ? `${a.move} — ${a.hand} hand ${a.tech}` : `${a.move} — ${a.tech}`;
-const same = (a, b) => a.move === b.move && a.tech === b.tech && a.hand === b.hand;
+const label = a => a.answer ? a.answer.replace(/\s*>\s*/g, " → ") : a.hand ? `${a.move} — ${a.hand} hand ${a.tech}` : `${a.move} — ${a.tech}`;
+const same = (a, b) => a.answer || b.answer ? a.answer === b.answer : a.move === b.move && a.tech === b.tech && a.hand === b.hand;
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const pick = a => a[Math.floor(Math.random() * a.length)];
 function show(id) { for (const p of ["menu", "question", "playing", "result"]) $(p).hidden = p !== id; }
@@ -170,6 +207,10 @@ function setScore(v) { const el = $("score"); el.textContent = v; const s = el.p
 
 // Wrong answers: change one or two parts of the right answer, so they all look believable
 function distractors(ans) {
+  if (ans.answer) {                      // free-text answers: three others from this pattern
+    const others = [...new Set([...pat.pool, ...pat.stops.map(s => s.answer)])].filter(x => x && x.toLowerCase() !== ans.answer.toLowerCase());
+    return shuffle(others).slice(0, 3).map(answer => ({ answer }));
+  }
   const out = [];
   let tries = 0;
   while (out.length < 3 && tries++ < 200) {
@@ -188,21 +229,37 @@ const player = {
   playVideo: () => { const p = video.play(); if (p && p.catch) p.catch(() => {}); }, pauseVideo: () => video.pause(),
   seekTo: t => { video.currentTime = t; }
 };
-let ready = false, game = null;
+let ready = false, game = null, pat = null;
+function choose(key) {
+  pat = PATTERNS[key];
+  try { localStorage.setItem("pattern-exam", key); } catch (_) {}
+  $("titleKo").textContent = pat.ko; $("titleEn").textContent = pat.name;
+  $("picker").querySelectorAll(".pat").forEach(b => b.setAttribute("aria-checked", String(b.dataset.key === key)));
+  $("error").hidden = true;
+  ready = false; $("startBtn").disabled = true; $("startBtn").textContent = "Loading…";
+  video.src = pat.file; video.load();
+  setTimeout(markReady, 4000);   // some phones won't load anything until you tap, so allow Begin anyway
+}
 function fail(msg) { $("errText").textContent = msg; $("error").hidden = false; }
 function markReady() { if (ready) return; ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Begin"; }
-video.addEventListener("loadedmetadata", () => { if (!game) video.currentTime = START_AT; markReady(); });
-if (video.readyState >= 1) markReady();
-video.addEventListener("error", () => fail("Couldn't load videos/chon-ji.mp4. Check the file is in the videos folder of the site."));
-setTimeout(markReady, 4000);   // some phones won't load anything until you tap, so allow Begin anyway
+video.addEventListener("loadedmetadata", () => { if (!game) video.currentTime = pat.start; markReady(); });
+video.addEventListener("error", () => { if (video.getAttribute("src")) fail(`Couldn't load ${pat.file}. Check the file is in the videos folder of the site.`); });
+for (const [key, p] of Object.entries(PATTERNS)) {
+  const b = document.createElement("button"); b.className = "pat"; b.dataset.key = key; b.setAttribute("role", "radio");
+  b.innerHTML = `<span class="pk" lang="ko">${p.ko}</span><span class="pe">${p.name}</span>`;
+  b.onclick = () => { if (!game) choose(key); };
+  $("picker").appendChild(b);
+}
+let saved = null; try { saved = localStorage.getItem("pattern-exam"); } catch (_) {}
+choose(PATTERNS[saved] ? saved : "chon-ji");
 
 // ---------------- the game ----------------
 $("startBtn").onclick = () => {
   if (!ready) return;
-  const chosen = shuffle(STOPS).slice(0, QUESTIONS_PER_RUN).sort((a, b) => a.t - b.t);
+  const chosen = shuffle(pat.stops).slice(0, QUESTIONS_PER_RUN).sort((a, b) => a.t - b.t);
   game = { queue: chosen, asked: 0, total: chosen.length, score: 0, wrongs: 0, waiting: false, end: null };
   $("score").textContent = "0";
-  player.seekTo(START_AT);
+  player.seekTo(pat.start);
   player.playVideo();
   show("playing");
   requestAnimationFrame(tick);
@@ -212,7 +269,7 @@ function tick() {
   if (!game) return;
   const t = player.getCurrentTime();
   if (!game.waiting) {
-    if (game.end === null) { const d = player.getDuration(); if (d > 0) game.end = END_AT !== null ? END_AT : d - 0.4; }
+    if (game.end === null) { const d = player.getDuration(); if (d > 0) game.end = pat.end !== null ? pat.end : d - 0.4; }
     const next = game.queue[0];
     if (next && t >= next.t - 0.03) { player.pauseVideo(); game.queue.shift(); ask(next); }
     else if (game.end !== null && t >= game.end) { finish(); return; }
