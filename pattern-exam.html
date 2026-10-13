@@ -125,11 +125,12 @@ const END_AT = null;         // seconds; null = play to the end of the file
 const QUESTIONS_PER_RUN = 2;
 // t = the moment just before the move starts; the answer is the move that comes next (hand is optional)
 const STOPS = [
-  { t: 46, move: "Turn 180° anticlockwise", tech: "low block" },
-  { t: 49, move: "Turn 90° clockwise",      tech: "middle block" },
-  { t: 56, move: "Turn 90° clockwise",      tech: "middle block" },
+  { t: 46, move: "Turn 180° right", tech: "low block" },
+  { t: 49, move: "Turn 90° left",   tech: "middle block" },
+  { t: 55, move: "Turn 90° left",   tech: "middle block" },
+  { t: 62, move: "Step backwards",  tech: "punch", hand: "left" },
 ];
-const MOVES = ["Step forward", "Step backwards", "Turn 90° clockwise", "Turn 90° anticlockwise", "Turn 180° clockwise", "Turn 180° anticlockwise"];
+const MOVES = ["Step forward", "Step backwards", "Turn 90° left", "Turn 90° right", "Turn 180° left", "Turn 180° right"];
 const TECHS = ["low block", "middle block", "punch"];
 const HANDS = ["left", "right"];
 
