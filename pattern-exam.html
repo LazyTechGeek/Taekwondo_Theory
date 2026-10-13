@@ -66,9 +66,6 @@ body {
 .eyebrow { font: 600 12px var(--body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
 .panel h2 { margin: 0; font: 400 26px/1.15 var(--display); letter-spacing: 0.02em; text-wrap: balance; }
 .panel p { margin: 0; color: var(--muted); max-width: 60ch; }
-.rules { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: 15px; }
-.rules li { display: flex; gap: 10px; align-items: baseline; }
-.rules b { color: var(--dobok); font-variant-numeric: tabular-nums; min-width: 2.2em; }
 
 button { font: 700 16px var(--body); cursor: pointer; border-radius: 8px; }
 button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
@@ -99,11 +96,13 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .watch .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--seal); flex: none; }
 @media (prefers-reduced-motion: no-preference) { .watch .dot { animation: pulse 1.2s ease-in-out infinite; } @keyframes pulse { 50% { opacity: 0.25; } } }
 
-.picker { display: flex; flex-wrap: wrap; gap: 10px; }
-.pat { background: transparent; color: var(--dobok); border: 2px solid var(--edge); padding: 10px 14px; display: flex; gap: 10px; align-items: baseline; }
-.pat .pk { font: 400 22px/1 var(--brush); color: var(--seal); }
-.pat .pe { font: 400 18px/1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; }
-.pat[aria-checked="true"] { border-color: var(--gold); background: rgba(224,180,60,0.1); }
+.field { display: grid; gap: 6px; }
+.field label { font: 600 12px var(--body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.field select { appearance: none; -webkit-appearance: none; width: 100%; font: 400 20px/1.2 var(--display); letter-spacing: 0.03em; color: var(--dobok);
+  background: var(--night) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23e0b43c' stroke-width='2.5'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border: 2px solid var(--edge); border-radius: 8px; padding: 12px 40px 12px 14px; }
+.field select:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.last { font-size: 15px; }
 .big { font: 400 64px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--dobok); }
 .big small { font-size: 0.45em; color: var(--muted); }
 .err { border-color: var(--bad); }
@@ -122,15 +121,12 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
   <!-- MENU -->
   <section class="panel" id="menu">
-    <div class="eyebrow">Pattern video test</div>
-    <h2 id="menuTitle">Choose a pattern. Watch it, and when it stops, choose the next move.</h2>
-    <div class="picker" id="picker" role="radiogroup" aria-label="Pattern"></div>
-    <ul class="rules">
-      <li><b>3×</b> The video stops three times, at random moves.</li>
-      <li><b>+1</b> Right first time scores a point.</li>
-      <li><b>−1</b> Every wrong answer loses a point. The video waits until you get it right.</li>
-      <li><b>10s</b> You have 10 seconds per question. Run out and you lose a point.</li>
-    </ul>
+    <h2>What move comes next?</h2>
+    <div class="field">
+      <label for="patternSel">Choose your pattern</label>
+      <select id="patternSel"></select>
+    </div>
+    <p class="last" id="lastScore" hidden></p>
     <button class="start" id="startBtn" disabled>Loading…</button>
   </section>
 
@@ -248,7 +244,7 @@ function choose(key) {
   $("titleKo").textContent = pat.ko; $("titleEn").textContent = pat.name;
   const head = document.querySelector(".belt");
   head.style.setProperty("--belt", pat.belt); head.style.setProperty("--tag", pat.tag || pat.belt);
-  $("picker").querySelectorAll(".pat").forEach(b => b.setAttribute("aria-checked", String(b.dataset.key === key)));
+  $("patternSel").value = key;
   $("error").hidden = true;
   ready = false; $("startBtn").disabled = true; $("startBtn").textContent = "Loading…";
   video.src = pat.file; video.load();
@@ -259,11 +255,10 @@ function markReady() { if (ready) return; ready = true; $("startBtn").disabled =
 video.addEventListener("loadedmetadata", () => { if (!game) video.currentTime = pat.start; markReady(); });
 video.addEventListener("error", () => { if (video.getAttribute("src")) fail(`Couldn't load ${pat.file}. Check the file is in the videos folder of the site.`); });
 for (const [key, p] of Object.entries(PATTERNS)) {
-  const b = document.createElement("button"); b.className = "pat"; b.dataset.key = key; b.setAttribute("role", "radio");
-  b.innerHTML = `<span class="pk" lang="ko">${p.ko}</span><span class="pe">${p.name}</span>`;
-  b.onclick = () => { if (!game) choose(key); };
-  $("picker").appendChild(b);
+  const o = document.createElement("option"); o.value = key; o.textContent = `${p.name} (${p.grade})`;
+  $("patternSel").appendChild(o);
 }
+$("patternSel").addEventListener("change", e => { if (!game) choose(e.target.value); });
 let saved = null; try { saved = localStorage.getItem("pattern-exam"); } catch (_) {}
 choose(PATTERNS[saved] ? saved : "chon-ji");
 
@@ -350,7 +345,7 @@ function finish() {
   $("finalText").textContent = s === n ? "Every answer right first time." : s > 0 ? "Some right first time. Have another go." : "Have another go and watch the moves closely.";
   show("result");
   setTimeout(() => {
-    $("menuTitle").textContent = `Last go: ${s} out of ${n}. Ready for another?`;
+    $("lastScore").textContent = `Last go: ${s} out of ${n}.`; $("lastScore").hidden = false;
     $("startBtn").textContent = "Go again";
     show("menu");
   }, 3500);
