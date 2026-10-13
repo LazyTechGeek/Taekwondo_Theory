@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chon-Ji Video Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one column — the video on top, one panel underneath that switches between menu, question and result. */
+:root {
+  --bg: #eef1f6; --panel: #ffffff; --ink: #14203a; --muted: #5a6680; --line: #d5dbe7;
+  --accent: #1d3f99; --accent-ink: #ffffff; --gold: #c99a00;
+  --good: #1e8a4c; --good-bg: #e3f4ea; --bad: #c23b2f; --bad-bg: #fbe7e5;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1424; --panel: #162039; --ink: #e8ecf5; --muted: #9aa6c0; --line: #2a3658;
+  --accent: #4f7cf0; --accent-ink: #ffffff; --gold: #f2c200;
+  --good: #4fd08a; --good-bg: #123323; --bad: #ff7b6e; --bad-bg: #3a1a18; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d1424; --panel: #162039; --ink: #e8ecf5; --muted: #9aa6c0; --line: #2a3658;
+  --accent: #4f7cf0; --accent-ink: #ffffff; --gold: #f2c200;
+  --good: #4fd08a; --good-bg: #123323; --bad: #ff7b6e; --bad-bg: #3a1a18; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.45 var(--body); padding: env(safe-area-inset-top, 0px) 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 14px; padding-block: 14px; }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+h1 { font: 800 30px/1 var(--display); letter-spacing: 0.02em; text-transform: uppercase; margin: 0; }
+h1 span { color: var(--gold); }
+.hud { display: flex; gap: 14px; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+.hud b { color: var(--ink); }
+.video { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
+.video > div, .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
+.panel h2 { font: 800 22px/1.1 var(--display); text-transform: uppercase; letter-spacing: 0.02em; margin: 0; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); }
+button { font: 700 16px var(--body); border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 12px 16px; cursor: pointer; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-size: 18px; padding: 14px 20px; }
+.primary:disabled { opacity: 0.5; cursor: default; }
+.options { display: grid; gap: 10px; }
+.opt { text-align: left; display: flex; gap: 12px; align-items: center; }
+.opt .k { font: 800 18px var(--display); width: 30px; height: 30px; border-radius: 6px; display: grid; place-items: center; background: var(--bg); flex: none; }
+.opt.wrong { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); cursor: default; }
+.opt.right { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.verdict { font: 800 22px var(--display); text-transform: uppercase; letter-spacing: 0.03em; min-height: 1.2em; }
+.verdict.good { color: var(--good); } .verdict.bad { color: var(--bad); }
+.eyebrow { font: 600 14px var(--display); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.big { font: 800 56px/1 var(--display); font-variant-numeric: tabular-nums; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+details { border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 700; }
+.stops { display: grid; gap: 8px; margin-top: 12px; }
+.stop { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: center; }
+.stop input { width: 100%; font: 16px var(--body); font-variant-numeric: tabular-nums; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.stop span { min-width: 0; font-size: 14px; }
+label.check { display: flex; gap: 8px; align-items: center; font-size: 15px; }
+.note { font-size: 13px; color: var(--muted); }
+.err { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
+@media (prefers-reduced-motion: no-preference) { .panel { animation: rise 0.18s ease-out; } @keyframes rise { from { transform: translateY(6px); opacity: 0.6; } } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Chon-Ji <span>·</span> what's next?</h1>
+    <div class="hud"><span>Time <b id="time">0:00.00</b></span><span>Score <b id="score">0</b></span></div>
+  </header>
+
+  <div class="video"><div id="player"></div></div>
+
+  <!-- MENU -->
+  <section class="panel" id="menu">
+    <div class="eyebrow">Pattern video test</div>
+    <h2 id="menuTitle">Watch Chon-Ji. It will stop twice and ask you for the next move.</h2>
+    <p id="menuText">Right first time scores a point. Each wrong answer loses a point, and the video waits until you pick the right one.</p>
+    <div class="row"><button class="primary" id="startBtn" disabled>Loading video…</button></div>
+    <details>
+      <summary>Pause points (for setting up)</summary>
+      <p class="note">Times are in seconds and can have decimals, e.g. 4.35. Change them here to fine-tune; your changes are remembered in this browser only.</p>
+      <div class="stops" id="stops"></div>
+      <div class="row" style="margin-top:12px">
+        <label class="check"><input type="checkbox" id="allStops"> Pause at every point (to check the timings)</label>
+        <button id="resetStops">Reset times</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="panel" id="question" hidden>
+    <div class="eyebrow" id="qCount">Question 1 of 2</div>
+    <h2>What's the next move?</h2>
+    <div class="options" id="options"></div>
+    <div class="verdict" id="verdict" aria-live="polite"></div>
+  </section>
+
+  <!-- PLAYING -->
+  <section class="panel" id="playing" hidden>
+    <div class="eyebrow">Watching</div>
+    <p>Keep watching. The video will stop and ask you what comes next.</p>
+  </section>
+
+  <!-- RESULT -->
+  <section class="panel" id="result" hidden>
+    <div class="eyebrow">Pattern complete</div>
+    <div class="big" id="finalScore">0</div>
+    <p id="finalText"></p>
+    <p class="note">Back to the menu in a moment…</p>
+  </section>
+
+  <section class="panel err" id="error" hidden><p id="errText"></p></section>
+</div>
+
+<script>
+"use strict";
+// ---------------- data (this is what would live in the spreadsheet) ----------------
+const VIDEO_ID = "x4g7JMmD6gQ";
+const START_AT = 0;          // seconds
+const END_AT = null;         // seconds; null = stop 0.4 s before the video ends (avoids YouTube's end screen)
+const QUESTIONS_PER_RUN = 2;
+// t = the moment just before the move starts; the answer is the move that comes next
+const STOPS = [
+  { t: 4,  move: "Turn 180° anticlockwise", tech: "middle block", hand: "right" },
+  { t: 7,  move: "Turn 90° clockwise",      tech: "low block",    hand: "left" },
+  { t: 13, move: "Turn 90° clockwise",      tech: "middle block", hand: "left" },
+  { t: 27, move: "Step backwards",          tech: "punch",        hand: "left" },
+];
+const MOVES = ["Step forward", "Step backwards", "Turn 90° clockwise", "Turn 90° anticlockwise", "Turn 180° clockwise", "Turn 180° anticlockwise"];
+const TECHS = ["low block", "middle block", "punch"];
+const HANDS = ["left", "right"];
+
+// ---------------- helpers ----------------
+const $ = id => document.getElementById(id);
+const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} } };
+const fmt = t => { t = Math.max(0, t || 0); const m = Math.floor(t / 60), s = t - m * 60; return `${m}:${s.toFixed(2).padStart(5, "0")}`; };
+const label = a => `${a.move} — ${a.hand} hand ${a.tech}`;
+const same = (a, b) => a.move === b.move && a.tech === b.tech && a.hand === b.hand;
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function show(id) { for (const p of ["menu", "question", "playing", "result"]) $(p).hidden = p !== id; }
+
+// Wrong answers: change one or two parts of the right answer, so they all look believable
+function distractors(ans) {
+  const out = [];
+  let guard = 0;
+  while (out.length < 3 && guard++ < 200) {
+    const d = { ...ans };
+    const parts = shuffle(["move", "tech", "hand"]).slice(0, Math.random() < 0.6 ? 1 : 2);
+    for (const p of parts) d[p] = pick(p === "move" ? MOVES : p === "tech" ? TECHS : HANDS);
+    if (!same(d, ans) && !out.some(o => same(o, d))) out.push(d);
+  }
+  return out;
+}
+
+// ---------------- pause-point editor ----------------
+let stops = STOPS.map(s => ({ ...s }));
+try { const saved = JSON.parse(store.get("chonji-stops") || "null"); if (Array.isArray(saved) && saved.length === STOPS.length) saved.forEach((t, i) => { if (typeof t === "number") stops[i].t = t; }); } catch (_) {}
+function renderStops() {
+  $("stops").innerHTML = "";
+  stops.forEach((s, i) => {
+    const row = document.createElement("div"); row.className = "stop";
+    row.innerHTML = `<input id="stop${i}" type="number" step="0.05" min="0" inputmode="decimal" aria-label="Pause point ${i + 1} in seconds"><span></span>`;
+    row.querySelector("input").value = s.t;
+    row.querySelector("span").textContent = label(s);
+    row.querySelector("input").addEventListener("change", e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { s.t = v; store.set("chonji-stops", JSON.stringify(stops.map(x => x.t))); } });
+    $("stops").appendChild(row);
+  });
+}
+$("resetStops").onclick = () => { stops = STOPS.map(s => ({ ...s })); store.set("chonji-stops", "null"); renderStops(); };
+renderStops();
+
+// ---------------- YouTube player ----------------
+let player = null, ready = false, game = null;
+function fail(msg) { $("errText").textContent = msg; $("error").hidden = false; }
+const YT_ERRORS = {
+  2: "The video link isn't valid.",
+  5: "This browser can't play the video.",
+  100: "The video has been removed or made private.",
+  101: "The owner doesn't allow this video to be played on other websites.",
+  150: "The owner doesn't allow this video to be played on other websites.",
+  153: "YouTube won't play videos on a page opened straight from your computer. Put this file on a web host (for example GitHub Pages) and open it from there."
+};
+if (location.protocol === "file:") fail(YT_ERRORS[153]);
+window.onYouTubeIframeAPIReady = () => {
+  player = new YT.Player("player", {
+    videoId: VIDEO_ID,
+    playerVars: { controls: 0, rel: 0, playsinline: 1, modestbranding: 1, iv_load_policy: 3, disablekb: 1, fs: 0, start: Math.floor(START_AT), origin: location.origin },
+    events: {
+      onReady: () => { ready = true; $("startBtn").disabled = false; $("startBtn").textContent = "Start"; },
+      onError: e => fail(`Video problem (code ${e.data}): ${YT_ERRORS[e.data] || "YouTube couldn't play it."}`)
+    }
+  });
+};
+const tag = document.createElement("script");
+tag.src = "https://www.youtube.com/iframe_api";
+tag.onerror = () => fail("Couldn't reach YouTube. Check your internet connection and reload.");
+document.head.appendChild(tag);
+
+// ---------------- the game ----------------
+$("startBtn").onclick = () => {
+  if (!ready) return;
+  const all = $("allStops").checked;
+  const chosen = (all ? stops.slice() : shuffle(stops).slice(0, QUESTIONS_PER_RUN)).sort((a, b) => a.t - b.t);
+  game = { queue: chosen, asked: 0, total: chosen.length, score: 0, wrongs: 0, waiting: false, end: null };
+  $("score").textContent = "0";
+  player.seekTo(START_AT, true);
+  player.playVideo();
+  show("playing");
+  requestAnimationFrame(tick);
+};
+
+function tick() {
+  if (!game) return;
+  const t = player.getCurrentTime ? player.getCurrentTime() : 0;
+  $("time").textContent = fmt(t);
+  if (!game.waiting) {
+    if (game.end === null) { const d = player.getDuration ? player.getDuration() : 0; if (d > 0) game.end = END_AT !== null ? END_AT : d - 0.4; }
+    const next = game.queue[0];
+    if (next && t >= next.t - 0.03) { player.pauseVideo(); game.queue.shift(); ask(next); }
+    else if (game.end !== null && t >= game.end) { finish(); return; }
+  }
+  requestAnimationFrame(tick);
+}
+
+function ask(stop) {
+  game.waiting = true; game.wrongs = 0; game.asked++;
+  $("qCount").textContent = `Question ${game.asked} of ${game.total} · paused at ${fmt(stop.t)}`;
+  $("verdict").textContent = ""; $("verdict").className = "verdict";
+  const opts = shuffle([stop, ...distractors(stop)]);
+  $("options").innerHTML = "";
+  opts.forEach((o, i) => {
+    const b = document.createElement("button"); b.className = "opt";
+    b.innerHTML = `<span class="k">${"ABCD"[i]}</span><span></span>`;
+    b.lastChild.textContent = label(o);
+    b.onclick = () => answer(b, same(o, stop));
+    $("options").appendChild(b);
+  });
+  show("question");
+  $("options").firstChild.focus({ preventScroll: true });
+}
+
+function answer(btn, right) {
+  if (!game || !game.waiting || btn.classList.contains("wrong")) return;
+  if (!right) {
+    game.wrongs++; game.score--; btn.classList.add("wrong");
+    $("verdict").textContent = game.wrongs === 1 ? "Incorrect · minus one point" : "Still incorrect · minus one point";
+    $("verdict").className = "verdict bad";
+  } else {
+    if (game.wrongs === 0) game.score++;
+    btn.classList.add("right");
+    $("verdict").textContent = game.wrongs === 0 ? "Correct · plus one point" : "Correct · no point this time";
+    $("verdict").className = "verdict good";
+    $("options").querySelectorAll("button").forEach(b => b.disabled = true);
+    setTimeout(() => { if (!game) return; game.waiting = false; show("playing"); player.playVideo(); }, 1100);
+  }
+  $("score").textContent = game.score;
+}
+
+function finish() {
+  player.pauseVideo();
+  const s = game.score, n = game.total; game = null;
+  $("finalScore").textContent = `${s} / ${n}`;
+  $("finalText").textContent = s === n ? "Every answer right first time." : s > 0 ? "Some right first time. Have another go." : "Have another go and watch the moves closely.";
+  show("result");
+  setTimeout(() => {
+    $("menuTitle").textContent = `Last go: ${s} out of ${n}. Ready for another?`;
+    $("startBtn").textContent = "Play again";
+    show("menu");
+  }, 3500);
+}
+</script>
+</body>
+</html>
