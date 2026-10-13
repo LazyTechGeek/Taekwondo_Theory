@@ -86,6 +86,12 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .opt.right { background: #183a29; color: #b7ecd0; border-color: var(--good); }
 .opt.right .k { background: var(--good); }
 .opt:disabled { cursor: default; }
+.qhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.clock { font: 400 26px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--dobok); min-width: 2ch; text-align: right; }
+.clock.low { color: var(--bad); }
+.bar { height: 6px; border-radius: 3px; background: var(--edge); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 100%; background: var(--gold); transform-origin: left; }
+.bar i.low { background: var(--bad); }
 .verdict { font: 400 24px/1.1 var(--display); letter-spacing: 0.03em; min-height: 1.1em; }
 .verdict.good { color: var(--good); } .verdict.bad { color: var(--bad); }
 
@@ -123,13 +129,15 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
       <li><b>3×</b> The video stops three times, at random moves.</li>
       <li><b>+1</b> Right first time scores a point.</li>
       <li><b>−1</b> Every wrong answer loses a point. The video waits until you get it right.</li>
+      <li><b>10s</b> You have 10 seconds per question. Run out and you lose a point.</li>
     </ul>
     <button class="start" id="startBtn" disabled>Loading…</button>
   </section>
 
   <!-- QUESTION -->
   <section class="panel" id="question" hidden>
-    <div class="eyebrow" id="qCount">Question 1 of 3</div>
+    <div class="qhead"><div class="eyebrow" id="qCount">Question 1 of 3</div><div class="clock" id="clock" aria-label="Seconds left">10</div></div>
+    <div class="bar"><i id="bar"></i></div>
     <h2>What's the next move?</h2>
     <div class="options" id="options"></div>
     <div class="verdict" id="verdict" aria-live="polite"></div>
@@ -156,6 +164,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 // Each stop: t = the moment just before the move starts; the answer is what comes next.
 // Wrong answers come from the pattern's own pool (and the other stops), never from another pattern.
 const QUESTIONS_PER_RUN = 3;
+const ANSWER_SECONDS = 10;
 const MOVES = ["Step forward", "Step backwards", "Turn 90° left", "Turn 90° right", "Turn 180° left", "Turn 180° right"];
 const TECHS = ["low block", "middle block", "punch"];
 const HANDS = ["left", "right"];
@@ -273,6 +282,12 @@ $("startBtn").onclick = () => {
 function tick() {
   if (!game) return;
   const t = player.getCurrentTime();
+  if (game.waiting && game.deadline) {
+    const left = Math.max(0, game.deadline - performance.now()), frac = left / (ANSWER_SECONDS * 1000), low = left < 3000;
+    $("clock").textContent = Math.ceil(left / 1000); $("clock").classList.toggle("low", low);
+    $("bar").style.transform = `scaleX(${frac})`; $("bar").classList.toggle("low", low);
+    if (left <= 0) timeUp();
+  }
   if (!game.waiting) {
     if (game.end === null) { const d = player.getDuration(); if (d > 0) game.end = pat.end !== null ? pat.end : d - 0.4; }
     const next = game.queue[0];
@@ -283,7 +298,8 @@ function tick() {
 }
 
 function ask(stop) {
-  game.waiting = true; game.wrongs = 0; game.asked++;
+  game.waiting = true; game.wrongs = 0; game.asked++; game.current = stop;
+  game.deadline = performance.now() + ANSWER_SECONDS * 1000;
   $("qCount").textContent = `Question ${game.asked} of ${game.total}`;
   $("verdict").textContent = ""; $("verdict").className = "verdict";
   const opts = shuffle([stop, ...distractors(stop)]);
@@ -293,6 +309,7 @@ function ask(stop) {
     b.innerHTML = `<span class="k">${"ABCD"[i]}</span><span></span>`;
     b.lastChild.textContent = label(o);
     b.onclick = () => answer(b, same(o, stop));
+    b.dataset.right = same(o, stop) ? "1" : "";
     $("options").appendChild(b);
   });
   show("question");
@@ -306,6 +323,7 @@ function answer(btn, right) {
     $("verdict").textContent = game.wrongs === 1 ? "Incorrect · −1" : "Still incorrect · −1";
     $("verdict").className = "verdict bad";
   } else {
+    game.deadline = null;
     if (game.wrongs === 0) game.score++;
     btn.classList.add("right");
     $("verdict").textContent = game.wrongs === 0 ? "Correct · +1" : "Correct · no point this time";
@@ -314,6 +332,15 @@ function answer(btn, right) {
     setTimeout(() => { if (!game) return; game.waiting = false; show("playing"); player.playVideo(); }, 1100);
   }
   setScore(game.score);
+}
+
+// Out of time: lose a point, show the right answer, carry on
+function timeUp() {
+  game.deadline = null; game.score--;
+  $("options").querySelectorAll("button").forEach(b => { b.disabled = true; if (b.dataset.right) b.classList.add("right"); });
+  $("verdict").textContent = "Time's up · −1"; $("verdict").className = "verdict bad";
+  setScore(game.score);
+  setTimeout(() => { if (!game) return; game.waiting = false; show("playing"); player.playVideo(); }, 1800);
 }
 
 function finish() {
