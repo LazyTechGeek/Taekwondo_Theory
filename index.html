@@ -11081,7 +11081,7 @@ function resolveH(k){
   btns.forEach(b=>b.disabled=true);
   const ok=k===ai,chOk=Math.random()*100<S.chSkill;
   const wrongs=[0,1,2].filter(i=>i!==ai),ck=chOk?ai:wrongs[Math.random()*wrongs.length|0];
-  if(k>=0){btns[k].classList.add('you');btns[k].querySelector('.tags').innerHTML+=`<i class="ty">YOU</i>`;btns[k].insertAdjacentHTML('beforeend','<em class="stamp">LOCKED IN</em>');chSfx('lock')}
+  if(k>=0){btns[k].classList.add('you');btns[k].querySelector('.tags').innerHTML+=`<i class="ty">YOU</i>`;btns[k].insertAdjacentHTML('beforeend','<em class="stamp">LOCKED IN</em>')}
   else chSfx('buzz');
   $('#hEx').textContent=k<0?'⏱ Out of time!':`Let's see what ${H.name} said...`;
   const step=(ms,f)=>H.seq.push(setTimeout(()=>{if(!me.dead)f()},ms));
@@ -11602,10 +11602,9 @@ function tlKill(){const f=document.querySelector('#tl iframe');if(f)f.remove()}
 function hfSfx(k){
   if(!TA.on||!taCtx())return;
   try{
-    if(k==='lock'){taTone(110,.5,'sawtooth',.08,104);taTone(165,.5,'triangle',.08)}
+    if(k==='wrong'){taTone(110,.5,'sawtooth',.08,104);taTone(165,.5,'triangle',.08)}
     else if(k==='right')[392,523,659,784].forEach((f,i)=>taTone(f,i===3?.45:.12,'triangle',.09,0,i*.09));
     else if(k==='big')[523,659,784,1047,1319,1047,1319,1568].forEach((f,i)=>taTone(f,i===7?.7:.13,'square',.07,0,i*.11));
-    else if(k==='wrong'){[311,277,233].forEach(f=>taTone(f,.9,'triangle',.06,f*.94));taTone(98,.9,'sine',.16,82)}
     else if(k==='cut')[0,.45].forEach(d=>{taNoise(.12,.12,3000,'highpass',d);taTone(700,.1,'square',.05,300,d)});
     else if(k==='ring')[0,.5].forEach(d=>{taTone(400,.32,'sine',.08,0,d);taTone(450,.32,'sine',.08,0,d)});
     else if(k==='crowd'){taNoise(1.3,.09,700,'bandpass');taNoise(1.1,.06,1400,'bandpass',.15)}
@@ -11690,7 +11689,7 @@ function hfAnswer(k){
   if(HF.lock)return;HF.lock=true;clearInterval(HF.timer);
   const q=HF.q,btns=[...$('#hfOpts').children],ai=q.opts.indexOf(q.ans);
   btns.forEach(b=>b.disabled=true);document.querySelectorAll('#hf .life').forEach(b=>b.disabled=true);$('#hfAct').innerHTML='';
-  if(k>=0){btns[k].classList.add('sel');hfSfx('lock')}
+  if(k>=0)btns[k].classList.add('sel');      // no sound on the tap: the sound comes with the reveal
   $('#hf').classList.add('dim');
   $('#hfEx').textContent=k>=0?'Final answer...':'⏱ Out of time!';
   setTimeout(()=>{
@@ -12933,8 +12932,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.72';
+const APP_VERSION='3.73';
 const VERSION_NOTES=[
+  ['3.73','Theory Master and Taekwondo Chaser: tapping an answer no longer makes a sound. The sound now comes when the answer is revealed, one for right and one for wrong.'],
   ['3.72','Who Wants to Be a Taekwondo Theory Master? now has studio lights that sweep in for each question and flash green or red on the answer, a set that gets darker as you climb, a ladder that lights up and moves, animated lifelines (the audience bars grow, the friend\'s reply is typed out, the host leans in), sound effects and a backing beat, a cheque at the end, medals in the Hall of Fame, and a tidier start screen with the sliders under Game settings.'],
   ['3.71','Taekwondo Chaser now feels like a TV game show: five Chasers with their own faces and moods, title cards for each round, a round studio clock, a lit board where you slide down and the red closes in behind you, a locked-in and reveal moment for every answer, quicker offers you can skip, sound effects and a backing beat (Sound button on the start screen), and a proper celebration when you get home.'],
   ['3.70','Taekwondo Turbo: the arrow buttons are back, now see-through and over the road. Turbo and Grand Prix both have a Sound panel with a music volume control, and the music is louder.'],
