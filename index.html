@@ -285,6 +285,81 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 #chase .row{margin-top:8px}
 .tr.o.wait{cursor:default;box-shadow:inset 0 0 0 2px #4a6cff}
 @media (max-height:760px){.tower{--rh:21px}.vs .portrait{width:42px;height:42px}#chase .cq{padding:8px}.cans button{min-height:50px}.bigClock{font-size:2.3rem}}
+/* Chaser 3.71: studio lights, round clock, live board, characters, title cards */
+#chase,#rapid.chaseTheme{position:relative;isolation:isolate;background:linear-gradient(112deg,transparent 36%,#5a9dff1f 46%,transparent 56%),linear-gradient(248deg,transparent 36%,#5a9dff1f 46%,transparent 56%),radial-gradient(ellipse at 50% 35%,transparent 25%,#000c 95%),radial-gradient(circle,#3159ff 0 34%,transparent 40%) 0 0/11px 11px,#020a3a}
+#chase::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,#d0101a22 0,#d0101a88 100%);opacity:0;transition:opacity .7s}
+#chase.danger::before{opacity:1;animation:chGlow 1.1s ease-in-out infinite}
+#chase.lost::before{opacity:1}
+#chase.won::before{opacity:1;background:radial-gradient(ellipse at 50% 30%,#1fbf6a22 0,#1fbf6a77 100%)}
+@keyframes chGlow{50%{opacity:.45}}
+#rapid.chaseTheme .stats{display:none}
+.chTop{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 8px}
+.chRing{position:relative;width:78px;height:78px;flex:none}
+.chRing svg{width:100%;height:100%;transform:rotate(-90deg);display:block}
+.chRing circle{fill:none;stroke-width:8}
+.chRing .bg{stroke:#0b1e6b;fill:#000a}
+.chRing .fg{stroke:#5ad1ff;stroke-linecap:round;stroke-dasharray:251.3;transition:stroke-dashoffset 1s linear,stroke .3s}
+.chRing b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:900;color:#fff;text-shadow:0 0 12px #3b7bff}
+.chTop.hot .fg{stroke:#ff4a55}.chTop.hot .chRing b{text-shadow:0 0 12px #ff4a55}
+.chTop.hot .chRing{animation:chTick .5s ease-out infinite}
+@keyframes chTick{0%{transform:scale(1.08)}100%{transform:scale(1)}}
+.chBank{position:relative;min-width:150px;text-align:center;background:#000a;border:2px solid #e8b931;border-radius:10px;padding:6px 12px;box-shadow:0 0 14px #e8b93144}
+.chBank small{display:block;font-size:.62rem;letter-spacing:.18em;color:#e8b931;font-weight:800}
+.chBank b{font-size:1.45rem;font-weight:900;color:#fff;font-variant-numeric:tabular-nums}
+.chFly{position:absolute;left:0;right:0;top:-6px;text-align:center;font-weight:900;font-size:1.05rem;color:#5dff9c;text-shadow:0 1px 3px #000;pointer-events:none;animation:chFly .7s ease-out forwards}
+@keyframes chFly{from{opacity:1;transform:translateY(-8px) scale(1.25)}to{opacity:0;transform:translateY(-34px)}}
+.watch .portrait,.vs .portrait{border-radius:50%;box-shadow:0 0 0 2px #ff5a64}
+.vs .portrait{transition:transform .4s}
+.vsTxt span{display:block;min-height:2.5em}
+@media (min-height:800px){.tower{--rh:30px;max-width:330px}.ldTok,.tr{font-size:.9rem}}
+.vs.lean .portrait{transform:scale(1.22) rotate(-5deg)}
+#chase.danger .vs{box-shadow:0 0 14px #ff2a3588}
+#chase .stats{display:flex;flex-direction:column;align-items:flex-end;gap:1px;line-height:1.15}
+#hGap{font-size:.74rem;font-weight:800;color:#9ec0ff}
+#chase.danger #hGap{color:#ff8a92}
+.tower{position:relative}
+.tr{transition:background .5s,box-shadow .5s,opacity .3s}
+.tr.c{box-shadow:inset 0 -3px 0 #ff5a64,0 0 10px #e21a2288}
+.tr.t{box-shadow:inset 0 -3px 0 #7ff5f5,0 0 8px #2ee0e044}
+.tr.q{background:linear-gradient(#2a3fa8,#15226b);box-shadow:inset 0 0 0 2px #9ec0ff;opacity:.5}
+.tr.o{animation:chPop .45s}
+.tr.o:not(.wait){animation:chPop .45s,chOffer 1.2s ease-in-out .45s infinite}
+@keyframes chPop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes chOffer{50%{box-shadow:inset 0 0 0 2px #e8b931,0 0 14px #e8b931aa}}
+.ldTok{position:absolute;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:.82rem;color:#fff;border-radius:3px;pointer-events:none;letter-spacing:.06em;white-space:nowrap;transition:top .55s cubic-bezier(.3,1.35,.5,1),left .55s,width .55s}
+.ldTok.ch{text-shadow:0 1px 3px #000}
+.ldTok.me{background:linear-gradient(#3b5fe0,#15226b);box-shadow:inset 0 0 0 2px #cfe0ff,0 0 14px #5a8dffcc;font-size:.9rem}
+.ldTok.me .ar{color:#c9d6f2;font-size:.7rem}
+.ldTok.me.win{background:linear-gradient(#35cf78,#117538);box-shadow:inset 0 0 0 2px #d6ffe6,0 0 18px #35cf78}
+.ldTok.caught{background:repeating-linear-gradient(45deg,#a80c12 0 10px,#15226b 10px 20px);box-shadow:0 0 16px #ff2a35;animation:chShake .5s}
+#chase.danger .ldTok.me{animation:chDanger 1s ease-in-out infinite}
+@keyframes chDanger{50%{box-shadow:inset 0 0 0 2px #ffd0d3,0 0 18px #ff2a35}}
+@keyframes chShake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+#chase.won .tr{background:linear-gradient(#35cf78,#117538);box-shadow:inset 0 -3px 0 #8ff0b8}
+#chase.won .tr:nth-child(1){transition-delay:.56s}#chase.won .tr:nth-child(2){transition-delay:.49s}#chase.won .tr:nth-child(3){transition-delay:.42s}#chase.won .tr:nth-child(4){transition-delay:.35s}#chase.won .tr:nth-child(5){transition-delay:.28s}#chase.won .tr:nth-child(6){transition-delay:.21s}#chase.won .tr:nth-child(7){transition-delay:.14s}#chase.won .tr:nth-child(8){transition-delay:.07s}
+#chase.lost .tr:not(.home){background:linear-gradient(#e21a22,#a80c12);box-shadow:inset 0 -3px 0 #ff5a64}
+.cans{overflow:hidden}
+.cans .tags .tc{animation:chSlide .35s ease-out}
+@keyframes chSlide{from{transform:translateX(36px);opacity:0}}
+.cans button.right{animation:chPop .4s}
+.cans .stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:900;font-size:.72rem;letter-spacing:.08em;color:#fff;background:#0a1a4ad9;box-shadow:inset 0 0 0 2px #7fb2ff;pointer-events:none;animation:chStamp .9s forwards}
+@keyframes chStamp{0%{opacity:0;transform:scale(1.6)}20%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0}}
+#chCard{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;cursor:pointer;background:linear-gradient(112deg,transparent 30%,#5a9dff2e 45%,transparent 60%),linear-gradient(248deg,transparent 30%,#5a9dff2e 45%,transparent 60%),radial-gradient(ellipse at 50% 42%,#12308f 0,#020a3a 55%,#000 100%)}
+.chCardIn{animation:chCardIn .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes chCardIn{from{opacity:0;transform:scale(.7)}}
+.chCardK{letter-spacing:.3em;text-transform:uppercase;color:#9ec0ff;font-weight:800;font-size:.85rem}
+.chCardT{font-size:2.1rem;font-weight:900;letter-spacing:.05em;color:#fff;text-shadow:0 0 18px #3b7bff;line-height:1.05;margin:8px 0}
+.chCardT.red{color:#ff5a64;text-shadow:0 0 18px #d62f3a}
+.chCardS{color:#c9d6f2;font-size:.95rem;max-width:300px;margin:0 auto}
+.chCardP{width:170px;height:170px;margin:14px auto;border-radius:50%;box-shadow:0 0 0 4px #ff5a64,0 0 40px #ff3b4a88}
+#chCard small{display:block;margin-top:24px;color:#7f93c9;font-size:.72rem}
+#chFx{position:fixed;inset:0;pointer-events:none;z-index:9500;overflow:hidden}
+#chFx i{position:absolute;top:-16px;width:9px;height:14px;border-radius:2px;animation:chFall linear forwards}
+@keyframes chFall{to{transform:translateY(106vh) rotate(720deg)}}
+.dlg .portrait{border-radius:50%}
+.chPB{margin:6px auto 2px;display:inline-block;padding:5px 14px;border-radius:999px;background:linear-gradient(#ffe27a,#e8b931);color:#3a2a00;font-weight:900;letter-spacing:.08em;font-size:.82rem;box-shadow:0 0 18px #e8b931aa;animation:chPop .5s}
+@media (max-height:760px){.chRing{width:62px;height:62px}.chRing b{font-size:1.5rem}.chBank b{font-size:1.25rem}.chCardP{width:140px;height:140px}}
+@media (prefers-reduced-motion:reduce){#chase *,#rapid.chaseTheme *,#chCard *{animation:none!important;transition:none!important}#chFx{display:none}}
 /* Hall of Fame top: lifelines left, ladder right */
 .hfMain{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;margin-bottom:6px}
 .hfLeft{display:flex;flex-direction:column;gap:8px;justify-content:center}
@@ -1074,7 +1149,7 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 <section id="rapid" class="hide">
   <div class="topbar"><button class="back" data-home>← Menu</button><div class="stats"><span>⏱ <b id="rTime">60</b>s</span><span id="rLabel">Score</span><b id="rScore">0</b></div></div>
   <div class="hostBar hide" id="rHost"><div class="hostPic" id="rHostPic"></div><div class="hostTxt"><b>The Host</b><span id="rHostSay"></span></div><div class="watch"><div class="portrait"></div><small id="rWatch"></small></div></div>
-  <div class="bigClock hide" id="rClock">60</div>
+  <div class="chTop hide" id="rClock"><div class="chRing"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="40"/><circle class="fg" id="rRing" cx="50" cy="50" r="40"/></svg><b id="rClockN">30</b></div><div class="chBank"><small>BANKED</small><b id="rBank">0 pts</b></div></div>
   <div class="bar-p"><i id="rBar"></i></div>
   <div class="qcard"><div class="qkind" id="rKind"></div><div class="qprompt" id="rPrompt"></div><div class="qcat" id="rCat"></div></div>
   <div class="opts" id="rOpts"></div>
@@ -1102,12 +1177,12 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
     <b>Round 1 — Points Builder.</b> 30 seconds of quick-fire questions. Every right answer banks 1,000 points.<br><br>
     <b>Round 2 — Head-to-Head.</b> The Chaser makes you three offers: step towards them for a big offer, stay for what you banked, or step towards home for less. Then you both answer each question. Right answers move you down the board; their right answers move them after you. Get home before he catches you to win the pot.
   </div>
-  <div class="row"><button class="btn red" id="chGo">Start the Chase</button></div>
+  <div class="row"><button class="btn alt" id="chSnd">🔊 Sound</button><button class="btn red" id="chGo">Start the Chase</button></div>
 </section>
 
 <!-- CHASER HEAD-TO-HEAD -->
 <section id="chase" class="hide">
-  <div class="topbar"><button class="back" data-home>← Menu</button><div class="stats"><span>Pot <b id="hPot">0 pts</b></span></div></div>
+  <div class="topbar"><button class="back" data-home>← Menu</button><div class="stats"><span>Pot <b id="hPot">0 pts</b></span><span id="hGap"></span></div></div>
   <div class="vs"><div class="portrait"></div><div class="vsTxt"><b id="hName">THE CHASER</b><span id="hSay"></span></div></div>
   <div class="tower" id="ladder"></div>
   <div id="hPanel"></div>
@@ -1243,6 +1318,7 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 
 </div>
 
+<div id="chCard" class="hide"></div><div id="chFx"></div>
 <div class="overlay" id="ov"><div class="dlg" id="ovBody"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -10448,7 +10524,7 @@ document.querySelectorAll('[data-home]').forEach(b=>b.onclick=goHome);
 
 const SECTIONS=['home','pat','study','gpSetup','gp','bpSetup','bp','gs','tl','mSetup','match','quiz','rapid','flash','chSetup','chase','hfSetup','hf','sl','tSetup','turbo','ws','hmSetup','hm'];
 function show(id){if(id!=='study'&&id!=='pat'&&typeof sgStop==='function')sgStop();closeVideo();if(id!=='gp')gpKill();if(id!=='bp')bpKill();if(id!=='tl')tlKill();if(id!=='gs')gsKill();SECTIONS.forEach(s=>$('#'+s).classList.toggle('hide',s!==id));window.scrollTo(0,0)}
-function stopTimers(){if(typeof taStop==='function')taStop();if(typeof TT!=='undefined'&&TT)cancelAnimationFrame(TT.raf);[M,R,H,HF,SL,typeof TT!=='undefined'?TT:null,typeof WS!=='undefined'?WS:null].forEach(x=>{if(x){clearInterval(x.timer);(x.seq||[]).forEach(clearTimeout);x.dead=true}})}
+function stopTimers(){if(typeof taStop==='function')taStop();try{chStop()}catch(e){}if(typeof TT!=='undefined'&&TT)cancelAnimationFrame(TT.raf);[M,R,H,HF,SL,typeof TT!=='undefined'?TT:null,typeof WS!=='undefined'?WS:null].forEach(x=>{if(x){clearInterval(x.timer);(x.seq||[]).forEach(clearTimeout);x.dead=true}})}
 function goHome(){stopTimers();closeOv();RG_ON=false;RG_CB=RG_COUNT=null;show('home');renderHome()}
 let toastT;function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.style.background=bad?'var(--bad)':'var(--good)';t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
 function openOv(html){$('#ovBody').className='dlg';$('#ovBody').innerHTML=html;$('#ov').classList.add('show')}
@@ -10618,13 +10694,15 @@ function startClock(){const pool=shuffle(items(inScope));if(!pool.length)return;
 function hostSay(t){$('#rHostSay').textContent=t}
 function startRapid(){
   const cash=R.mode==='cash';
-  $('#rapid').classList.toggle('chaseTheme',cash);$('#rHost').classList.toggle('hide',!cash);$('#rClock').classList.toggle('hide',!cash);$('#rClock').textContent=R.secs;
+  $('#rapid').classList.toggle('chaseTheme',cash);$('#rHost').classList.toggle('hide',!cash);$('#rClock').classList.toggle('hide',!cash);
   $('#rLabel').textContent=cash?'Banked':'Score';
-  if(cash){$('#rHostPic').innerHTML=HOST_SVG;$('#rWatch').textContent=`${R.chaser} is watching`;hostSay('Your 30 seconds start... now!')}
+  if(cash){$('#rHostPic').innerHTML=HOST_SVG;chPaint('#rHost .portrait',R.chaser,'calm');const bk=$('#rBank');bk._v=0;bk.textContent=money(0);$('#rWatch').textContent=`${R.chaser} is watching`;hostSay('Your 30 seconds start... now!');chBed('r1')}
   show('rapid');nextRapid();updRapid();
-  R.timer=setInterval(()=>{R.secs--;updRapid();if(cash&&R.secs===10)hostSay('Ten seconds left!');if(R.secs<=0){clearInterval(R.timer);R.lock=true;if(cash)hostSay("And that's time!");setTimeout(endRapid,500)}},1000);
+  R.timer=setInterval(()=>{R.secs--;updRapid();if(cash&&R.secs===10)hostSay('Ten seconds left!');
+    if(cash&&R.secs>0){chSfx('tick');if(R.secs<=10){const me=R;setTimeout(()=>{if(!me.dead&&me.secs>0)chSfx('tick')},500)}}   // the clock ticks twice as fast for the last 10 seconds
+    if(R.secs<=0){clearInterval(R.timer);R.lock=true;if(cash){hostSay("And that's time!");chSfx('time');chBed(null)}setTimeout(endRapid,cash?900:500)}},1000);
 }
-function updRapid(){$('#rTime').textContent=Math.max(0,R.secs);$('#rClock').textContent=Math.max(0,R.secs);$('#rScore').textContent=R.mode==='cash'?money(R.score*1000):R.score;$('#rBar').style.width=(R.secs/(R.total||60)*100)+'%'}
+function updRapid(){$('#rTime').textContent=Math.max(0,R.secs);chClock();if(R.mode==='cash')chCount($('#rBank'),R.score*1000,350);$('#rScore').textContent=R.mode==='cash'?money(R.score*1000):R.score;$('#rBar').style.width=(R.secs/(R.total||60)*100)+'%'}
 function nextRapid(){
   R.q=makeQ(draw(R),R.mode==='cash'?3:4);const q=R.q;
   $('#rKind').textContent=q.kind;$('#rPrompt').textContent=q.prompt;$('#rPrompt').classList.toggle('long',!!q.long);$('#rPrompt').classList.toggle('xlong',!!q.xl);$('#rCat').textContent=q.cat;
@@ -10636,7 +10714,7 @@ function answerRapid(k,el){
   const q=R.q,ok=q.opts[k]===q.ans;R.res.push({topic:q.topic,ok,explain:q.explain});if(ok)R.score++;
   el.classList.add(ok?'right':'wrong');
   if(!ok)[...$('#rOpts').children].forEach((b,j)=>{if(q.opts[j]===q.ans)b.classList.add('right')});
-  if(R.mode==='cash')hostSay(ok?pickL(BANTER.hostRight):pickL(BANTER.hostWrong)(q.ans));
+  if(R.mode==='cash'){hostSay(ok?pickL(BANTER.hostRight):pickL(BANTER.hostWrong)(q.ans));chSfx(ok?'ding':'buzz');if(ok)chFly()}
   updRapid();
   setTimeout(()=>{if(R.dead||R.secs<=0)return;R.lock=false;nextRapid()},ok?250:700);
 }
@@ -10651,10 +10729,10 @@ function endRapid(){
     <div class="row"><button class="btn alt" onclick="goHome()">Menu</button><button class="btn" onclick="closeOv();startClock()">Go again</button></div>`);
   }else{
     const bank=R.score*1000;
-    openOv(`<div class="portrait">${GM_SVG}</div><h3>You banked ${money(bank)}</h3>
+    openOv(`<div class="portrait">${chFace(R.chaser,R.score<=3?'smug':R.score>6?'cross':'calm')}</div><h3>You banked ${money(bank)}</h3>
     <div class="sub">${R.score} right out of ${R.res.length}</div>
     <div class="say" style="margin-top:12px"><b style="color:#ff5a64">${esc(R.chaser)}:</b> "${pickL(R.score===0?BANTER.bank0:R.score<=3?BANTER.bankLow:R.score<=6?BANTER.bankMid:BANTER.bankHigh)}"</div>
-    <div class="row"><button class="btn red" onclick="closeOv();startOffer()">Face ${esc(R.chaser)}</button></div>`);
+    <div class="row"><button class="btn red" onclick="closeOv();chRound2()">Face ${esc(R.chaser)}</button></div>`);
   }
 }
 
@@ -10680,6 +10758,139 @@ const BANTER={
   hostRight:["Correct!","Yes!","Right!","Good!","That's it!"],
   hostWrong:[a=>`No — ${a}.`,a=>`No, it's ${a}.`,a=>`Ooh, no. ${a}.`]
 };
+/* ---------- Taekwondo Chaser: the five Chasers (cartoon faces with moods), sound, title cards ---------- */
+const CH_CHARS={
+  'Hwa-Rang':    {tag:'The young warrior. Fast, fearless and very sure of himself.',bg:'#0d2a6e',skin:'#e8bd95',brow:'#1b1b1b',bw:2.6,
+    out:'<path d="M10 100 C14 78 32 70 50 70 C68 70 86 78 90 100Z" fill="#2456c8"/><path d="M38 71 L50 90 L62 71" fill="none" stroke="#fff" stroke-width="5"/>',
+    hair:'<circle cx="50" cy="13" r="6.5" fill="#1b1b1b"/><path d="M30 40 Q28 17 50 17 Q72 17 70 40 Q63 27 50 27 Q37 27 30 40Z" fill="#1b1b1b"/><path d="M31 33 Q50 24 69 33" fill="none" stroke="#e8b931" stroke-width="4.5"/>',beard:''},
+  'Ahn Chang-Ho':{tag:'The teacher. Calm, patient and rarely wrong.',bg:'#3b2f24',skin:'#e0b48c',brow:'#2a2019',bw:2.6,
+    out:'<path d="M10 100 C14 78 32 70 50 70 C68 70 86 78 90 100Z" fill="#20242e"/><path d="M40 70 L50 86 L60 70Z" fill="#fff"/><path d="M48 73 L52 73 L54 90 L50 95 L46 90Z" fill="#111"/><path d="M33 72 L44 86 M67 72 L56 86" stroke="#39404f" stroke-width="3"/>',
+    hair:'<path d="M30 39 Q30 17 53 18 Q72 19 70 39 Q62 25 45 26 Q35 28 30 39Z" fill="#2a2019"/>',
+    beard:'<path d="M40 55 Q50 50 60 55 Q50 57.5 40 55Z" fill="#2a2019"/>'},
+  'Admiral Yi':  {tag:'The admiral. Never lost a battle and does not plan to start now.',bg:'#0b3d4a',skin:'#dcae84',brow:'#1c1c1c',bw:3,
+    out:'<path d="M10 100 C14 78 32 70 50 70 C68 70 86 78 90 100Z" fill="#8a1a1a"/><path d="M22 84 H78 M18 93 H82" stroke="#5c0f0f" stroke-width="2"/><g fill="#e8b931"><circle cx="30" cy="88" r="2"/><circle cx="43" cy="88" r="2"/><circle cx="57" cy="88" r="2"/><circle cx="70" cy="88" r="2"/></g>',
+    hair:'<path d="M50 3 V12" stroke="#e8b931" stroke-width="3"/><circle cx="50" cy="4" r="3" fill="#c8102e"/><path d="M28 31 Q28 10 50 10 Q72 10 72 31Z" fill="#7a1414"/><rect x="26" y="27" width="48" height="6" rx="2" fill="#e8b931"/><path d="M27 33 L24 54 L31 50 Z M73 33 L76 54 L69 50Z" fill="#7a1414"/>',
+    beard:'<path d="M32 50 Q35 76 50 83 Q65 76 68 50 Q61 61 50 60 Q39 61 32 50Z" fill="#1c1c1c"/><path d="M40 55 Q50 51 60 55" stroke="#1c1c1c" stroke-width="4" fill="none" stroke-linecap="round"/>'},
+  'Won-Hyo':     {tag:'The monk. Quiet, wise and always one thought ahead.',bg:'#3a2c5a',skin:'#e3b68e',brow:'#8a8a8a',bw:2.4,
+    out:'<path d="M10 100 C14 78 32 70 50 70 C68 70 86 78 90 100Z" fill="#8d8f96"/><path d="M36 71 L56 96 M64 71 L44 92" stroke="#6b6d75" stroke-width="4" fill="none"/><g fill="#7a4a2a"><circle cx="37" cy="76" r="2.4"/><circle cx="41" cy="81" r="2.4"/><circle cx="46" cy="85" r="2.4"/><circle cx="54" cy="85" r="2.4"/><circle cx="59" cy="81" r="2.4"/><circle cx="63" cy="76" r="2.4"/></g>',
+    hair:'<ellipse cx="43" cy="26" rx="8" ry="4" fill="#fff" opacity=".28"/>',beard:''},
+  'Ge-Baek':     {tag:'The general. Strict, stern and very hard to beat.',bg:'#5a1017',skin:'#d9a97e',brow:'#151515',bw:4,
+    out:'<path d="M10 100 C14 78 32 70 50 70 C68 70 86 78 90 100Z" fill="#23262e"/><path d="M10 100 C13 84 22 77 32 73 L38 100Z M90 100 C87 84 78 77 68 73 L62 100Z" fill="#a31a1a"/><path d="M38 100 L42 74 H58 L62 100" fill="none" stroke="#e8b931" stroke-width="2"/>',
+    hair:'<circle cx="50" cy="12" r="7" fill="#151515"/><rect x="46" y="15" width="8" height="5" fill="#a31a1a"/><path d="M30 41 Q28 18 50 18 Q72 18 70 41 Q64 28 50 28 Q36 28 30 41Z" fill="#151515"/>',
+    beard:'<path d="M31 48 Q32 80 50 90 Q68 80 69 48 Q62 60 50 59 Q38 60 31 48Z" fill="#151515"/><path d="M39 55 Q50 50 61 55" stroke="#151515" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M62 30 L66 44" stroke="#9a5a44" stroke-width="1.8"/>'}
+};
+// mood: calm, smug (they got it right), cross (you got one past them), close (right behind you)
+function chFace(name,mood){
+  const c=CH_CHARS[name]||CH_CHARS['Ge-Baek'],m=mood||'calm',id='chc'+(chFace.n=(chFace.n||0)+1);
+  const brow={calm:'M33 37 L45 37 M55 37 L67 37',smug:'M33 37 L45 36 M55 32 L67 35',cross:'M33 33 L45 39 M55 39 L67 33',close:'M33 35 L45 38 M55 38 L67 35'}[m];
+  const mouth={calm:'<path d="M43 63 Q50 65 57 63" stroke="#6b2f20" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+    smug:'<path d="M42 62 Q52 68 60 59" stroke="#6b2f20" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    cross:'<path d="M43 66 Q50 60 57 66" stroke="#6b2f20" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    close:'<path d="M41 61 Q50 72 59 61Z" fill="#fff" stroke="#6b2f20" stroke-width="2" stroke-linejoin="round"/>'}[m];
+  const eyeY=m==='close'?45:44,eyeR=m==='cross'?2.2:2.6;
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#${id})">
+<rect width="100" height="100" fill="${c.bg}"/><circle cx="50" cy="38" r="46" fill="#fff" opacity=".07"/>${c.out}
+<rect x="43" y="58" width="14" height="15" fill="${c.skin}"/><path d="M43 68 Q50 73 57 68 V73 H43Z" fill="#000" opacity=".12"/>
+<ellipse cx="30.5" cy="45" rx="4" ry="6.5" fill="${c.skin}"/><ellipse cx="69.5" cy="45" rx="4" ry="6.5" fill="${c.skin}"/>
+<ellipse cx="50" cy="43" rx="19.5" ry="23" fill="${c.skin}"/>${c.beard}${c.hair}
+<path d="${brow}" stroke="${c.brow}" stroke-width="${c.bw}" stroke-linecap="round" fill="none"/>
+<circle cx="39" cy="${eyeY}" r="${eyeR}" fill="#1a1210"/><circle cx="61" cy="${eyeY}" r="${eyeR}" fill="#1a1210"/>
+<path d="M50 46 L47.5 54 Q50 56 52.5 54" stroke="#000" stroke-opacity=".28" stroke-width="1.8" fill="none" stroke-linejoin="round"/>${mouth}</g></svg>`;
+}
+function chPaint(sel,name,mood){document.querySelectorAll(sel).forEach(p=>p.innerHTML=chFace(name,mood))}
+function chMood(m){if(!H)return;H.mood=m;chPaint('#chase .vs .portrait',H.name,m);$('#chase .vs').classList.toggle('lean',m==='close')}
+// Sound: effects follow the "All sound" switch, the quiet backing beat follows the music volume (both shared with Turbo and Grand Prix)
+const CHA={int:null,mode:null,next:0,step:0};
+const chHz=n=>440*Math.pow(2,(n-69)/12);
+function chSfx(k){
+  if(!TA.on||!taCtx())return;
+  try{
+    if(k==='tick')taTone(1250,.035,'square',.04);
+    else if(k==='ding'){taTone(880,.08,'triangle',.11);taTone(1320,.22,'triangle',.11,0,.07)}
+    else if(k==='buzz')taTone(140,.28,'sawtooth',.09,95);
+    else if(k==='time'){taTone(220,.7,'sawtooth',.1,110);taTone(165,.7,'square',.06,82)}
+    else if(k==='lock'){taTone(330,.09,'square',.08);taTone(660,.22,'triangle',.11,0,.06)}
+    else if(k==='chLock'){taTone(196,.12,'sawtooth',.08);taTone(147,.28,'sawtooth',.09,0,.1)}
+    else if(k==='roll'){for(let i=0;i<14;i++)taNoise(.05,.05+i*.009,1800,'bandpass',i*.055)}
+    else if(k==='right')[523,659,784].forEach(f=>taTone(f,.38,'triangle',.07));
+    else if(k==='wrong'){taTone(196,.38,'sawtooth',.07,120);taTone(233,.38,'sawtooth',.05,140)}
+    else if(k==='stepMe'){taTone(392,.1,'triangle',.1,523);taTone(784,.26,'sine',.09,0,.09)}
+    else if(k==='stepCh'){taTone(82,.42,'sine',.3,41);taNoise(.18,.18,220)}
+    else if(k==='offer'){taTone(294,.12,'square',.06);taTone(440,.3,'triangle',.1,0,.1)}
+    else if(k==='card'){taNoise(.35,.09,2400,'highpass');taTone(110,.5,'sawtooth',.07,220)}
+    else if(k==='intro'){[45,45,48,44].forEach((n,i)=>taTone(chHz(n),.32,'sawtooth',.09,0,i*.3));taTone(chHz(33),1.3,'sine',.22,0,1.2)}
+    else if(k==='win')[523,659,784,1047,784,1047,1319].forEach((f,i)=>taTone(f,i===6?.6:.13,'square',.07,0,i*.12));
+    else if(k==='caught'){[220,208,196,147].forEach((f,i)=>taTone(f,i===3?.9:.2,'sawtooth',.09,0,i*.2));taNoise(.5,.2,200,'lowpass',.6)}
+    else if(k==='pb')[1047,1319,1568,2093].forEach((f,i)=>taTone(f,.22,'sine',.08,0,i*.08));
+  }catch(e){}
+}
+function chBed(mode){   // 'r1' = Points Builder, 'r2' = Head-to-Head, null = stop
+  CHA.mode=mode;
+  if(!mode){clearInterval(CHA.int);CHA.int=null;try{if(TA.mus)TA.mus.gain.setTargetAtTime(0,TA.ctx.currentTime,.08)}catch(e){}return}
+  if(!taCtx())return;
+  taMusOut();taApply();CHA.step=0;CHA.next=TA.ctx.currentTime+.1;
+  if(!CHA.int)CHA.int=setInterval(chBedTick,60);
+}
+function chBedTick(){
+  const a=TA.ctx;if(!a||!CHA.mode)return;
+  try{
+    const now=a.currentTime,r1=CHA.mode==='r1';
+    const hot=r1?!!(R&&R.secs<=10):!!(H&&H.phase==='play'&&H.c>=H.p-1&&H.p<HOME);
+    const sd=60/(r1?(hot?150:124):(hot?104:84))/2;      // one step = half a beat; faster when time is short or the Chaser is close
+    if(CHA.next<now-.3)CHA.next=now+.05;
+    while(CHA.next<now+.2){
+      const s=CHA.step%8,bar=Math.floor(CHA.step/8),d=CHA.next-now,root=[33,33,36,31][bar%4];
+      if(r1){taTone(chHz(root+(s%2?12:0)),sd*.9,'triangle',.09,0,d,TA.mus);if(s===0||s===4)taTone(chHz(root+24+(bar%2?3:7)),sd*1.6,'square',.02,0,d,TA.mus)}
+      else{
+        if(s===0||s===3||s===6)taTone(chHz(root),sd*1.8,'triangle',.09,0,d,TA.mus);
+        if(s===0)taTone(chHz(root+19),sd*7,'sine',.035,0,d,TA.mus);
+        if(hot&&TA.on&&s%4===0){taTone(62,.13,'sine',.26,40,d);taTone(55,.16,'sine',.2,36,d+.2)}     // heartbeat
+      }
+      CHA.next+=sd;CHA.step++;
+    }
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CHA.mode&&TA.ctx){taCtx();taApply()}});
+function chStop(){
+  chBed(null);
+  const c=$('#chCard');if(c){c.classList.add('hide');c.onclick=null;c.innerHTML=''}
+  const f=$('#chFx');if(f)f.innerHTML='';
+  const s=$('#chase');if(s)s.classList.remove('danger','won','lost');
+}
+// A full-screen title card. Goes away by itself; a tap skips it.
+function chCard(html,ms,cb,st,snd){
+  const el=$('#chCard');let done=false;
+  const go=()=>{if(done)return;done=true;el.classList.add('hide');el.onclick=null;if(!st.dead)cb()};
+  el.innerHTML=`<div class="chCardIn">${html}<small>Tap to continue</small></div>`;el.classList.remove('hide');
+  el.onclick=go;(st.seq=st.seq||[]).push(setTimeout(go,ms));chSfx(snd||'card');
+}
+function chIntro(){
+  taCtx();const nm=R.chaser;
+  chCard(`<div class="chCardK">Tonight's Chaser</div><div class="chCardP">${chFace(nm,'smug')}</div><div class="chCardT red">${esc(nm.toUpperCase())}</div><div class="chCardS">${CH_CHARS[nm].tag}</div>`,3600,()=>
+    chCard(`<div class="chCardK">Round 1</div><div class="chCardT">POINTS BUILDER</div><div class="chCardS">30 seconds. Every right answer banks 1,000 points.</div>`,2600,startRapid,R),R,'intro');
+}
+function chRound2(){
+  chCard(`<div class="chCardK">Round 2</div><div class="chCardT">HEAD-TO-HEAD</div><div class="chCardS">Get home before ${esc(R.chaser)} catches you.</div>`,2600,startOffer,R);
+}
+function chClock(){
+  const n=$('#rClockN');if(!n||!R)return;const s=Math.max(0,R.secs);
+  n.textContent=s;$('#rRing').style.strokeDashoffset=(1-s/(R.total||30))*251.3;
+  $('#rClock').classList.toggle('hot',R.mode==='cash'&&s<=10&&s>0);
+}
+// Count a points display up (or down) to a new value
+function chCount(el,to,ms){
+  if(!el)return;const from=el._v||0;el._v=to;
+  if(from===to){el.textContent=money(to);return}
+  const t0=performance.now(),d=ms||400;
+  const f=t=>{if(el._v!==to)return;const k=Math.min(1,(t-t0)/d);el.textContent=money(k<1?Math.round((from+(to-from)*k)/100)*100:to);if(k<1)requestAnimationFrame(f)};
+  requestAnimationFrame(f);
+}
+function chFly(){const b=$('.chBank');if(!b)return;const s=document.createElement('span');s.className='chFly';s.textContent='+1,000';b.appendChild(s);setTimeout(()=>s.remove(),720)}
+function chConfetti(){
+  const cols=['#e8b931','#35cf78','#4a9dff','#ff5a64','#ffffff'];let h='';
+  for(let i=0;i<46;i++)h+=`<i style="left:${(Math.random()*100).toFixed(1)}%;background:${cols[i%5]};animation-delay:${(Math.random()*.9).toFixed(2)}s;animation-duration:${(1.8+Math.random()*1.4).toFixed(2)}s"></i>`;
+  $('#chFx').innerHTML=h;setTimeout(()=>{const f=$('#chFx');if(f&&!$('#chase').classList.contains('won'))return;if(f)f.innerHTML=''},4300);
+}
 /* ---------- Taekwondo Chaser ---------- */
 let H=null;
 const HOME=8,H_SECS=10;
@@ -10689,12 +10900,13 @@ function renderChSetup(){
   $('#chSkillLbl').innerHTML=`<b>${skillName(S.chSkill)}</b> · gets about ${S.chSkill}% right`;
 }
 function openChaser(){stopTimers();renderChSetup();show('chSetup');rgMount()}
+$('#chSnd').onclick=()=>$('#tuSound').onclick();
 $('#chSkill').oninput=e=>{S.chSkill=+e.target.value;save();renderChSetup()};
 $('#chGo').onclick=()=>{
   const pool=shuffle(items(inScope));
   if(pool.length<4){toast('Not enough questions — raise the grade or turn on more topics',true);return}
   stopTimers();H=null;
-  R={mode:'cash',pool,idx:0,score:0,res:[],secs:30,total:30,lock:false,chaser:CPU_NAMES[Math.random()*CPU_NAMES.length|0]};startRapid();
+  R={mode:'cash',pool,idx:0,score:0,res:[],secs:30,total:30,lock:false,chaser:CPU_NAMES[Math.random()*CPU_NAMES.length|0],seq:[]};chIntro();
 };
 const roundK=n=>Math.round(n/500)*500;
 // Random offers, shaped by how well you did in the Points Builder
@@ -10714,59 +10926,80 @@ function startOffer(){
   H={pool:R.pool,idx:R.idx,bank,c:0,p:null,pot:0,phase:'offer',timer:null,name:R.chaser,
      offers:genOffers(bank),shown:{3:true},ready:false,seq:[]};
   const me=H,nm=esc(H.name),lo=H.offers[4],hi=H.offers[2];
-  show('chase');$('#hName').textContent=H.name.toUpperCase();say('...');
-  $('#hPot').textContent=money(bank);renderLadder();
+  show('chase');$('#chase').classList.remove('danger','won','lost');$('#hName').textContent=H.name.toUpperCase();chMood('calm');say('...');
+  $('#hPot').textContent=money(bank);buildLadder();renderLadder();chBed('r2');
   $('#hPanel').innerHTML=`<div class="hostBar"><div class="hostPic">${HOST_SVG}</div><div class="hostTxt"><b>The Host</b><div id="hHost1" class="hmsg"></div><div id="hHost2" class="hmsg"></div></div></div>
-    <div class="row"><button class="btn red hide" id="hOfferNext">Next ▸</button></div>`;
-  const at=(ms,f)=>H.seq.push(setTimeout(()=>{if(!me.dead)f()},ms));
-  $('#hHost1').innerHTML=`Well done, you've banked <em class="hv">${money(bank)}</em>. If you want to take a step closer to home, <em class="hv">${nm}</em> will offer you…`;
-  at(4500,()=>{H.shown[4]=true;renderLadder();say(lo<0?`${money(lo)}. I'm not feeling generous tonight.`:`${money(lo)}.`)});
-  at(7500,()=>{$('#hHost2').innerHTML=`And if you want the higher offer, <em class="hv">${nm}</em> will offer you…`});
-  at(11500,()=>{H.shown[2]=true;renderLadder();say(`${money(hi)}.`)});
-  at(13300,()=>{const b=$('#hOfferNext');b.classList.remove('hide');b.onclick=()=>{
-    H.ready=true;renderLadder();
+    <div class="row"><button class="btn alt" id="hOfferSkip">Skip ▸</button></div>`;
+  const at=(ms,f)=>H.seq.push(setTimeout(()=>{if(!me.dead&&!me.ready)f()},ms));
+  const ready=()=>{
+    if(me.dead||me.ready)return;
+    me.shown[2]=me.shown[4]=true;me.ready=true;renderLadder();
     $('#hHost1').innerHTML=`So, which offer do you want? Tap it on the board.`;$('#hHost2').innerHTML='';
-    say(pickL(BANTER.offerIntro));b.closest('.row').remove();
-  }});
+    chMood('smug');say(pickL(BANTER.offerIntro));const b=$('#hOfferSkip');if(b)b.closest('.row').remove();
+  };
+  $('#hHost1').innerHTML=`Well done, you've banked <em class="hv">${money(bank)}</em>. If you want to take a step closer to home, <em class="hv">${nm}</em> will offer you…`;
+  at(2600,()=>{H.shown[4]=true;renderLadder();chSfx('offer');say(lo<0?`${money(lo)}. I'm not feeling generous tonight.`:`${money(lo)}.`)});
+  at(4600,()=>{$('#hHost2').innerHTML=`And if you want the higher offer, <em class="hv">${nm}</em> will offer you…`});
+  at(6400,()=>{H.shown[2]=true;renderLadder();chSfx('offer');say(`${money(hi)}.`)});
+  at(8000,ready);
+  $('#hOfferSkip').onclick=ready;
 }
 function say(t){$('#hSay').textContent=`"${t}"`}
-function renderLadder(){
-  const rows=[],w=r=>`style="width:${100-r*5}%"`;
-  for(let r=0;r<HOME;r++){
-    if(H.phase==='offer'){
-      if(r===0)rows.push(`<div class="tr c" ${w(r)}>${esc(H.name.toUpperCase())}</div>`);
-      else if(H.offers[r]!==undefined&&H.shown[r])rows.push(`<button class="tr o ${H.ready?'':'wait'}" ${w(r)} data-r="${r}"><span class="ar">▶</span>${money(H.offers[r])}<small>${r===2?'HIGH':r===3?'BANKED':'LOW'}</small><span class="ar">◀</span></button>`);
-      else if(H.offers[r]!==undefined)rows.push(`<div class="tr p" ${w(r)} style="width:${100-r*5}%;opacity:.5">?</div>`);
-      else rows.push(`<div class="tr ${r>4?'t':''}" ${w(r)}></div>`);
-    }else{
-      if(r<=H.c&&r>=H.p)rows.push(`<div class="tr caught" ${w(r)}>CAUGHT!</div>`);
-      else if(r<H.c)rows.push(`<div class="tr c" ${w(r)}></div>`);
-      else if(r===H.c)rows.push(`<div class="tr c" ${w(r)}>${esc(H.name.toUpperCase())}</div>`);
-      else if(r===H.p)rows.push(`<div class="tr p" ${w(r)}><span class="ar">▶</span>${money(H.pot)}<span class="ar">◀</span></div>`);
-      else if(r>H.p)rows.push(`<div class="tr t" ${w(r)}></div>`);
-      else rows.push(`<div class="tr" ${w(r)}></div>`);
-    }
-  }
-  rows.push(`<div class="tr home ${H.p>=HOME?'win':''}" style="width:58%">${H.p>=HOME?'HOME · '+money(H.pot):'HOME'}</div>`);
-  $('#ladder').innerHTML=rows.join('');
-  $('#ladder').onclick=e=>{const b=e.target.closest('.tr.o');if(b)chooseOffer(+b.dataset.r)};
+// The board is built once per game; renderLadder then only changes classes and moves the two markers, so every move is animated
+function buildLadder(){
+  let h='';for(let r=0;r<HOME;r++)h+=`<div class="tr" data-r="${r}" style="width:${100-r*5}%"></div>`;
+  h+=`<div class="tr home" style="width:58%">HOME</div><div class="ldTok ch" id="ldCh"></div><div class="ldTok me hide" id="ldMe"></div>`;
+  const L=$('#ladder');L.innerHTML=h;
+  L.onclick=e=>{const b=e.target.closest('.tr.o');if(b)chooseOffer(+b.dataset.r)};
 }
+function ldPlace(tok,r){const row=$('#ladder').children[r];tok.style.top=row.offsetTop+'px';tok.style.left=row.offsetLeft+'px';tok.style.width=row.offsetWidth+'px';tok.style.height=row.offsetHeight+'px'}
+function renderLadder(){
+  const L=$('#ladder');if(!H||!L||!$('#ldCh'))return;
+  const offer=H.phase==='offer',won=!offer&&H.p>=HOME,caught=!offer&&!won&&H.c>=H.p;
+  for(let r=0;r<HOME;r++){
+    const el=L.children[r];let cls='tr',txt='';
+    if(offer){
+      if(r===0)cls+=' c';
+      else if(H.offers[r]!==undefined&&H.shown[r]){cls+=' o'+(H.ready?'':' wait');txt=`<span class="ar">▶</span>${money(H.offers[r])}<small>${r===2?'HIGH':r===3?'BANKED':'LOW'}</small><span class="ar">◀</span>`}
+      else if(H.offers[r]!==undefined){cls+=' q';txt='?'}
+      else if(r>4)cls+=' t';
+    }else if(r<=H.c)cls+=' c';
+    else if(r>H.p)cls+=' t';
+    if(el.className!==cls)el.className=cls;
+    if(el._t!==txt){el.innerHTML=txt;el._t=txt}
+  }
+  const home=L.children[HOME];home.className='tr home'+(won?' win':'');
+  const ch=$('#ldCh'),me=$('#ldMe');
+  ch.className='ldTok ch'+(caught?' caught':'')+(won?' hide':'');ch.textContent=caught?'CAUGHT!':H.name.toUpperCase();
+  ldPlace(ch,caught?H.p:H.c);
+  me.className='ldTok me'+(offer||caught?' hide':'')+(won?' win':'');
+  if(!offer){me.innerHTML=won?`HOME · ${money(H.pot)}`:`<span class="ar">▶</span>${money(H.pot)}<span class="ar">◀</span>`;ldPlace(me,Math.min(H.p,HOME))}
+  const gap=offer?0:H.p-H.c,danger=!offer&&!won&&!caught&&gap===1;
+  $('#chase').classList.toggle('danger',danger);
+  $('#hGap').textContent=offer?'':won?'Home!':caught?'Caught!':danger?'Right behind you!':`${gap} steps ahead · ${HOME-H.p} to home`;
+}
+window.addEventListener('resize',()=>{if(H&&!H.dead&&!$('#chase').classList.contains('hide'))renderLadder()});
 function chooseOffer(r){
-  if(!H.ready)return;
-  H.p=r;H.pot=H.offers[r];H.phase='play';$('#hPot').textContent=money(H.pot);
-  say(pickL(r===2?BANTER.high:r===3?BANTER.mid:BANTER.low));
-  renderLadder();setTimeout(nextH,1000);
+  if(!H.ready||H.phase!=='offer')return;
+  const me=H;H.p=r;H.pot=H.offers[r];H.phase='play';$('#hPot').textContent=money(H.pot);
+  chSfx('lock');chMood(r===3?'calm':'smug');say(pickL(r===2?BANTER.high:r===3?BANTER.mid:BANTER.low));
+  renderLadder();H.seq.push(setTimeout(()=>{if(!me.dead)nextH()},1400));
 }
 function nextH(){
   if(!H||H.dead)return;
-  H.q=makeQ(draw(H),3);H.lock=false;H.t=H_SECS;const q=H.q;
+  H.q=makeQ(draw(H),3);H.lock=false;H.t=H_SECS;H.ls=H_SECS;const q=H.q;
+  chMood(H.c>=H.p-1?'close':'calm');
   $('#hPanel').innerHTML=`<div class="tbar"><i id="hT" style="width:100%"></i></div>
   <div class="cq"><small>${esc(q.kind)}</small><b class="${q.long?'long':''} ${q.xl?'xlong':''}">${esc(q.prompt)}</b></div>
   <div class="cans" id="hOpts">${q.opts.map((o,i)=>`<button><span class="L">${'ABC'[i]}</span><span>${esc(o)}</span><span class="tags"></span></button>`).join('')}</div>
   <div class="explain" id="hEx"></div><div class="row"><button class="btn red hide" id="hNext">Next question →</button></div>`;
   $('#hOpts').querySelectorAll('button').forEach((b,k)=>b.onclick=()=>resolveH(k));
   clearInterval(H.timer);
-  H.timer=setInterval(()=>{H.t-=.1;const bar=$('#hT');if(bar)bar.style.width=Math.max(0,H.t/H_SECS*100)+'%';if(H.t<=0)resolveH(-1)},100);
+  H.timer=setInterval(()=>{
+    H.t-=.1;const bar=$('#hT');if(bar)bar.style.width=Math.max(0,H.t/H_SECS*100)+'%';
+    const sec=Math.ceil(H.t-.001);if(sec!==H.ls){H.ls=sec;if(sec<=3&&sec>0)chSfx('tick')}
+    if(H.t<=0)resolveH(-1);
+  },100);
 }
 function resolveH(k){
   if(H.lock)return;H.lock=true;clearInterval(H.timer);
@@ -10774,26 +11007,40 @@ function resolveH(k){
   btns.forEach(b=>b.disabled=true);
   const ok=k===ai,chOk=Math.random()*100<S.chSkill;
   const wrongs=[0,1,2].filter(i=>i!==ai),ck=chOk?ai:wrongs[Math.random()*wrongs.length|0];
-  if(k>=0){btns[k].classList.add('you');btns[k].querySelector('.tags').innerHTML+=`<i class="ty">YOU</i>`}
+  if(k>=0){btns[k].classList.add('you');btns[k].querySelector('.tags').innerHTML+=`<i class="ty">YOU</i>`;btns[k].insertAdjacentHTML('beforeend','<em class="stamp">LOCKED IN</em>');chSfx('lock')}
+  else chSfx('buzz');
   $('#hEx').textContent=k<0?'⏱ Out of time!':`Let's see what ${H.name} said...`;
-  const step=(ms,f)=>setTimeout(()=>{if(!me.dead)f()},ms);
-  step(800,()=>{btns[ck].querySelector('.tags').innerHTML+=`<i class="tc">${esc(H.name.split(' ')[0].toUpperCase())}</i>`;$('#hEx').textContent='And the right answer is...'});
-  step(1700,()=>{btns[ai].classList.add('right');if(k>=0&&!ok)btns[k].classList.add('wrong');$('#hEx').textContent=q.explain});
-  step(2300,()=>{if(ok){H.p++;renderLadder()}});
-  step(2900,()=>{
-    if(chOk){H.c++;renderLadder()}
-    say(H.p<HOME&&H.c===H.p-1&&Math.random()<.6?pickL(BANTER.close):H.p===HOME-1&&Math.random()<.6?pickL(BANTER.nearHome):pickL(ok&&chOk?BANTER.bothRight:ok?BANTER.youRight:chOk?BANTER.chRight:BANTER.bothWrong));
-    if(H.p>=HOME)return step(900,()=>endChase(true));
-    if(H.c>=H.p)return step(900,()=>endChase(false));
+  const step=(ms,f)=>H.seq.push(setTimeout(()=>{if(!me.dead)f()},ms));
+  step(800,()=>{btns[ck].querySelector('.tags').innerHTML+=`<i class="tc">${esc(H.name.split(' ')[0].toUpperCase())}</i>`;chSfx('chLock');$('#hEx').textContent='And the right answer is...'});
+  step(1000,()=>chSfx('roll'));
+  step(1800,()=>{btns[ai].classList.add('right');if(k>=0&&!ok)btns[k].classList.add('wrong');chSfx(ok?'right':'wrong');chMood(chOk&&!ok?'smug':ok&&!chOk?'cross':'calm');$('#hEx').textContent=q.explain});
+  step(2500,()=>{if(ok){H.p++;renderLadder();chSfx('stepMe')}});
+  step(3200,()=>{
+    if(chOk){H.c++;renderLadder();chSfx('stepCh')}
+    const close=H.p<HOME&&H.c===H.p-1;
+    if(close&&!(ok&&!chOk))chMood('close');
+    say(close&&Math.random()<.6?pickL(BANTER.close):H.p===HOME-1&&Math.random()<.6?pickL(BANTER.nearHome):pickL(ok&&chOk?BANTER.bothRight:ok?BANTER.youRight:chOk?BANTER.chRight:BANTER.bothWrong));
+    if(H.p>=HOME)return step(700,()=>endChase(true));
+    if(H.c>=H.p)return step(700,()=>endChase(false));
     $('#hNext').classList.remove('hide');$('#hNext').onclick=nextH;
   });
 }
 function chBest(v){const b=lsGet('tkd_chase_best')||0;if(v>b){lsSet('tkd_chase_best',v);return v>0?'New personal best!':''}return `Your best: ${money(b)}`}
 function endChase(won){
-  openOv(`<div class="portrait">${GM_SVG}</div><h3>${won?'You made it home! 🏠':`Caught by ${esc(H.name)}! 👊`}</h3>
-  <div class="big" style="color:${won?'var(--good)':'var(--bad)'}">${won?money(H.pot):'0 pts'}</div><div class="sub">${chBest(won?H.pot:0)}</div>
-  <div class="say"><b style="color:#ff5a64">${esc(H.name)}:</b> "${pickL(won?BANTER.win:BANTER.lose)}"</div>
-  <div class="row"><button class="btn alt" onclick="goHome()">Menu</button><button class="btn red" onclick="closeOv();openChaser()">Play again</button></div>`);
+  const me=H,name=H.name,pot=H.pot;
+  chBed(null);clearInterval(H.timer);
+  const pb=won&&pot>0&&pot>(lsGet('tkd_chase_best')||0),note=chBest(won?pot:0);
+  $('#chase').classList.remove('danger');$('#chase').classList.add(won?'won':'lost');
+  chMood(won?'cross':'smug');chSfx(won?'win':'caught');if(won)chConfetti();
+  H.seq.push(setTimeout(()=>{
+    if(me.dead)return;
+    openOv(`<div class="portrait">${chFace(name,won?'cross':'smug')}</div><h3>${won?'You made it home! 🏠':`Caught by ${esc(name)}! 👊`}</h3>
+    <div class="big" id="chEndPts" style="color:${won?'var(--good)':'var(--bad)'}">0 pts</div>${pb?`<div class="chPB">★ NEW PERSONAL BEST ★</div>`:`<div class="sub">${note}</div>`}
+    <div class="say"><b style="color:#ff5a64">${esc(name)}:</b> "${pickL(won?BANTER.win:BANTER.lose)}"</div>
+    <div class="row"><button class="btn alt" onclick="goHome()">Menu</button><button class="btn red" onclick="closeOv();openChaser()">Play again</button></div>`);
+    if(won)chCount($('#chEndPts'),pot,900);
+    if(pb)chSfx('pb');
+  },won?1900:1600));
 }
 
 /* ---------- Flashcards ---------- */
@@ -12577,8 +12824,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.70';
+const APP_VERSION='3.71';
 const VERSION_NOTES=[
+  ['3.71','Taekwondo Chaser now feels like a TV game show: five Chasers with their own faces and moods, title cards for each round, a round studio clock, a lit board where you slide down and the red closes in behind you, a locked-in and reveal moment for every answer, quicker offers you can skip, sound effects and a backing beat (Sound button on the start screen), and a proper celebration when you get home.'],
   ['3.70','Taekwondo Turbo: the arrow buttons are back, now see-through and over the road. Turbo and Grand Prix both have a Sound panel with a music volume control, and the music is louder.'],
   ['3.69','Taekwondo Turbo rebuilt: a bigger bike and a road that fills the screen, drag anywhere to steer (buttons still available), word signs you can read as soon as they appear, scenery and music that change each round, streaks for double and triple points, a shield, perfect-round bonuses, stars, and bikes to unlock with the same theory points as Grand Prix.'],
   ['3.68','Behind the scenes: more work on the new game that is still being built (nothing new on the menu yet).'],
