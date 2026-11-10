@@ -457,6 +457,37 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 .tuQbar.idle{min-height:60px}.tuQbar.idle #tuQlab{color:#777!important}
 @keyframes qpop{0%{transform:scale(1)}30%{transform:scale(1.06);box-shadow:0 0 24px #ffe14d}100%{transform:scale(1)}}
 @media (max-height:700px){.tuQbar{min-height:66px}.tuQcd{min-width:42px!important;height:42px!important;font-size:1.6rem!important}}
+/* Turbo v3 (3.69): picture-led set-up screen, slim HUD, a road that fills the screen, drag steering */
+#tSetup{font-family:"Courier New",ui-monospace,monospace}
+#tuPrev{display:block;width:100%;height:92px;border:3px solid #fff;box-shadow:4px 4px 0 #000;image-rendering:pixelated;flex:none}
+.tuTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:none}
+.tuTile{background:#16163a;border:2px solid #3a3a6a;border-radius:10px;padding:8px 4px;text-align:center;font-size:.72rem;font-weight:800;line-height:1.25}
+.tuTile i{display:block;font-style:normal;font-size:1.5rem;margin-bottom:3px}
+.tuTile b{color:#ffe14d}
+#tuBikes{display:flex;gap:8px;justify-content:center;flex:none}
+.tuBike{width:clamp(34px,10vw,46px);height:clamp(34px,10vw,46px);border-radius:10px;border:3px solid rgba(255,255,255,.35);padding:0;font-size:.85rem;background:linear-gradient(180deg,var(--c) 0 62%,var(--d) 62%)}
+.tuBike.on{border-color:#fff;box-shadow:0 0 12px #fff;transform:scale(1.1)}
+.tuBike.locked{filter:grayscale(.85) brightness(.5)}
+#tuTP{text-align:center;font-size:.76rem;min-height:1.2em;flex:none}
+#tSetup .tuRow2{display:flex;gap:8px;align-items:center;flex:none}
+#tSetup .tuRow2 .seg{flex:1}
+#tSetup .tuRow2 .seg button{min-width:0;font:800 .78rem "Courier New",monospace}
+#tuHow{flex:none;border:2px solid #fff;background:#16163a;color:#fff;font:900 .8rem "Courier New",monospace;padding:8px 10px;border-radius:8px}
+.tuTop{gap:6px}
+.tuTop .back{flex:none}
+.tuStat{flex:1;min-width:0;border:2px solid #fff;box-shadow:3px 3px 0 #000;background:#1f4fc4;text-align:center;line-height:1.05;padding:2px 4px}
+.tuStat small{display:block;font-size:.55rem;font-weight:900;letter-spacing:.08em}
+.tuStat b{font-size:1.05rem;font-weight:900;white-space:nowrap}
+.tuStat.time{background:#111;flex:0 0 64px}.tuStat.time b{color:#ffe14d;font-size:1.25rem}
+.tuStat.time.low b{color:#ff5a64;animation:blink .5s infinite}
+.tuStat.wd{background:#6b2fa3}
+#tuSnd{flex:none;width:38px;height:36px;border:2px solid #fff;background:#111;box-shadow:3px 3px 0 #000;font-size:1rem;padding:0}
+.tuWrap{align-items:center}
+#tuCv{touch-action:none;cursor:grab}
+.tuPanel{display:none;height:112px}
+#turbo.btns .tuPanel{display:block}
+#turbo.btns .tuCtl button{font-size:1.1rem}
+@media (max-height:700px){.tuPanel{height:100px}#tuPrev{height:70px}.tuTile i{font-size:1.2rem}.tuTile{padding:5px 3px;font-size:.66rem}}
 /* ================= HOME SCREEN ================= */
 #home{--hb:#0b1120;--hp:#131b2d;--hp2:#1a2440;--hl:#28345a;--hblue:#3b6cf0;--hred:#e0343f;--hgold:#f0c24b;--hd:"Black Han Sans",system-ui,sans-serif;
   padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
@@ -1131,25 +1162,26 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 <section id="tSetup" class="hide">
   <div class="topbar"><button class="back" data-home>← Menu</button><div class="count" id="tuBest"></div></div>
   <div class="tuTitle"><span>TAEKWONDO</span><b>TURBO</b></div>
-  <div class="panel tuRules">
-    <ul>
-      <li>Ride for <b>2 minutes</b> and build the biggest <b>THEORY SCORE</b>.</li>
-      <li><b>TERMINOLOGY ROUNDS:</b> a word appears at the top (e.g. <b>KICK</b>, find the Korean). After <b>3-2-1 GO!</b>, words fly down the road for 14 seconds. Collect the <b>right</b> word: <b>+5</b>. Wrong word: <b>−5</b>.</li>
-      <li>Weave round <b>potholes</b> and <b>vehicles</b>. Hit one and you're dazed: slowed, can't steer and can't grab words for a second.</li>
-      <li><b>▲ ▼</b> change lanes. <b>◀ ▶</b> move your bike back or forward along the road (or use the arrow keys).</li>
-    </ul>
+  <canvas id="tuPrev"></canvas>
+  <div class="tuTiles">
+    <div class="tuTile"><i>✅</i>Ride into the <b>right word</b></div>
+    <div class="tuTile"><i>🚗</i>Dodge <b>traffic</b> and <b>potholes</b></div>
+    <div class="tuTile"><i>🔥</i>Build a <b>streak</b> for bonus points</div>
   </div>
+  <div id="tuBikes"></div>
+  <div id="tuTP"></div>
+  <div class="tuRow2"><div class="seg" id="tuCtlSeg"><button data-c="drag">👆 Drag to steer</button><button data-c="buttons">Buttons</button></div><button id="tuHow">HOW TO PLAY</button></div>
   <div class="tuOpt tuPush rgBox"></div>
   <button class="btn red" id="tuGo">START RACE</button>
 </section>
 
 <!-- TAEKWONDO TURBO RACE -->
 <section id="turbo" class="hide">
-  <div class="tuTop"><button class="back" data-home>← Menu</button><div class="tuDiff" id="tuDiff">Normal</div></div>
-  <div class="tuHud">
-    <div class="tuBox you"><small>THEORY SCORE</small><b id="tuPD">0 pts</b><i id="tuPS"></i></div>
-    <div class="tuTime" id="tuTimeBox"><small>TIME</small><b id="tuTime">2:00</b></div>
-    <div class="tuBox bot"><small>WORDS</small><b id="tuBD">✓0 ✗0</b><i id="tuBS"></i></div>
+  <div class="tuTop"><button class="back" data-home>← Menu</button>
+    <div class="tuStat you"><small>SCORE</small><b id="tuPD">0</b></div>
+    <div class="tuStat time" id="tuTimeBox"><small>TIME</small><b id="tuTime">2:00</b></div>
+    <div class="tuStat wd"><small>WORDS</small><b id="tuBD">✓0 ✗0</b></div>
+    <button id="tuSnd" aria-label="Sound on or off">🔊</button>
   </div>
   <div class="tuQbar idle" id="tuQbar"><span id="tuQlab"></span><b id="tuQtxt"></b><span class="tuQcd" id="tuQcd"></span><i class="tuQtime"><i id="tuQfill"></i></i></div>
   <div class="tuWrap" id="tuWrap"><canvas id="tuCv"></canvas></div>
@@ -10374,7 +10406,7 @@ document.querySelectorAll('[data-home]').forEach(b=>b.onclick=goHome);
 
 const SECTIONS=['home','pat','study','gpSetup','gp','bpSetup','bp','gs','tl','mSetup','match','quiz','rapid','flash','chSetup','chase','hfSetup','hf','sl','tSetup','turbo','ws','hmSetup','hm'];
 function show(id){if(id!=='study'&&id!=='pat'&&typeof sgStop==='function')sgStop();closeVideo();if(id!=='gp')gpKill();if(id!=='bp')bpKill();if(id!=='tl')tlKill();if(id!=='gs')gsKill();SECTIONS.forEach(s=>$('#'+s).classList.toggle('hide',s!==id));window.scrollTo(0,0)}
-function stopTimers(){if(typeof TT!=='undefined'&&TT)cancelAnimationFrame(TT.raf);[M,R,H,HF,SL,typeof TT!=='undefined'?TT:null,typeof WS!=='undefined'?WS:null].forEach(x=>{if(x){clearInterval(x.timer);(x.seq||[]).forEach(clearTimeout);x.dead=true}})}
+function stopTimers(){if(typeof taStop==='function')taStop();if(typeof TT!=='undefined'&&TT)cancelAnimationFrame(TT.raf);[M,R,H,HF,SL,typeof TT!=='undefined'?TT:null,typeof WS!=='undefined'?WS:null].forEach(x=>{if(x){clearInterval(x.timer);(x.seq||[]).forEach(clearTimeout);x.dead=true}})}
 function goHome(){stopTimers();closeOv();RG_ON=false;RG_CB=RG_COUNT=null;show('home');renderHome()}
 let toastT;function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.style.background=bad?'var(--bad)':'var(--good)';t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
 function openOv(html){$('#ovBody').className='dlg';$('#ovBody').innerHTML=html;$('#ov').classList.add('show')}
@@ -11535,6 +11567,9 @@ function slEnd(winner){
    TAEKWONDO TURBO — 2-minute single-player terminology motorbike game
    Ride, dodge traffic and potholes, and collect the correct Taekwondo
    terminology during each round. Your THEORY SCORE is what counts.
+   Right words in a row build a streak (bigger scores, then a shield); a round
+   with no wrong words is a perfect round. The scenery and tune change each
+   round and the road gets a little faster. Drag on the road to steer.
    ===================================================================== */
 
 /* ---- GAME SETTINGS: change these to tune the game ---- */
@@ -11566,7 +11601,7 @@ const TURBO={
   SPEEDUP_SECS:20,              // how long the final-round speed-up takes to build to full speed
   RIDER_X:92,                   // where your bike starts on screen (0 = left edge, 400 = right edge)
   RIDER_X_MIN:40,               // furthest left ◀ can move the bike
-  RIDER_X_MAX:330,              // furthest right ▶ can move the bike
+  RIDER_X_MAX:250,              // furthest right ▶ can move the bike (kept clear of the word signs waiting at the right-hand edge)
   MOVE_SPEED:11,                // lane-widths per second for all bike movement (up/down/left/right)
   // ---- Terminology rounds ----
   ROUND_FIRST:1,                // seconds after GO before round one starts
@@ -11576,39 +11611,110 @@ const TURBO={
   ROUND_RESULTS:2.5,            // how long the round results show
   WORD_EVERY:[.75,1.05],        // seconds between word pickups during a round
   WORD_RIGHT_SHARE:.5,          // share of pickups that are the correct answer
-  WORD_AHEAD:1.7,               // pickups appear this far ahead (just off-screen) so you can see them coming
-  WORD_MAX_CHARS:14             // longest word allowed on a pickup
+  WORD_AHEAD:2.1,               // pickups appear this far ahead; until they scroll into view their sign waits, whole, at the right-hand edge
+  WORD_LANE_GAP:1.3,            // two pickups in the same lane are at least this many metres apart, so their signs never overlap
+  WORD_MAX_CHARS:14,            // longest word allowed on a pickup
+  // ---- Streaks, shield and bonuses ----
+  STREAK_X2:3,                  // right words in a row for double points
+  STREAK_X3:6,                  // ...and for triple points
+  SHIELD_EVERY:5,               // every this many in a row earns a shield (one at a time) that saves you from one crash
+  PERFECT_BONUS:10,             // bonus for a round with no wrong words (and at least three right ones)
+  ROUND_SPEEDUP_PX:8,           // extra pixels per metre added at the start of each new round
+  DRAG_LANE:.5                  // when dragging: this share of a lane's height of finger travel changes one lane
 };
 
+/* ---- BIKES, THEMES and the shared reward ----
+   Bikes are unlocked with THEORY POINTS, the same points as the Grand Prix karts (saved by that game in
+   tkd_gp.tp). Every correct word collected here adds one. All saved on this device only. */
+const TU_BIKES=[
+  {name:'Ocean', col:'#2d6cff',dark:'#173fb0',unlock:0},
+  {name:'Flame', col:'#e01e6e',dark:'#8f1145',unlock:15},
+  {name:'Jade',  col:'#12b36b',dark:'#0a7445',unlock:35},
+  {name:'Sunset',col:'#ff7a1a',dark:'#b3500a',unlock:60},
+  {name:'Shadow',col:'#4a4f70',dark:'#23263d',unlock:90},
+  {name:'Royal', col:'#7a3cff',dark:'#4a1fb0',unlock:130}
+];
+// The scenery changes with every terminology round. deco = what stands on the verges (see tDeco).
+const TU_THEMES=[
+  {name:'park',   verge:['#46a83c','#3b9433'],road:'#4a4a58',speck:'#555564',kerb:['#e8303a','#ffffff'],lane:'#f4f4f4',deco:['tree','bush','taeguk','flag','sign','hut'],tune:0},
+  {name:'blossom',verge:['#63b85a','#56a84e'],road:'#514b5e',speck:'#5c566a',kerb:['#ff8fbd','#ffffff'],lane:'#f4f4f4',deco:['blossom','lantern','blossom','flag','hut','blossom'],fall:'petals',tune:1},
+  {name:'neon',   verge:['#1a1640','#221c52'],road:'#2a2840',speck:'#34314e',kerb:['#3de0ff','#ff3d9a'],lane:'#cfd3ff',deco:['lamp','tower','holo','lamp','tower','sign'],dark:true,tune:2},
+  {name:'snow',   verge:['#dbe6f1','#cbd9e8'],road:'#565a70',speck:'#62667c',kerb:['#e8303a','#ffffff'],lane:'#f4f4f4',deco:['pine','snowman','pine','rock','hut','pine'],fall:'snow',tune:3}
+];
+const TU_GP_UNLOCKS=[[10,'Blossom Valley'],[25,'Neon City'],[45,'Snowy Peaks and the Cup']];   // what the same points open in Grand Prix (kept in step with that game)
+const tuGP=()=>{const o=lsGet('tkd_gp');return o&&typeof o==='object'?o:{}};
+const tuTP=()=>Math.max(0,Math.floor(+tuGP().tp||0));
+function tuAddTP(n){if(n>0){const o=tuGP();o.tp=tuTP()+n;lsSet('tkd_gp',o)}}
+const tuBikeOpen=b=>DEV.on||tuTP()>=b.unlock;
+function tuBike(){const i=lsGet('tkd_turbo_bike')||0;return TU_BIKES[i]&&tuBikeOpen(TU_BIKES[i])?TU_BIKES[i]:TU_BIKES[0]}
+const tuDragOn=()=>lsGet('tkd_turbo_ctl')!=='buttons';
+const tuStars=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+
 /* ---- SET-UP SCREEN ---- */
-let TT=null;
+let TT=null,tc=null;                                   // tc = the canvas being drawn on (the game, or the bike preview)
 const tRnd=a=>a[0]+Math.random()*(a[1]-a[0]);
 const tMod=(a,n)=>((a%n)+n)%n;
 const tClamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const tLast=()=>TURBO.LANES-1;
+const tClock=()=>TT?TT.clock:performance.now()/1000;
+let tuNote='';
 function renderTurboSetup(){
-  const best=lsGet('tkd_turbo_theory');
-  $('#tuBest').textContent=best!==null?`🏆 Best: ${best} pts`:'';
+  const best=lsGet('tkd_turbo_theory'),stars=lsGet('tkd_turbo_stars')||0,tp=tuTP(),mine=tuBike();
+  $('#tuBest').textContent=best!==null?`🏆 Best: ${best} pts${stars?' '+tuStars(stars):''}`:'';
+  $('#tuBikes').innerHTML=TU_BIKES.map((b,i)=>`<button class="tuBike${b===mine?' on':''}${tuBikeOpen(b)?'':' locked'}" data-b="${i}" style="--c:${b.col};--d:${b.dark}" title="${b.name}">${tuBikeOpen(b)?'':'🔒'}</button>`).join('');
+  const next=TU_BIKES.filter(b=>b.unlock>tp).sort((a,b)=>a.unlock-b.unlock)[0];
+  $('#tuTP').innerHTML=tuNote||`⭐ Theory points: <b>${tp}</b>${next&&!DEV.on?` · the ${next.name} bike opens at ${next.unlock}`:''}`;
+  document.querySelectorAll('#tuCtlSeg button').forEach(b=>b.classList.toggle('on',(b.dataset.c==='drag')===tuDragOn()));
+  tuPreview();
 }
-function openTurbo(){stopTimers();renderTurboSetup();show('tSetup');rgMount()}
+// A little strip of road with your bike on it, on the set-up screen
+function tuPreview(){
+  const cv=$('#tuPrev');if(!cv)return;
+  const dpr=window.devicePixelRatio||1,w=cv.clientWidth||340,h=cv.clientHeight||92;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+  tc=cv.getContext('2d');const k=w*dpr/400,H=h/w*400;
+  tc.setTransform(k,0,0,k,0,0);tc.imageSmoothingEnabled=false;
+  const th=TU_THEMES[0],vg=H*.2,b=tuBike();
+  tBack(th,(performance.now()/1000*90)%4800,400,H,vg,vg,H-vg*2,2,(H-vg*2)/2);
+  tBike(150,H/2+3,H*.62,b.col,b.dark,true,false,0,false);
+  tText('TURBO',300,H/2,34,'#fff');
+}
+function openTurbo(){stopTimers();tuNote='';renderTurboSetup();show('tSetup');rgMount()}
 $('#tuGo').onclick=()=>startTurbo();
+$('#tuBikes').onclick=e=>{
+  const el=e.target.closest('button');if(!el)return;const i=+el.dataset.b,b=TU_BIKES[i];
+  if(tuBikeOpen(b)){lsSet('tkd_turbo_bike',i);tuNote=''}else tuNote=`🔒 The ${b.name} bike opens at ${b.unlock} theory points`;
+  renderTurboSetup();
+};
+$('#tuCtlSeg').onclick=e=>{const el=e.target.closest('button');if(!el)return;lsSet('tkd_turbo_ctl',el.dataset.c);renderTurboSetup()};
+$('#tuHow').onclick=()=>openOv(`<h3>How to play</h3>
+  <div class="brk" style="text-align:left;line-height:1.45">
+    <div class="tip" style="text-align:left">🏍️ Ride for <b>2 minutes</b> and build the biggest <b>THEORY SCORE</b>.</div>
+    <div class="tip" style="text-align:left">📣 A word appears at the top, like <b>KICK</b>. After <b>3-2-1 GO!</b> words come down the road. Ride into the <b>right</b> one: <b>+5</b>. A wrong one: <b>−5</b>.</div>
+    <div class="tip" style="text-align:left">🔥 Right words in a row build a <b>streak</b>: ×2 after 3, ×3 after 6. Five in a row earns a <b>shield</b> that saves you from one crash.</div>
+    <div class="tip" style="text-align:left">⭐ A round with no wrong words is a <b>perfect round</b>: +10.</div>
+    <div class="tip" style="text-align:left">🚗 Dodge <b>potholes</b> and <b>vehicles</b>. A crash dazes you for a second and ends your streak.</div>
+    <div class="tip" style="text-align:left">👆 <b>Drag</b> anywhere on the road to move the bike, or switch to buttons. Arrow keys work too.</div>
+  </div>
+  <div class="row"><button class="btn red" onclick="closeOv()">Got it</button></div>`);
 
 function startTurbo(){
   stopTimers();
-  const cv=$('#tuCv');
-  TT={cv,ctx:cv.getContext('2d'),t:0,clock:0,phase:'count',count:3,
-      track:[],traffic:[],parts:[],nextId:1,nextObs:TURBO.FIRST_HAZARD,nextTraffic:tRnd([6,9]),
-      p:{d:0,lane:2,vis:2,x:TURBO.RIDER_X,xt:TURBO.RIDER_X,theory:0,crash:0,safe:0,hit:new Set(),shake:0,pops:[]},
+  const cv=$('#tuCv'),bike=tuBike();
+  TT={cv,ctx:cv.getContext('2d'),t:0,clock:0,phase:'count',count:3,bike,
+      track:[],traffic:[],parts:[],skids:[],nextId:1,nextObs:TURBO.FIRST_HAZARD,nextTraffic:tRnd([6,9]),
+      th:0,thPrev:0,thT:9,                                   // scenery theme now / before / seconds since it changed
+      p:{d:0,lane:2,vis:2,x:TURBO.RIDER_X,xt:TURBO.RIDER_X,theory:0,crash:0,safe:0,hit:new Set(),shake:0,pops:[],streak:0,shield:false,shieldT:0},
       rd:{n:0,phase:'wait',t:TURBO.ROUND_FIRST},wPool:tWordPool(),wUsed:new Set(),
-      stats:{crash:0,wRight:0,wWrong:0,wSpawned:0,rounds:[]},last:performance.now(),raf:0,timer:null};
-  $('#tuDiff').textContent=GRADES[S.grade].name;
-  tQbar();show('turbo');
+      stats:{crash:0,wRight:0,wWrong:0,wSpawned:0,rounds:[],bestStreak:0,perfect:0,saves:0},tp0:tuTP(),last:performance.now(),raf:0,timer:null};
+  $('#turbo').classList.toggle('btns',!tuDragOn());
+  tQbar();show('turbo');taStart();
   requestAnimationFrame(()=>{tResize();TT.last=performance.now();TT.raf=requestAnimationFrame(tLoop)});
 }
 function tResize(){
   if(!TT)return;
   const wrap=$('#tuWrap'),dpr=window.devicePixelRatio||1;
-  const w=wrap.clientWidth-6,h=Math.min(wrap.clientHeight-6,w*1.6);
+  const w=wrap.clientWidth-6,h=Math.min(wrap.clientHeight-6,w*2);       // the road fills the screen under the question bar
   TT.cv.style.width=w+'px';TT.cv.style.height=h+'px';
   TT.cv.width=Math.round(w*dpr);TT.cv.height=Math.round(h*dpr);
   TT.scale=w*dpr/400;TT.H=h/w*400;
@@ -11679,7 +11785,8 @@ function tRoundTick(dt){
     // a round needs time for intro + countdown + collecting + settling; don't start one that can't finish
     const need=TURBO.ROUND_INTRO+TURBO.ROUND_COUNT+TURBO.ROUND_COLLECT+1.4,cycle=need+TURBO.ROUND_RESULTS+.3;
     if(TT.t+need>TURBO.RACE_SECONDS){R.phase='over';tQbar();return}
-    R.n++;Object.assign(R,{phase:'intro',t:TURBO.ROUND_INTRO,cur:tMakeRound(),fresh:TT.clock,spawned:0,got:0,bad:0,pts:0});
+    R.n++;Object.assign(R,{phase:'intro',t:TURBO.ROUND_INTRO,cur:tMakeRound(),fresh:TT.clock,spawned:0,got:0,bad:0,pts:0,perfect:false});
+    if(R.n>1){TT.thPrev=TT.th;TT.th=(R.n-1)%TU_THEMES.length;TT.thT=0}   // new round, new scenery (and tune)
     R.final=TT.t+cycle+need>TURBO.RACE_SECONDS;                 // no room for another round after this one
     if(R.final){TT.fastFrom=TT.t;TT.finalBanner=TT.clock}       // FINAL ROUND: the road starts speeding up
   }
@@ -11692,15 +11799,17 @@ function tRoundTick(dt){
   }
   else if(R.phase==='settle'&&R.t<=0){
     R.phase='results';R.t=TURBO.ROUND_RESULTS;
+    R.perfect=R.bad===0&&R.got>=3;                              // a perfect round: no wrong words
+    if(R.perfect){TT.p.theory+=TURBO.PERFECT_BONUS;R.pts+=TURBO.PERFECT_BONUS;TT.stats.perfect++;taSfx('perfect')}
     TT.stats.rounds.push({n:R.n,got:R.got,of:R.spawned,bad:R.bad,pts:R.pts});
   }
   else if(R.phase==='results'&&R.t<=0){R.phase='wait';R.t=.3}
   tQbar();
 }
-// Spawn one word pickup just off-screen, in a lane that's clear, and clear any hazard right around it
+// Spawn one word pickup ahead of you, in a lane that's clear, and clear any hazard right around it
 function tSpawnWord(){
   const R=TT.rd,d=TT.p.d+TURBO.WORD_AHEAD,right=Math.random()<TURBO.WORD_RIGHT_SHARE||R.sinceRight>=3;
-  const lanes=[...Array(TURBO.LANES).keys()].filter(l=>!TT.traffic.some(t=>t.lane===l&&t.d>TT.p.d-.5&&t.d<d+1.5)&&!TT.track.some(it=>it.type==='word'&&it.lane===l&&Math.abs(it.d-d)<.6));
+  const lanes=[...Array(TURBO.LANES).keys()].filter(l=>!TT.traffic.some(t=>t.lane===l&&t.d>TT.p.d-.5&&t.d<d+1.5)&&!TT.track.some(it=>it.type==='word'&&it.lane===l&&Math.abs(it.d-d)<TURBO.WORD_LANE_GAP));
   if(!lanes.length)return;
   const lane=pickL(lanes);
   TT.track=TT.track.filter(it=>!(it.type==='obs'&&it.lane===lane&&Math.abs(it.d-d)<.7)); // never on top of a hazard
@@ -11722,33 +11831,47 @@ function tQbar(){
     cd=go?'GO':Math.max(0,Math.ceil(R.phase==='settle'?0:R.t));frac=R.phase==='settle'?0:R.t/TURBO.ROUND_COLLECT;cls='go'}
   else if(R.phase==='results'){
     const pc=R.spawned?R.got/R.spawned:0;
-    lab=`${pc>=.8?'🌟 WELL DONE!':pc>=.5?'👍 GOOD TRY':'💪 KEEP PRACTISING!'} · ${R.got} OF ${R.spawned} COLLECTED`;
+    lab=`${R.perfect?`⭐ PERFECT ROUND +${TURBO.PERFECT_BONUS}`:pc>=.8?'🌟 WELL DONE!':pc>=.5?'👍 GOOD TRY':'💪 KEEP PRACTISING!'} · ${R.got} OF ${R.spawned} COLLECTED`;
     txt=`ROUND SCORE ${sc(R.pts)}`;cls=pc>=.8?'right':pc>=.5?'skip':'wrong'}
   bar.className='tuQbar '+cls;
   $('#tuQlab').textContent=lab;$('#tuQtxt').textContent=txt;$('#tuQcd').textContent=cd;
   $('#tuQfill').style.width=(frac*100)+'%';
 }
+// Collecting a word. Right words in a row are a STREAK: x2 after 3, x3 after 6, and every 5th earns a shield.
 function tWord(r,it){
-  const R=TT.rd,pts=it.correct?TURBO.WORD_RIGHT:TURBO.WORD_WRONG;
+  const R=TT.rd,st=TT.stats;let pts=TURBO.WORD_WRONG,tag='';
+  if(it.correct){
+    r.streak++;st.bestStreak=Math.max(st.bestStreak,r.streak);
+    const mult=r.streak>=TURBO.STREAK_X3?3:r.streak>=TURBO.STREAK_X2?2:1;
+    pts=TURBO.WORD_RIGHT*mult;if(mult>1)tag=` ×${mult}`;
+    R.got++;st.wRight++;taSfx('right');
+    if(r.streak%TURBO.SHIELD_EVERY===0&&!r.shield){r.shield=true;r.shieldT=TT.clock;setTimeout(()=>taSfx('shield'),180)}
+    else if(r.streak===TURBO.STREAK_X2||r.streak===TURBO.STREAK_X3)setTimeout(()=>taSfx('streak'),180);
+  }else{r.streak=0;R.bad++;st.wWrong++;taSfx('wrong')}
   r.theory+=pts;R.pts+=pts;
-  it.correct?(R.got++,TT.stats.wRight++):(R.bad++,TT.stats.wWrong++);
   tBurst(it.correct?'right':'wrong',it.d,it.lane);
-  tPop(it.correct?`+${pts} ${it.text}`:`${pts} ${it.text}`,it.correct?'#35cf78':'#ff5a64');
+  tPop(it.correct?`+${pts} ${it.text}${tag}`:`${pts} ${it.text}`,it.correct?'#35cf78':'#ff5a64');
 }
 
 /* ---- CRASHES & EFFECTS ---- */
 function tPop(txt,c){TT.p.pops=[{txt,c,l:1.1}]} // one message at a time so they never overlap
 // particles live in world metres (d) so they stay put on the road as it scrolls
 function tBurst(kind,d,lane){
-  const n={crash:22,right:24,wrong:18}[kind],cols={crash:['#ffe14d','#ff7a1a','#fff','#ff3040'],right:['#35cf78','#fff','#ffe14d'],wrong:['#ff5a64','#fff','#333']}[kind];
-  for(let i=0;i<n;i++){const a=Math.random()*6.28,s=60+Math.random()*160;
-    TT.parts.push({d,lane,x:0,y:0,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.6,c:pickL(cols),sz:4})}
+  const n={crash:26,right:26,wrong:18,shield:30}[kind],cols={crash:['#ffe14d','#ff7a1a','#fff','#ff3040'],right:['#35cf78','#fff','#ffe14d'],wrong:['#ff5a64','#fff','#333'],shield:['#7df0ff','#fff','#3de0ff']}[kind];
+  for(let i=0;i<n;i++){const a=Math.random()*6.28,s=70+Math.random()*190;
+    TT.parts.push({d,lane,x:0,y:0,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:.6,c:pickL(cols),sz:kind==='right'&&i%3===0?8:5})}
 }
 function tCrash(r,it){
   if(r.safe>0)return;
-  r.crash=TURBO.CRASH_SECS;r.safe=TURBO.CRASH_SECS+TURBO.CRASH_SAFE;r.shake=.45;
-  TT.stats.crash++;tBurst('crash',it.d,it.lane);tPop('CRASH! DAZED','#ff9a5a');
+  if(r.shield){                                              // the shield takes the hit: no daze, and the streak survives
+    r.shield=false;r.safe=TURBO.CRASH_SAFE+.5;r.shake=.2;TT.stats.saves++;
+    tBurst('shield',it.d,it.lane);tPop('SHIELD SAVED YOU!','#7df0ff');taSfx('shield');return;
+  }
+  r.crash=TURBO.CRASH_SECS;r.safe=TURBO.CRASH_SECS+TURBO.CRASH_SAFE;r.shake=.5;r.streak=0;
+  TT.stats.crash++;tBurst('crash',it.d,it.lane);tPop('CRASH! DAZED','#ff9a5a');taSfx('crash');
+  TT.skids.push({d:tBikeD(r)-.1,lane:Math.round(r.vis),len:.5});   // skid marks left on the road
 }
+
 // where the bike really is on the road: the camera's distance plus how far ◀ ▶ have moved it along the screen
 function tBikeD(r){return r.d+(r.x-TURBO.RIDER_X)/tPPM()}
 function tCollide(r){
@@ -11756,7 +11879,8 @@ function tCollide(r){
   for(const it of tItems()){
     if(r.hit.has(it.id)||it.lane!==lane)continue;
     const rel=it.d-tBikeD(r),half=tLen(it)/2;
-    if(rel<=half+.15&&rel>=-(half+.1)){
+    const fw=it.type==='word'?.24:.17,bk=it.type==='word'?.22:.12;      // a little generous for words, tighter for hazards
+    if(rel<=half+fw&&rel>=-(half+bk)){
       if(it.type==='word'){if(r.crash>0)continue;r.hit.add(it.id);tWord(r,it)} // dazed riders can't grab words
       else{r.hit.add(it.id);tCrash(r,it)}
     }
@@ -11766,14 +11890,16 @@ function tCollide(r){
 /* ---- MAIN LOOP ---- */
 function tLoop(now){
   if(!TT||TT.dead)return;
-  const dt=Math.min(.05,(now-TT.last)/1000);TT.last=now;TT.clock+=dt;
+  const dt=Math.min(.05,(now-TT.last)/1000);TT.last=now;TT.clock+=dt;TT.thT+=dt;
   const p=TT.p;
-  if(TT.phase==='count'){TT.count-=dt;if(TT.count<=0){TT.phase='race';tQbar()}}
+  if(TT.phase==='count'){const was=Math.ceil(TT.count);TT.count-=dt;if(Math.ceil(TT.count)<was&&TT.count>0)taSfx('tick');if(TT.count<=0){TT.phase='race';taSfx('go');tQbar()}}
   else if(TT.phase==='race'){
     TT.t+=dt;
     tGenTrack(p.d+8);tTraffic(dt);tRoundTick(dt);
-    p.d+=tSpeed(p)*dt;p.crash=Math.max(0,p.crash-dt);p.safe=Math.max(0,p.safe-dt);
+    const v=tSpeed(p)*dt;p.d+=v;TT.off=(TT.off||0)+v*tPPM();                 // off = how far the scenery has scrolled, in pixels
+    p.crash=Math.max(0,p.crash-dt);p.safe=Math.max(0,p.safe-dt);
     tCollide(p);
+    if(Math.random()<dt*14)TT.parts.push({d:tBikeD(p)-.14,lane:p.vis,x:0,y:(TT.lh||60)*.2,vx:-30-Math.random()*40,vy:-8+Math.random()*16,l:.35,c:p.streak>=TURBO.STREAK_X2?'#ffb03d':'#d8d8e2',sz:4});   // exhaust
     if(TT.t>=TURBO.RACE_SECONDS){TT.t=TURBO.RACE_SECONDS;tFinish()}
   }
   const mv=TURBO.MOVE_SPEED;
@@ -11782,46 +11908,84 @@ function tLoop(now){
   p.shake=Math.max(0,p.shake-dt);
   p.pops.forEach(q=>q.l-=dt);p.pops=p.pops.filter(q=>q.l>0);
   TT.parts.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.l-=dt});TT.parts=TT.parts.filter(q=>q.l>0);
-  TT.track=TT.track.filter(it=>it.d>p.d-3);
-  tDraw();tHud();
+  TT.track=TT.track.filter(it=>it.d>p.d-3);TT.skids=TT.skids.filter(s=>s.d>p.d-3);
+  tDraw();tHud();taTick();
   TT.raf=requestAnimationFrame(tLoop);
 }
 function tHud(){
-  const left=Math.max(0,Math.ceil(TURBO.RACE_SECONDS-TT.t)),st=TT.stats,touched=st.wRight+st.wWrong;
+  const left=Math.max(0,Math.ceil(TURBO.RACE_SECONDS-TT.t)),st=TT.stats;
   $('#tuTime').textContent=fmt(TT.phase==='count'?TURBO.RACE_SECONDS:left);
   $('#tuTimeBox').classList.toggle('low',TT.phase==='race'&&left<=10);
-  $('#tuPD').textContent=TT.p.theory+' pts';$('#tuPS').textContent=TT.p.crash>0?'💥 DAZED':'';
-  $('#tuBD').textContent=`✓${st.wRight} ✗${st.wWrong}`;$('#tuBS').textContent=touched?`${Math.round(st.wRight/touched*100)}% accuracy`:'';
+  $('#tuPD').textContent=TT.p.theory;
+  $('#tuBD').textContent=`✓${st.wRight} ✗${st.wWrong}`;
 }
 function tFinish(){
-  TT.phase='done';const me=TT;
+  TT.phase='done';const me=TT;taStop();taSfx('finish');
   setTimeout(()=>{if(me.dead)return;
     const st=me.stats,th=me.p.theory,sc=v=>v>0?`+${v}`:String(v),touched=st.wRight+st.wWrong;
     const best=lsGet('tkd_turbo_theory'),isBest=best===null||th>best;if(isBest)lsSet('tkd_turbo_theory',th);
-    const pc=st.wSpawned?st.wRight/st.wSpawned:0;
+    const pc=st.wSpawned?st.wRight/st.wSpawned:0,acc=touched?st.wRight/touched:0;
+    // Stars are for knowing the words: how many of the right ones you collected, and how few wrong ones
+    const stars=pc>=.85&&acc>=.9?3:pc>=.6&&acc>=.75?2:1;
+    if(stars>(lsGet('tkd_turbo_stars')||0))lsSet('tkd_turbo_stars',stars);
+    // Every right word is a theory point (shared with Grand Prix), which opens bikes here and circuits and karts there
+    tuAddTP(st.wRight);const tp=tuTP(),news=[];
+    if(!DEV.on){
+      TU_BIKES.forEach(b=>{if(b.unlock>me.tp0&&b.unlock<=tp)news.push(`🔓 New bike: ${b.name}!`)});
+      TU_GP_UNLOCKS.forEach(([n,what])=>{if(n>me.tp0&&n<=tp)news.push(`🔓 Grand Prix: ${what} opened!`)});
+    }
     const row=(a,b2)=>`<div class="r"><span>${a}</span><span style="text-align:right">${b2}</span></div>`;
     openOv(`<h3>🏁 Time's up!</h3><div class="sub">THEORY SCORE</div><div class="big" style="color:${th>0?'var(--good)':th<0?'var(--bad)':'var(--gold)'}">${sc(th)}</div>
+      <div class="big" style="color:var(--gold);font-size:1.9rem;letter-spacing:.12em;margin:-4px 0 2px">${tuStars(stars)}</div>
       <div class="sub">${pc>=.8?'🌟 Brilliant knowledge!':pc>=.5?'👍 Good effort, keep it up!':'💪 Keep practising, you\'ll get there!'}</div>
       <div class="brk">
         ${row('✅ Correct words collected',`<b>${st.wRight}</b> of ${st.wSpawned}`)}
         ${row('❌ Wrong words collected',`<b>${st.wWrong}</b>`)}
-        ${row('🎯 Accuracy',touched?`<b>${Math.round(st.wRight/touched*100)}%</b>`:'–')}
+        ${row('🎯 Accuracy',touched?`<b>${Math.round(acc*100)}%</b>`:'–')}
+        ${row('🔥 Best streak',`<b>${st.bestStreak}</b> in a row`)}
+        ${st.perfect?row('⭐ Perfect rounds',`<b>${st.perfect}</b>`):''}
         ${st.rounds.map(r=>row(`Round ${r.n}`,`${r.got}/${r.of} · ${sc(r.pts)}`)).join('')}
-        ${row('💥 Crashes',st.crash)}
-        <div class="tip">${isBest?'New best theory score!':`Your best: ${best} pts`}</div>
+        ${row('💥 Crashes',st.crash+(st.saves?` (shield saved ${st.saves})`:''))}
+        ${row('⭐ Theory points',`+${st.wRight} (now <b>${tp}</b>)`)}
+        <div class="tip">${isBest?'New best theory score!':`Your best: ${best} pts`}${news.length?'<br>'+news.join('<br>'):''}</div>
       </div>
       <div class="row"><button class="btn alt" onclick="goHome()">Menu</button><button class="btn red" onclick="closeOv();startTurbo()">Play again</button></div>`);
   },1400);
 }
 
-/* ---- CONTROLS: arrow keys / W A S D, or the on-screen D-pad ---- */
+/* ---- CONTROLS: drag anywhere on the road (or tap above / below the bike), the optional buttons, or the arrow keys / W A S D ---- */
 function tLane(dir){if(!TT||TT.dead||TT.phase==='done'||TT.p.crash>0)return;TT.p.lane=tClamp(TT.p.lane+dir,0,tLast())}
 // ◀ ▶ slide the bike along the screen, one lane-width per press
-function tSide(dir){if(!TT||TT.dead||TT.phase==='done'||TT.p.crash>0)return;const p=TT.p;p.xt=tClamp(p.xt+dir*(TT.lh||60),TURBO.RIDER_X_MIN,TURBO.RIDER_X_MAX)}
+function tSide(dir){if(!TT||TT.dead||TT.phase==='done'||TT.p.crash>0)return;const p=TT.p;p.xt=tClamp(p.xt+dir*Math.min(TT.lh||60,70),TURBO.RIDER_X_MIN,TURBO.RIDER_X_MAX)}
 $('#tuUp').onpointerdown=e=>{e.preventDefault();tLane(-1)};
 $('#tuDown').onpointerdown=e=>{e.preventDefault();tLane(1)};
 $('#tuLeft').onpointerdown=e=>{e.preventDefault();tSide(-1)};
 $('#tuRight').onpointerdown=e=>{e.preventDefault();tSide(1)};
+{
+  // Dragging works like a track-pad: the bike moves by as much as your finger does, wherever on the road you touch,
+  // so your hand never has to cover the bike or the words. A short tap above or below the bike changes one lane.
+  const cv=$('#tuCv');let drag=null;
+  const end=e=>{
+    if(!drag||e.pointerId!==drag.id)return;
+    if(TT&&!TT.dead&&drag.tot<10&&performance.now()-drag.t0<300){
+      const box=cv.getBoundingClientRect(),y=(e.clientY-box.top)*400/box.width,vg=Math.round(Math.min(TT.H*.1,78)),by=vg+(TT.lh||60)*(TT.p.vis+.5);
+      if(Math.abs(y-by)>(TT.lh||60)*.5)tLane(y<by?-1:1);
+    }
+    drag=null;
+  };
+  cv.addEventListener('pointerdown',e=>{if(!TT||TT.dead)return;e.preventDefault();taCtx();try{cv.setPointerCapture(e.pointerId)}catch(_){}drag={id:e.pointerId,x:e.clientX,y:e.clientY,ay:0,tot:0,t0:performance.now()}});
+  cv.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.id||!TT||TT.dead)return;
+    const k=400/(cv.clientWidth||400),dx=(e.clientX-drag.x)*k,dy=(e.clientY-drag.y)*k;drag.x=e.clientX;drag.y=e.clientY;
+    drag.tot+=Math.abs(dx)+Math.abs(dy);drag.ay+=dy;
+    const step=(TT.lh||60)*TURBO.DRAG_LANE;
+    while(drag.ay<=-step){tLane(-1);drag.ay+=step}
+    while(drag.ay>=step){tLane(1);drag.ay-=step}
+    if(TT.p.crash<=0&&TT.phase!=='done')TT.p.xt=tClamp(TT.p.xt+dx,TURBO.RIDER_X_MIN,TURBO.RIDER_X_MAX);
+  });
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+  cv.style.touchAction='none';
+}
 document.addEventListener('keydown',e=>{
   if(!TT||TT.dead||$('#turbo').classList.contains('hide'))return;
   const k=e.key.toLowerCase();
@@ -11830,45 +11994,147 @@ document.addEventListener('keydown',e=>{
   else if(k==='arrowleft'||k==='a'){e.preventDefault();tSide(-1)}
   else if(k==='arrowright'||k==='d'){e.preventDefault();tSide(1)}
 });
+$('#tuSnd').onclick=()=>{TA.on=!TA.on;lsSet('tkd_turbo_snd',TA.on);taPaint();if(TA.on&&TT&&!TT.dead&&TT.phase!=='done')taStart();else taStop()};
 
-/* ---- DRAWING (Canvas, retro 16-bit style). The camera follows your bike. ---- */
+/* ---- SOUND: a few effects, an engine note and a quiet looping tune, all made here (no audio files).
+   One button (top right) turns the lot on or off; the choice is remembered on this device. ---- */
+const TA={ctx:null,on:lsGet('tkd_turbo_snd')!==false,eng:null,engGain:null,mus:null,next:0,step:0,playing:false,noise:null};
+const TA_TUNES=[   // one per scenery theme: beats per minute, root note (MIDI number), lead sound, four bars of chords (semitones above the root)
+  {bpm:126,root:48,wave:'square',  chords:[[0,4,7],[7,11,14],[9,12,16],[5,9,12]]},
+  {bpm:112,root:50,wave:'triangle',chords:[[0,4,7],[9,12,16],[5,9,12],[7,11,14]]},
+  {bpm:132,root:45,wave:'sawtooth',chords:[[0,3,7],[8,12,15],[3,7,10],[10,14,17]]},
+  {bpm:118,root:53,wave:'sine',    chords:[[0,4,7],[5,9,12],[9,12,16],[7,11,14]]}
+];
+function taPaint(){const b=$('#tuSnd');if(b)b.textContent=TA.on?'🔊':'🔇'}
+function taCtx(){try{TA.ctx=TA.ctx||new (window.AudioContext||window.webkitAudioContext)();if(TA.ctx.state==='suspended')TA.ctx.resume()}catch(e){}return TA.ctx}
+function taTone(f,d,type,vol,f2,delay,out){
+  const a=TA.ctx;if(!a)return;const t=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g);g.connect(out||a.destination);o.start(t);o.stop(t+d+.03);
+}
+function taNoise(d,vol,freq,type,delay,out){
+  const a=TA.ctx;if(!a)return;
+  if(!TA.noise){TA.noise=a.createBuffer(1,Math.floor(a.sampleRate*.5),a.sampleRate);const ch=TA.noise.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1}
+  const t=a.currentTime+(delay||0),n=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();
+  n.buffer=TA.noise;f.type=type||'lowpass';f.frequency.value=freq||900;
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  n.connect(f);f.connect(g);g.connect(out||a.destination);n.start(t);n.stop(t+d+.02);
+}
+function taSfx(kind){
+  if(!TA.on||!taCtx())return;
+  try{
+    if(kind==='right'){taTone(660,.09,'square',.07);taTone(990,.16,'square',.07,0,.08)}
+    else if(kind==='wrong')taTone(150,.3,'sawtooth',.09,90);
+    else if(kind==='crash'){taNoise(.4,.3,700);taTone(110,.3,'sawtooth',.12,45)}
+    else if(kind==='shield'){taTone(420,.2,'triangle',.1,1260);taTone(840,.25,'sine',.06,1680,.1)}
+    else if(kind==='streak')[523,659,784,1047].forEach((f,i)=>taTone(f,.1,'square',.06,0,i*.07));
+    else if(kind==='perfect')[784,988,1175,1568].forEach((f,i)=>taTone(f,.14,'triangle',.08,0,i*.09));
+    else if(kind==='tick')taTone(440,.1,'square',.06);
+    else if(kind==='go')taTone(880,.35,'square',.08);
+    else if(kind==='finish')[523,659,784,1047,1319].forEach((f,i)=>taTone(f,i===4?.4:.12,'square',.07,0,i*.12));
+  }catch(e){}
+}
+function taStart(){
+  taPaint();
+  if(!TA.on||!taCtx())return;
+  try{
+    const a=TA.ctx;
+    if(!TA.eng){
+      TA.eng=a.createOscillator();TA.eng.type='sawtooth';const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=520;
+      TA.engGain=a.createGain();TA.engGain.gain.value=0;TA.eng.connect(f);f.connect(TA.engGain);TA.engGain.connect(a.destination);TA.eng.start();
+    }
+    if(!TA.mus){TA.mus=a.createGain();TA.mus.connect(a.destination)}
+    TA.mus.gain.setTargetAtTime(.42,a.currentTime,.05);
+    TA.step=0;TA.next=a.currentTime+.2;TA.playing=true;
+  }catch(e){}
+}
+function taStop(){
+  TA.playing=false;
+  try{if(TA.engGain)TA.engGain.gain.setTargetAtTime(0,TA.ctx.currentTime,.05);if(TA.mus)TA.mus.gain.setTargetAtTime(0,TA.ctx.currentTime,.05)}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)taStop();else if(TT&&!TT.dead&&TT.phase!=='done'&&!$('#turbo').classList.contains('hide'))taStart()});
+// Called every frame: the engine note follows your speed, and the next notes of the tune are queued up
+function taTick(){
+  if(!TA.playing||!TA.ctx||!TT)return;
+  const a=TA.ctx,now=a.currentTime,p=TT.p,racing=TT.phase==='race';
+  if(TA.engGain){
+    TA.eng.frequency.setTargetAtTime(!racing?70:p.crash>0?60:92+(tPPM()-TURBO.PX_PER_M)*.35+(p.streak>=TURBO.STREAK_X2?14:0),now,.08);
+    TA.engGain.gain.setTargetAtTime(racing?.03:.018,now,.1);
+  }
+  if(TA.next<now-.3)TA.next=now+.05;                              // the tab was in the background
+  const T=TA_TUNES[TU_THEMES[TT.th].tune],sd=60/(T.bpm*(TT.rd.final?1.1:1))/4,hz=n=>440*Math.pow(2,(n-69)/12),soft=T.wave==='sine'||T.wave==='triangle';
+  while(TA.next<now+.2){
+    const s=TA.step%16,bar=Math.floor(TA.step/16),ch=T.chords[bar%4],d=TA.next-now,alt=bar%8>=4;
+    if(s%4===0)taTone(hz(T.root-12+ch[0]),sd*3.2,'triangle',.1,0,d,TA.mus);                     // bass on each beat
+    if(s===10||s===14)taTone(hz(T.root+ch[0]),sd*1.5,'triangle',.06,0,d,TA.mus);
+    if(s%2===0){const k=(alt?[2,1,0,1,2,0,1,2]:[0,1,2,1,0,2,1,2])[s/2];taTone(hz(T.root+12+ch[k]+(alt&&s===8?12:0)),sd*1.7,T.wave,soft?.055:.022,0,d,TA.mus)}   // the tune: notes of the chord
+    if(s===0||s===8)taTone(150,.14,'sine',.2,45,d,TA.mus);                                       // kick drum
+    if(s===4||s===12)taNoise(.1,.07,1900,'bandpass',d,TA.mus);                                   // snare
+    if(s%2===0)taNoise(.03,.02,7000,'highpass',d,TA.mus);                                        // hi-hat
+    TA.next+=sd;TA.step++;
+  }
+}
+
+/* ---- DRAWING (Canvas, retro arcade style). The camera follows your bike. ---- */
+function tRR(x,y,w,h,r){const c=tc;c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+// One theme's verges, roadside scenery, tarmac, kerbs and lane lines. off = how far the road has scrolled, in pixels.
+function tBack(th,off,W,H,vg,rt,rh,L,lh){
+  const c=tc,s=Math.min(vg,74),gap=150;
+  c.fillStyle=th.verge[0];c.fillRect(-10,-10,W+20,H+20);
+  c.fillStyle=th.verge[1];
+  for(let k=Math.floor(off/40);k*40-off<W;k++){const x=Math.round(k*40-off);if(tMod(k,2)){c.fillRect(x,0,40,vg);c.fillRect(x,H-vg,40,vg)}}
+  for(let k=Math.floor((off-90)/gap);k*gap-off<W+90;k++){                       // scenery along both verges
+    tDeco(th.deco[tMod(k*7+3,th.deco.length)],Math.round(k*gap-off),vg/2,s);
+    tDeco(th.deco[tMod(k*5+1,th.deco.length)],Math.round(k*gap-off+gap/2),H-vg/2,s);
+  }
+  c.fillStyle=th.road;c.fillRect(0,rt,W,rh);
+  c.fillStyle=th.speck;                                                         // flecks in the tarmac, so you can feel the speed
+  for(let k=Math.floor(off/50);k*50-off<W;k++){const x=k*50-off;for(let i=0;i<4;i++)c.fillRect(Math.round(x+tMod(k*73+i*37,97)/97*50),Math.round(rt+tMod(k*31+i*59,89)/89*rh),7,2)}
+  c.fillStyle='rgba(0,0,0,.16)';c.fillRect(0,rt,W,6);c.fillRect(0,rt+rh-6,W,6);
+  for(let k=Math.floor(off/16);k*16-off<W;k++){const x=Math.round(k*16-off);c.fillStyle=th.kerb[tMod(k,2)];c.fillRect(x,rt-5,16,5);c.fillRect(x,rt+rh,16,5)}
+  c.fillStyle=th.lane;
+  for(let k=Math.floor(off/48);k*48-off<W;k++){const x=Math.round(k*48-off);for(let l=1;l<L;l++)c.fillRect(x,Math.round(rt+lh*l)-2,26,4)}
+}
 function tDraw(){
-  const c=TT.ctx,W=400,H=TT.H,p=TT.p,ppm=tPPM(),off=p.d*ppm,X=TURBO.RIDER_X,L=TURBO.LANES;
+  const c=tc=TT.ctx,W=400,H=TT.H,p=TT.p,ppm=tPPM(),X=TURBO.RIDER_X,L=TURBO.LANES,th=TU_THEMES[TT.th];
   c.setTransform(TT.scale,0,0,TT.scale,0,0);c.imageSmoothingEnabled=false;
   c.save();
-  if(p.shake>0)c.translate(Math.round((Math.random()-.5)*10*p.shake),Math.round((Math.random()-.5)*6*p.shake));
-  const vg=Math.round(H*.09),rt=vg,rh=H-vg*2,lh=rh/L,sx=d=>X+(d-p.d)*ppm,ly=l=>rt+lh*(l+.5);TT.lh=lh;
-  // grass verges with scrolling tiles and roadside decorations
-  c.fillStyle='#46a83c';c.fillRect(-10,-10,W+20,H+20);
-  c.fillStyle='#3b9433';
-  for(let k=Math.floor(off/40);k*40-off<W;k++){const x=Math.round(k*40-off);if(k%2){c.fillRect(x,0,40,vg);c.fillRect(x,H-vg,40,vg)}}
-  for(let k=Math.floor((p.d-1)/1.1);;k++){
-    const x=sx(k*1.1);if(x>W+40)break;if(x<-40)continue;
-    tDeco((k*7+3)%5,Math.round(x),k%2===0?vg/2:H-vg/2,vg);
-  }
-  // road, kerbs and lane markings
-  c.fillStyle='#4a4a58';c.fillRect(0,rt,W,rh);
-  for(let k=Math.floor(off/16);k*16-off<W;k++){const x=Math.round(k*16-off);c.fillStyle=k%2?'#e8303a':'#fff';c.fillRect(x,rt-4,16,4);c.fillRect(x,rt+rh,16,4)}
-  c.fillStyle='#f4f4f4';
-  for(let k=Math.floor(off/48);k*48-off<W;k++){const x=Math.round(k*48-off);for(let l=1;l<L;l++)c.fillRect(x,Math.round(rt+lh*l)-2,26,4)}
-  // road items: potholes first (flat), then vehicles, then word pickups on top
+  if(p.shake>0)c.translate(Math.round((Math.random()-.5)*12*p.shake),Math.round((Math.random()-.5)*8*p.shake));
+  const vg=Math.round(Math.min(H*.1,78)),rt=vg,rh=H-vg*2,lh=rh/L,sx=d=>X+(d-p.d)*ppm,ly=l=>rt+lh*(l+.5),off=TT.off||0;TT.lh=lh;
+  tBack(th,off,W,H,vg,rt,rh,L,lh);
+  if(TT.thT<1.2&&TT.thPrev!==TT.th){c.globalAlpha=1-TT.thT/1.2;tBack(TU_THEMES[TT.thPrev],off,W,H,vg,rt,rh,L,lh);c.globalAlpha=1}   // the last scenery fades out
+  // skid marks from crashes
+  c.fillStyle='rgba(18,18,22,.5)';
+  TT.skids.forEach(s=>{const x=Math.round(sx(s.d)),w=Math.round(s.len*ppm),y=ly(s.lane);c.fillRect(x,Math.round(y+lh*.12),w,3);c.fillRect(x,Math.round(y+lh*.2),w,3)});
+  // road items: potholes first (flat), then vehicles, then the word signs on top
   const order=it=>it.kind==='pothole'?0:it.type==='word'?2:1;
   tItems().sort((a,b)=>order(a)-order(b)).forEach(it=>{
-    const x=sx(it.d),half=tLen(it)*ppm/2;if(x+half<-80||x-half>W+80)return;
+    const x=sx(it.d),half=tLen(it)*ppm/2;if(x+half<-90||x-half>W+(it.type==='word'?400:90))return;
     const cy=ly(it.lane);
-    it.type==='word'?tWordCard(it,Math.round(x),cy,lh):tObs(it,Math.round(x),cy,lh,half);
+    it.type==='word'?tWordCard(it,Math.round(x),cy,lh,W):tObs(it,Math.round(x),cy,lh,half,th.dark);
   });
   // your bike (flashes while protected after a crash)
-  const py=ly(p.vis);
-  const bx=Math.round(p.x);
-  if(!(p.safe>0&&p.crash<=0&&Math.floor(TT.clock*12)%2))tBike(bx,py,lh,'#2d6cff','#173fb0',false,p.crash>0);
-  // sparks
-  TT.parts.forEach(q=>{const x=sx(q.d)+q.x;c.globalAlpha=Math.max(0,q.l/.6);c.fillStyle=q.c;c.fillRect(Math.round(x),Math.round(ly(q.lane)+q.y),q.sz,q.sz)});c.globalAlpha=1;
+  const py=ly(p.vis),bx=Math.round(p.x),bh=Math.min(lh*.56,66);
+  if(!(p.safe>0&&p.crash<=0&&Math.floor(TT.clock*12)%2))tBike(bx,py,bh,TT.bike.col,TT.bike.dark,p.streak>=TURBO.STREAK_X2,p.crash>0,tClamp(p.lane-p.vis,-1,1)*.16,p.shield);
+  // sparks, exhaust and bursts
+  TT.parts.forEach(q=>{const x=sx(q.d)+q.x;c.globalAlpha=Math.max(0,Math.min(1,q.l/.5));c.fillStyle=q.c;c.fillRect(Math.round(x),Math.round(ly(q.lane)+q.y),q.sz,q.sz)});c.globalAlpha=1;
+  // speed streaks on a big streak or in the final round
+  if(TT.phase==='race'&&(p.streak>=TURBO.STREAK_X3||TT.fastFrom!=null)){c.fillStyle='rgba(255,255,255,.22)';for(let i=0;i<5;i++)c.fillRect(Math.round(Math.random()*W),Math.round(rt+Math.random()*rh),30+Math.random()*50,2)}
+  // petals or snow drifting across
+  if(th.fall){
+    const petals=th.fall==='petals',n=petals?16:34;c.fillStyle=petals?'rgba(255,170,205,.9)':'rgba(255,255,255,.9)';
+    for(let i=0;i<n;i++){const h1=(i*.6180339)%1,h2=(i*.381966+.37)%1,sz=petals?5:4;
+      c.fillRect(Math.round(tMod(h1*W*1.7-TT.clock*(60+h2*80)-off*.3,W+20)-10),Math.round(tMod(h2*H+TT.clock*(40+h1*50),H+20)-10),sz,petals?3:sz)}
+  }
+  // your streak and shield, tucked into the corner of the road
+  if(p.streak>=2){const m=p.streak>=TURBO.STREAK_X3?3:p.streak>=TURBO.STREAK_X2?2:1;tText(`🔥 ${p.streak} IN A ROW${m>1?' ×'+m:''}`,8,rt+16,17,m>1?'#ffb03d':'#ffe14d','left')}
+  if(p.shield)tText('🛡 SHIELD',W-8,rt+16,17,'#7df0ff','right');
   // pop-up messages
-  p.pops.forEach(q=>tText(q.txt,W/2,rt+lh*.7-(1.1-q.l)*12,/^[+-]\d/.test(q.txt)?30:20,q.c));
+  p.pops.forEach(q=>tText(q.txt,W/2,rt+lh*.5-(1.1-q.l)*14,/^[+-]\d/.test(q.txt)?(q.txt.length>18?22:28):22,q.c));
   c.restore();
-  if(TT.phase==='count'){const n=Math.ceil(TT.count);tText(String(n),W/2,H/2,110,['#ffe14d','#ff7a1a','#ff3040'][3-n]||'#fff')}
-  else if(TT.phase==='race'&&TT.t<.8)tText('GO!',W/2,H/2,100,'#35cf78');
+  if(TT.phase==='count'){const n=Math.ceil(TT.count);tText(String(n),W/2,H/2,120,['#ffe14d','#ff7a1a','#ff3040'][3-n]||'#fff')}
+  else if(TT.phase==='race'&&TT.t<.8)tText('GO!',W/2,H/2,110,'#35cf78');
   else if(TT.phase==='done')tText('FINISH!',W/2,H/2,64,'#ffe14d');
   else if(TT.finalBanner!=null&&TT.clock-TT.finalBanner<3){           // FINAL ROUND · SPEEDING UP! banner
     const a=TT.clock-TT.finalBanner,show=Math.floor(a*4)%2||a>1;      // flashes, then holds
@@ -11876,90 +12142,129 @@ function tDraw(){
       tText('FINAL ROUND',W/2,H/2-22,48,'#ffe14d');tText('⚡ SPEEDING UP! ⚡',W/2,H/2+26,30,'#ff3040');c.globalAlpha=1}
   }
 }
-// Hazards: potholes, broken-down cars, slow trucks and moving cars (none can be destroyed)
-function tObs(it,x,cy,lh,half){
-  const c=TT.ctx,kind=it.kind,s=Math.round(Math.min(lh*.74,34)),R=Math.round;
-  if(kind!=='pothole'){c.fillStyle='#0006';c.fillRect(R(x-half+3),R(cy+s*.3),R(half*2),5)}
+// Hazards: potholes (marked with a cone), broken-down cars, slow trucks and moving cars (none can be destroyed)
+function tObs(it,x,cy,lh,half,dark){
+  const c=tc,kind=it.kind,R=Math.round,wheel=(wx,wy,r)=>{c.fillStyle='#111';c.beginPath();c.arc(wx,wy,r,0,6.28);c.fill();c.fillStyle='#9a9aa8';c.beginPath();c.arc(wx,wy,r*.45,0,6.28);c.fill()};
   if(kind==='pothole'){
-    c.fillStyle='#2a2a33';c.beginPath();c.ellipse(x,cy+2,half,s*.3,0,0,6.28);c.fill();
-    c.fillStyle='#16161c';c.beginPath();c.ellipse(x+2,cy+4,half*.7,s*.2,0,0,6.28);c.fill();
-    c.strokeStyle='#2a2a33';c.lineWidth=2;c.beginPath();c.moveTo(x-half,cy);c.lineTo(x-half-8,cy-6);c.moveTo(x+half,cy+2);c.lineTo(x+half+7,cy+8);c.stroke();
+    const s=Math.min(lh*.5,44);
+    c.fillStyle='#33333d';c.beginPath();c.ellipse(x,cy+2,half*1.05,s*.36,0,0,6.28);c.fill();
+    c.fillStyle='#16161c';c.beginPath();c.ellipse(x+2,cy+4,half*.78,s*.25,0,0,6.28);c.fill();
+    c.strokeStyle='#2a2a33';c.lineWidth=2;c.beginPath();c.moveTo(x-half,cy);c.lineTo(x-half-9,cy-7);c.moveTo(x+half,cy+2);c.lineTo(x+half+8,cy+9);c.stroke();
+    // a traffic cone on the near side, so you can spot it sooner
+    const kx=x-half-12,ky=cy+s*.3,kh=s*.62;
+    c.fillStyle='#ff7a1a';c.beginPath();c.moveTo(kx-kh*.3,ky);c.lineTo(kx,ky-kh);c.lineTo(kx+kh*.3,ky);c.closePath();c.fill();
+    c.fillStyle='#fff';c.fillRect(R(kx-kh*.16),R(ky-kh*.5),R(kh*.32),R(kh*.16));
+    c.fillStyle='#d4600e';c.fillRect(R(kx-kh*.38),R(ky-2),R(kh*.76),4);
   }else if(kind==='car'||kind==='traffic'){                                   // broken-down car (smoke + hazard lights) or a moving car
-    const L=R(half*2),X0=R(x-half),hh=R(Math.min(lh*.62,28)),Y0=R(cy-hh/2),broken=kind==='car';
-    c.fillStyle='#111';c.fillRect(X0+6,Y0+hh-4,12,6);c.fillRect(X0+L-18,Y0+hh-4,12,6);
-    c.fillStyle=broken?'#7d8a96':it.col;c.fillRect(X0,Y0+hh*.3,L,hh*.6);c.fillRect(X0+L*.22,Y0,L*.5,hh*.4);
-    c.fillStyle='#a9d6e8';c.fillRect(X0+L*.27,Y0+3,L*.18,hh*.3);c.fillRect(X0+L*.49,Y0+3,L*.18,hh*.3);
+    const L=R(half*2),X0=R(x-half),hh=R(Math.min(lh*.44,48)),Y0=R(cy-hh/2+2),broken=kind==='car',col=broken?'#7d8a96':it.col;
+    c.fillStyle='#0005';c.beginPath();c.ellipse(x,Y0+hh+3,half*1.02,hh*.13,0,0,6.28);c.fill();
+    if(dark&&!broken){c.fillStyle='rgba(255,240,170,.16)';c.beginPath();c.moveTo(X0+L,Y0+hh*.55);c.lineTo(X0+L+80,Y0+hh*.15);c.lineTo(X0+L+80,Y0+hh);c.closePath();c.fill()}
+    c.fillStyle=col;tRR(X0,Y0+hh*.36,L,hh*.52,hh*.14);c.fill();
+    c.beginPath();c.moveTo(X0+L*.16,Y0+hh*.4);c.lineTo(X0+L*.28,Y0);c.lineTo(X0+L*.68,Y0);c.lineTo(X0+L*.82,Y0+hh*.4);c.closePath();c.fill();
+    c.fillStyle='#a9d6e8';
+    c.beginPath();c.moveTo(X0+L*.23,Y0+hh*.36);c.lineTo(X0+L*.31,Y0+hh*.09);c.lineTo(X0+L*.47,Y0+hh*.09);c.lineTo(X0+L*.47,Y0+hh*.36);c.closePath();c.fill();
+    c.beginPath();c.moveTo(X0+L*.51,Y0+hh*.36);c.lineTo(X0+L*.51,Y0+hh*.09);c.lineTo(X0+L*.66,Y0+hh*.09);c.lineTo(X0+L*.76,Y0+hh*.36);c.closePath();c.fill();
+    c.fillStyle='rgba(0,0,0,.2)';c.fillRect(X0+2,R(Y0+hh*.68),L-4,R(hh*.14));
+    c.fillStyle='rgba(255,255,255,.25)';c.fillRect(X0+4,R(Y0+hh*.42),L-8,2);
+    wheel(X0+L*.22,Y0+hh*.9,hh*.19);wheel(X0+L*.78,Y0+hh*.9,hh*.19);
     if(broken){
-      c.fillStyle='#8a4b2a';c.fillRect(X0+L*.1,Y0+hh*.5,8,5);c.fillRect(X0+L*.7,Y0+hh*.62,10,4);   // rust
-      const blink=Math.floor(TT.clock*3)%2;c.fillStyle=blink?'#ff9a1a':'#6b3a10';c.fillRect(X0-2,Y0+hh*.35,4,5);c.fillRect(X0+L-2,Y0+hh*.35,4,5);
-      c.fillStyle='#9a9aa0';for(let i=0;i<3;i++){const t=(TT.clock*.8+i/3)%1;c.globalAlpha=.6*(1-t);c.beginPath();c.arc(X0+L*.8+t*6,Y0-t*18,4+t*6,0,6.28);c.fill()}c.globalAlpha=1;
-    }else{c.fillStyle='#ffe14d';c.fillRect(X0+L-3,Y0+hh*.4,3,5);c.fillStyle='#ff3040';c.fillRect(X0,Y0+hh*.4,3,5)}  // headlight / tail light
+      c.fillStyle='#8a4b2a';c.fillRect(R(X0+L*.1),R(Y0+hh*.52),9,5);c.fillRect(R(X0+L*.6),R(Y0+hh*.6),11,4);   // rust
+      const blink=Math.floor(tClock()*3)%2;c.fillStyle=blink?'#ff9a1a':'#6b3a10';c.fillRect(X0-2,R(Y0+hh*.45),5,6);c.fillRect(X0+L-3,R(Y0+hh*.45),5,6);
+      c.fillStyle='#9a9aa0';for(let i=0;i<3;i++){const t=(tClock()*.8+i/3)%1;c.globalAlpha=.6*(1-t);c.beginPath();c.arc(X0+L*.84+t*8,Y0+hh*.3-t*26,5+t*8,0,6.28);c.fill()}c.globalAlpha=1;
+    }else{c.fillStyle='#ffe14d';c.fillRect(X0+L-4,R(Y0+hh*.46),4,6);c.fillStyle='#ff3040';c.fillRect(X0,R(Y0+hh*.46),4,6)}  // headlight / tail light
   }else if(kind==='truck'){                                                    // slow truck heading the same way
-    const L=R(half*2),X0=R(x-half),hh=R(Math.min(lh*.8,34)),Y0=R(cy-hh/2);
-    c.fillStyle='#111';[.12,.3,.62,.88].forEach(f=>c.fillRect(R(X0+L*f-6),Y0+hh-4,12,7));
-    c.fillStyle='#e6e6ea';c.fillRect(X0,Y0,R(L*.72),hh-3);
-    c.fillStyle='#c9c9d2';c.fillRect(X0,Y0+hh-8,R(L*.72),3);
-    c.fillStyle='#d62f3a';c.fillRect(X0+6,Y0+R(hh*.35),R(L*.6),4);
-    c.fillStyle='#2e9e4f';c.fillRect(X0+R(L*.74),Y0+R(hh*.2),R(L*.26),hh-R(hh*.2)-3);
-    c.fillStyle='#a9d6e8';c.fillRect(X0+R(L*.86),Y0+R(hh*.28),R(L*.1),R(hh*.3));
-    c.fillStyle='#777';for(let i=0;i<2;i++){const t=(TT.clock*1.2+i/2)%1;c.globalAlpha=.5*(1-t);c.beginPath();c.arc(X0-4-t*14,Y0+hh-8-t*8,3+t*5,0,6.28);c.fill()}c.globalAlpha=1;
+    const L=R(half*2),X0=R(x-half),hh=R(Math.min(lh*.56,60)),Y0=R(cy-hh/2);
+    c.fillStyle='#0005';c.beginPath();c.ellipse(x,Y0+hh+3,half*1.02,hh*.11,0,0,6.28);c.fill();
+    if(dark){c.fillStyle='rgba(255,240,170,.16)';c.beginPath();c.moveTo(X0+L,Y0+hh*.6);c.lineTo(X0+L+80,Y0+hh*.25);c.lineTo(X0+L+80,Y0+hh);c.closePath();c.fill()}
+    c.fillStyle='#e6e6ea';tRR(X0,Y0,R(L*.72),hh-6,4);c.fill();
+    c.fillStyle='#c9c9d2';c.fillRect(X0,Y0+hh-12,R(L*.72),4);
+    c.fillStyle='#d62f3a';c.fillRect(X0+7,Y0+R(hh*.3),R(L*.6),5);c.fillStyle='#2d5fd3';c.fillRect(X0+7,Y0+R(hh*.3)+7,R(L*.6),5);
+    c.fillStyle='#2e9e4f';tRR(X0+R(L*.74),Y0+R(hh*.2),R(L*.26),hh-R(hh*.2)-6,5);c.fill();
+    c.fillStyle='#a9d6e8';c.fillRect(X0+R(L*.86),Y0+R(hh*.28),R(L*.1),R(hh*.28));
+    [.12,.3,.62,.88].forEach(f=>wheel(X0+L*f,Y0+hh-3,hh*.13));
+    c.fillStyle='#ffe14d';c.fillRect(X0+L-3,R(Y0+hh*.62),3,6);
+    c.fillStyle='#777';for(let i=0;i<2;i++){const t=(tClock()*1.2+i/2)%1;c.globalAlpha=.5*(1-t);c.beginPath();c.arc(X0-5-t*18,Y0+hh-12-t*10,4+t*7,0,6.28);c.fill()}c.globalAlpha=1;
   }
 }
-function tPPM(){return TURBO.PX_PER_M+(TT.fastFrom==null?0:TURBO.SPEEDUP_PX*tClamp((TT.t-TT.fastFrom)/TURBO.SPEEDUP_SECS,0,1))}
+// On-screen pixels per metre: this is the feeling of speed. It rises a little each round, and builds again in the final round.
+function tPPM(){return TURBO.PX_PER_M+TURBO.ROUND_SPEEDUP_PX*Math.max(0,((TT&&TT.rd.n)||1)-1)+(TT.fastFrom==null?0:TURBO.SPEEDUP_PX*tClamp((TT.t-TT.fastFrom)/TURBO.SPEEDUP_SECS,0,1))}
 function tText(t,x,y,size,col,align){
-  const c=TT.ctx;c.font=`900 ${size}px "Courier New",ui-monospace,monospace`;c.textAlign=align||'center';c.textBaseline='middle';
+  const c=tc;c.font=`900 ${size}px "Courier New",ui-monospace,monospace`;c.textAlign=align||'center';c.textBaseline='middle';
   c.fillStyle='#000';c.fillText(t,x+2,y+2);c.fillStyle=col;c.fillText(t,x,y);
 }
-// A terminology pickup: a floating, glowing retro card with the word in big letters
-function tWordCard(w,x,cy,lh){
-  // floating red word: no box, a very faint dark outline, and a soft shadow on the road below so it seems to hover
-  const c=TT.ctx,bob=Math.sin(TT.clock*5+w.id)*3,grow=Math.min(1,(TT.clock-w.born)/.25);
-  let fs=Math.round(Math.min(lh*.6,34));c.font=`900 ${fs}px "Courier New",monospace`;
-  while(c.measureText(w.text).width>190&&fs>12){fs--;c.font=`900 ${fs}px "Courier New",monospace`}
+// A terminology pickup: the word on a sign that hovers over its lane. Every sign looks the same, right or wrong.
+// A sign that is still beyond the right-hand edge is held at the edge, whole, so it can be read from the moment it appears.
+function tWordCard(w,x,cy,lh,W){
+  const c=tc,bob=Math.sin(tClock()*5+w.id)*3,grow=Math.min(1,(tClock()-w.born)/.25);
   if(grow<.05)return;
-  const tw=c.measureText(w.text).width,ty=Math.round(cy-lh*.12+bob),lift=(bob+3)/6;   // lift 0..1 as it bobs
+  let fs=Math.round(Math.min(lh*.3,30));c.font=`900 ${fs}px "Courier New",monospace`;
+  while(c.measureText(w.text).width>210&&fs>12){fs--;c.font=`900 ${fs}px "Courier New",monospace`}
+  const tw=c.measureText(w.text).width,pw=tw+22,ph=fs*1.75,px=Math.min(x,W-pw/2-5),held=px<x-1,ty=Math.round(cy-lh*.06+bob),lift=(bob+3)/6;
   c.save();
-  c.fillStyle=`rgba(0,0,0,${.32-lift*.12})`;c.filter='blur(4px)';                           // shadow on the road
-  c.beginPath();c.ellipse(x,cy+lh*.3,tw*.45*grow*(1-lift*.1),5,0,0,6.28);c.fill();c.filter='none';
-  c.translate(x,ty);c.scale(grow,grow);
-  c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
-  c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=2.5;c.strokeText(w.text,0,0);                  // very faint outline
-  c.fillStyle='#ff2a2a';c.fillText(w.text,0,0);
+  c.fillStyle=`rgba(0,0,0,${.3-lift*.1})`;c.beginPath();c.ellipse(px,cy+lh*.3,pw*.42*grow,5,0,0,6.28);c.fill();   // shadow on the road
+  c.translate(px,ty);c.scale(grow,grow);
+  c.fillStyle='#101a3f';tRR(-pw/2,-ph/2,pw,ph,9);c.fill();
+  c.strokeStyle='#ffe14d';c.lineWidth=3;c.stroke();
+  c.textAlign='center';c.textBaseline='middle';c.fillStyle='#ffffff';c.fillText(w.text,0,1);
+  if(held){c.fillStyle='#ffe14d';const k=Math.floor(tClock()*6)%3;for(let i=0;i<3;i++){c.globalAlpha=i===k?1:.35;c.beginPath();c.moveTo(-pw/2-6-i*7,0);c.lineTo(-pw/2-1-i*7,-5);c.lineTo(-pw/2-1-i*7,5);c.closePath();c.fill()}c.globalAlpha=1}   // arrows: it is still on its way
   c.restore();
 }
-function tBike(x,cy,lh,col,dark,boost,crashed){
-  // side-view motorbike with a rider in a white dobok and black belt
-  const c=TT.ctx,w=58,h=Math.round(Math.min(lh*.8,36)),X=Math.round(x-w/2),Y=Math.round(cy-h/2+h*.12),wr=Math.round(h*.22),gy=Y+h-wr,P=(fx,fy)=>[X+w*fx,Y+h*fy];
+// Side-view motorbike with a rider in a white dobok and black belt. h = its height on screen; lean tips it as it changes lane.
+function tBike(x,cy,h,col,dark,boost,crashed,lean,shield){
+  const c=tc,w=h*1.62,X=Math.round(x-w/2),Y=Math.round(cy-h/2+h*.12),wr=Math.round(h*.22),gy=Y+h-wr,P=(fx,fy)=>[X+w*fx,Y+h*fy],u=h/36;
   const poly=(pts,fill)=>{c.fillStyle=fill;c.beginPath();pts.forEach(([a,b],k)=>k?c.lineTo(a,b):c.moveTo(a,b));c.closePath();c.fill()};
   const line=(a,b,col2,lw)=>{c.strokeStyle=col2;c.lineWidth=lw;c.lineCap='round';c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke()};
-  if(boost){for(let i=0;i<3;i++){const L=16+Math.random()*16;c.fillStyle=['#ffe14d','#ff9a1a','#ff3040'][i];c.beginPath();c.moveTo(X+4,gy-3+i*2);c.lineTo(X+4-L+i*4,gy+1);c.lineTo(X+4,gy+5-i*2);c.fill()}}
-  c.fillStyle='#0006';c.fillRect(X+4,Y+h-2,w-4,5);                                   // shadow
-  const wheel=cx=>{c.fillStyle='#111';c.beginPath();c.arc(cx,gy,wr,0,6.28);c.fill();c.fillStyle='#8a8a9a';c.beginPath();c.arc(cx,gy,wr*.45,0,6.28);c.fill()};
+  c.fillStyle='#0006';c.beginPath();c.ellipse(x,Y+h+2*u,w*.5,3.5*u,0,0,6.28);c.fill();           // shadow
+  c.save();c.translate(x,gy);c.rotate(lean||0);c.translate(-x,-gy);
+  if(boost){for(let i=0;i<3;i++){const L=(18+Math.random()*18)*u;c.fillStyle=['#ffe14d','#ff9a1a','#ff3040'][i];c.beginPath();c.moveTo(X+4*u,gy-4*u+i*2*u);c.lineTo(X+4*u-L+i*4*u,gy+1);c.lineTo(X+4*u,gy+6*u-i*2*u);c.fill()}}
+  const spin=tClock()*14;
+  const wheel=cx=>{c.fillStyle='#111';c.beginPath();c.arc(cx,gy,wr,0,6.28);c.fill();c.fillStyle='#8a8a9a';c.beginPath();c.arc(cx,gy,wr*.5,0,6.28);c.fill();
+    c.strokeStyle='#2a2a33';c.lineWidth=Math.max(1,1.4*u);for(let i=0;i<3;i++){const a=spin+i*2.094;c.beginPath();c.moveTo(cx,gy);c.lineTo(cx+Math.cos(a)*wr*.9,gy+Math.sin(a)*wr*.9);c.stroke()}};
   wheel(X+wr+2);wheel(X+w-wr-2);
-  line([X+4,gy-1],[X+w*.35,gy-1],'#9a9aa8',4);                                       // exhaust
-  line([X+w-wr-2,gy],P(.8,.3),'#cfcfd8',3);                                          // front forks
-  poly([[X+wr+2,gy-wr*.2],P(.3,.44),P(.72,.4),[X+w-wr-2,gy-wr*.5],P(.55,.86)],col);  // body + tank
-  c.fillStyle=dark;c.fillRect(...P(.26,.38).map(Math.round),Math.round(w*.22),4);     // seat
-  c.fillStyle='#ffe14d';c.fillRect(Math.round(X+w-8),Math.round(Y+h*.36),5,5);       // headlight
-  line(P(.46,.46),P(.56,.7),'#f4f4f4',5);                                            // leg
-  poly([P(.3,.46),P(.52,.46),P(.64,.06),P(.48,.0)],'#f4f4f4');                       // torso (dobok)
-  c.fillStyle='#111';c.fillRect(...P(.31,.34).map(Math.round),Math.round(w*.22),4);   // black belt
-  line(P(.58,.12),P(.8,.3),'#f4f4f4',4);                                             // arm to handlebar
+  line([X+4*u,gy-1],[X+w*.35,gy-1],'#9a9aa8',4*u);                                     // exhaust
+  line([X+w-wr-2,gy],P(.8,.3),'#cfcfd8',3*u);                                          // front forks
+  poly([[X+wr+2,gy-wr*.2],P(.3,.44),P(.72,.4),[X+w-wr-2,gy-wr*.5],P(.55,.86)],col);    // body + tank
+  poly([P(.36,.5),P(.66,.47),P(.6,.62),P(.44,.66)],dark);                              // engine cover
+  c.fillStyle=dark;c.fillRect(Math.round(X+w*.26),Math.round(Y+h*.38),Math.round(w*.22),Math.round(4*u));     // seat
+  c.fillStyle='#ffe14d';c.fillRect(Math.round(X+w-8*u),Math.round(Y+h*.36),Math.round(5*u),Math.round(5*u)); // headlight
+  line(P(.46,.46),P(.56,.7),'#f4f4f4',5*u);                                            // leg
+  poly([P(.3,.46),P(.52,.46),P(.64,.06),P(.48,.0)],'#f4f4f4');                         // torso (dobok)
+  c.fillStyle='#111';c.fillRect(Math.round(X+w*.31),Math.round(Y+h*.34),Math.round(w*.22),Math.round(4*u));   // black belt
+  line(P(.58,.12),P(.8,.3),'#f4f4f4',4*u);                                             // arm to handlebar
   const [hx,hy]=P(.6,-.12),hr=h*.22;
-  c.fillStyle=col;c.beginPath();c.arc(hx,hy,hr,0,6.28);c.fill();                      // helmet
+  c.fillStyle=col;c.beginPath();c.arc(hx,hy,hr,0,6.28);c.fill();                        // helmet
+  c.fillStyle='#fff';c.fillRect(Math.round(hx-hr*.9),Math.round(hy-hr*.12),Math.round(hr*.9),Math.round(hr*.24));   // helmet stripe
   c.fillStyle='#1a1f3a';c.fillRect(Math.round(hx),Math.round(hy-hr*.35),Math.round(hr*.95),Math.round(hr*.6)); // visor
-  if(crashed){c.fillStyle='#bbbbbb';for(let i=0;i<3;i++){const s2=6+((TT.clock*20+i*7)%10);c.globalAlpha=.6;c.fillRect(X+w-10+i*6,Y-10-((TT.clock*30+i*9)%16),s2,s2)}c.globalAlpha=1}
+  c.restore();
+  if(shield){c.strokeStyle=`rgba(125,240,255,${.55+.3*Math.sin(tClock()*6)})`;c.lineWidth=3;c.beginPath();c.ellipse(x,Y+h*.42,w*.62,h*.82,0,0,6.28);c.stroke();c.fillStyle='rgba(125,240,255,.1)';c.fill()}
+  if(crashed){c.fillStyle='#bbbbbb';for(let i=0;i<3;i++){const s2=(6+((tClock()*20+i*7)%10))*u;c.globalAlpha=.6;c.fillRect(X+w-10*u+i*6*u,Y-10*u-((tClock()*30+i*9)%16)*u,s2,s2)}c.globalAlpha=1}
 }
-function tDeco(type,x,cy,vg){
-  const c=TT.ctx,s=vg;
-  if(type===0){c.fillStyle='#2b7a2a';c.fillRect(x-s*.35,cy-s*.2,s*.7,s*.45);c.fillRect(x-s*.2,cy-s*.36,s*.4,s*.3);c.fillStyle='#62c552';c.fillRect(x-s*.15,cy-s*.3,s*.18,s*.12)}
-  else if(type===1){c.fillStyle='#6b4a2a';c.fillRect(x-1,cy-s*.1,3,s*.45);c.fillStyle='#fff';c.beginPath();c.arc(x,cy-s*.18,s*.3,0,6.28);c.fill();
+// Roadside scenery, drawn as simple side-on shapes standing on the verge. s = the verge's height.
+function tDeco(type,x,cy,s){
+  const c=tc,dot=(a,b,r)=>{c.beginPath();c.arc(a,b,r,0,6.28);c.fill()};
+  if(type==='bush'){c.fillStyle='#2b7a2a';c.fillRect(x-s*.35,cy-s*.2,s*.7,s*.45);c.fillRect(x-s*.2,cy-s*.36,s*.4,s*.3);c.fillStyle='#62c552';c.fillRect(x-s*.15,cy-s*.3,s*.18,s*.12)}
+  else if(type==='tree'){c.fillStyle='#6b4a2a';c.fillRect(x-s*.05,cy,s*.1,s*.36);c.fillStyle='#237a2c';dot(x,cy-s*.08,s*.3);c.fillStyle='#2f9a3a';dot(x-s*.08,cy-s*.14,s*.2);c.fillStyle='#5fc552';dot(x-s*.12,cy-s*.2,s*.08)}
+  else if(type==='taeguk'){c.fillStyle='#6b4a2a';c.fillRect(x-1,cy-s*.1,3,s*.45);c.fillStyle='#fff';dot(x,cy-s*.18,s*.3);
     c.fillStyle='#d62f3a';c.beginPath();c.arc(x,cy-s*.18,s*.25,Math.PI,0);c.fill();c.fillStyle='#2d5fd3';c.beginPath();c.arc(x,cy-s*.18,s*.25,0,Math.PI);c.fill()}
-  else if(type===2){c.fillStyle='#ddd';c.fillRect(x,cy-s*.42,2,s*.84);c.fillStyle=['#d62f3a','#2d5fd3','#ffe14d'][Math.abs(Math.round(x/7))%3];
+  else if(type==='flag'){c.fillStyle='#ddd';c.fillRect(x,cy-s*.42,2,s*.84);c.fillStyle=['#d62f3a','#2d5fd3','#ffe14d'][Math.abs(Math.round(x/7))%3];
     c.beginPath();c.moveTo(x+2,cy-s*.42);c.lineTo(x+2+s*.45,cy-s*.3);c.lineTo(x+2,cy-s*.16);c.fill()}
-  else if(type===3){c.fillStyle='#6b4a2a';c.fillRect(x-1,cy,3,s*.4);c.fillStyle='#fff';c.fillRect(x-15,cy-s*.36,30,Math.max(11,s*.42));
-    c.fillStyle='#d62f3a';c.font='900 9px "Courier New",monospace';c.textAlign='center';c.textBaseline='middle';c.fillText('TKD',x,cy-s*.36+Math.max(11,s*.42)/2)}
-  else{c.fillStyle='#8e1f2a';c.fillRect(x-s*.22,cy-s*.1,s*.44,s*.4);c.fillStyle='#1d1a24';c.beginPath();c.moveTo(x-s*.42,cy-s*.1);c.lineTo(x,cy-s*.4);c.lineTo(x+s*.42,cy-s*.1);c.fill();c.fillStyle='#ffcf6b';c.fillRect(x-3,cy+s*.05,6,s*.2)}
+  else if(type==='sign'){c.fillStyle='#6b4a2a';c.fillRect(x-1,cy,3,s*.4);c.fillStyle='#fff';c.fillRect(x-17,cy-s*.36,34,Math.max(12,s*.42));
+    c.fillStyle='#d62f3a';c.font='900 10px "Courier New",monospace';c.textAlign='center';c.textBaseline='middle';c.fillText('TKD',x,cy-s*.36+Math.max(12,s*.42)/2)}
+  else if(type==='hut'){c.fillStyle='#8e1f2a';c.fillRect(x-s*.22,cy-s*.1,s*.44,s*.4);c.fillStyle='#1d1a24';c.beginPath();c.moveTo(x-s*.42,cy-s*.1);c.lineTo(x,cy-s*.4);c.lineTo(x+s*.42,cy-s*.1);c.fill();c.fillStyle='#ffcf6b';c.fillRect(x-3,cy+s*.05,6,s*.2)}
+  else if(type==='blossom'){c.fillStyle='#5a3a2a';c.fillRect(x-s*.04,cy,s*.08,s*.36);c.fillStyle='#f58fb8';dot(x-s*.16,cy-s*.04,s*.2);dot(x+s*.16,cy-s*.06,s*.2);c.fillStyle='#ffb3d1';dot(x,cy-s*.18,s*.24);c.fillStyle='#ffd9e8';dot(x-s*.07,cy-s*.24,s*.1)}
+  else if(type==='lantern'){c.fillStyle='#8d8aa3';c.fillRect(x-s*.14,cy+s*.3,s*.28,s*.07);c.fillRect(x-s*.04,cy+s*.02,s*.08,s*.28);c.fillStyle='#ffe08a';c.fillRect(x-s*.1,cy-s*.16,s*.2,s*.18);
+    c.fillStyle='#6f6c88';c.beginPath();c.moveTo(x-s*.2,cy-s*.16);c.lineTo(x,cy-s*.34);c.lineTo(x+s*.2,cy-s*.16);c.fill()}
+  else if(type==='lamp'){const col=Math.abs(Math.round(x/11))%2?'255,61,154':'61,224,255';c.fillStyle='#4a4870';c.fillRect(x-1,cy-s*.36,3,s*.76);c.fillRect(x,cy-s*.36,s*.2,3);
+    c.fillStyle=`rgba(${col},.28)`;dot(x+s*.2,cy-s*.32,s*.22);c.fillStyle='#fff';dot(x+s*.2,cy-s*.32,s*.06)}
+  else if(type==='tower'){c.fillStyle='#241a5c';c.fillRect(x-s*.22,cy-s*.44,s*.44,s*.84);c.fillStyle=Math.abs(Math.round(x/13))%2?'#3de0ff':'#ff3d9a';c.fillRect(x-s*.22,cy-s*.44,s*.44,3);
+    c.fillStyle='rgba(255,220,130,.9)';for(let r=0;r<4;r++)for(let k=0;k<3;k++)if((r*3+k+Math.abs(Math.round(x/9)))%3)c.fillRect(Math.round(x-s*.16+k*s*.12),Math.round(cy-s*.34+r*s*.18),Math.round(s*.07),Math.round(s*.09))}
+  else if(type==='holo'){const col=['#ff3d9a','#3de0ff','#ffd23d','#8dff5a'][Math.abs(Math.round(x/17))%4],off=Math.floor(tClock()*3)%3;c.fillStyle='#3a3860';c.fillRect(x-1,cy,3,s*.4);
+    c.fillStyle='#0b0820';c.fillRect(x-s*.3,cy-s*.36,s*.6,s*.36);c.strokeStyle=col;c.lineWidth=2;c.strokeRect(x-s*.3,cy-s*.36,s*.6,s*.36);c.fillStyle=col;for(let i=0;i<3;i++)if(i!==off)c.fillRect(Math.round(x-s*.22+i*s*.16),Math.round(cy-s*.28),Math.round(s*.1),Math.round(s*.2))}
+  else if(type==='pine'){c.fillStyle='#5a3a22';c.fillRect(x-s*.04,cy+s*.18,s*.08,s*.2);
+    for(let i=0;i<3;i++){const by=cy+s*(.24-i*.2),tw=s*(.3-i*.07);c.fillStyle=['#1d6b55','#237a62','#2a8a70'][i];c.beginPath();c.moveTo(x-tw,by);c.lineTo(x,by-s*.3);c.lineTo(x+tw,by);c.fill();
+      c.fillStyle='#f4f9ff';c.beginPath();c.moveTo(x-tw*.5,by-s*.15);c.lineTo(x,by-s*.3);c.lineTo(x+tw*.5,by-s*.15);c.lineTo(x,by-s*.19);c.fill()}}
+  else if(type==='snowman'){c.fillStyle='#fff';dot(x,cy+s*.2,s*.18);dot(x,cy-s*.04,s*.13);dot(x,cy-s*.22,s*.09);c.fillStyle='#ff7a1a';c.fillRect(x,cy-s*.23,s*.1,3);c.fillStyle='#12083a';c.fillRect(x-s*.08,cy-s*.36,s*.16,s*.07);c.fillStyle='#e01e6e';c.fillRect(x-s*.1,cy-s*.15,s*.2,3)}
+  else if(type==='rock'){c.fillStyle='#8a8f9c';c.beginPath();c.moveTo(x-s*.28,cy+s*.3);c.lineTo(x-s*.12,cy-s*.02);c.lineTo(x+s*.14,cy-s*.08);c.lineTo(x+s*.3,cy+s*.3);c.fill();c.fillStyle='#f4f9ff';c.beginPath();c.moveTo(x-s*.12,cy-s*.02);c.lineTo(x+s*.14,cy-s*.08);c.lineTo(x+s*.18,cy+s*.04);c.lineTo(x-s*.14,cy+s*.08);c.fill()}
 }
 
 /* =====================================================================
@@ -12218,8 +12523,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.68';
+const APP_VERSION='3.69';
 const VERSION_NOTES=[
+  ['3.69','Taekwondo Turbo rebuilt: a bigger bike and a road that fills the screen, drag anywhere to steer (buttons still available), word signs you can read as soon as they appear, scenery and music that change each round, streaks for double and triple points, a shield, perfect-round bonuses, stars, and bikes to unlock with the same theory points as Grand Prix.'],
   ['3.68','Behind the scenes: more work on the new game that is still being built (nothing new on the menu yet).'],
   ['3.67','Behind the scenes: groundwork for a new game that is still being built (nothing new on the menu yet).'],
   ['3.66','Taekwondo Grand Prix rebuilt: four themed circuits with hills (plus a Mystery Track), Race, Cup and Time Trial with a ghost of your best lap, drift and combo boosts, slipstream, karts to unlock with theory points, stars and best scores, music, game controller support and a fuller display on big screens. Driving stays easy while answers are on the road.'],
