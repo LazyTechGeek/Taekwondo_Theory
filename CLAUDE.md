@@ -42,18 +42,23 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 ## Features worth knowing
 - Study Guide: play buttons (MP3 → Pronounced → text as written, en-GB TTS), Play all, Hide Korean/English/answers (answers reveal silently, then ▶ / Hide), Grade questions in each grade, General Knowledge card under the last grade shown, pattern videos.
 - Hidden developer mode: Version history → tap the title 5 times. Edit Pronounced/MP3 per item, Copy changes, Export spreadsheet (rewrites only those cells of the embedded workbook).
-- Embedded games run in iframes from `<script type="text/plain">` blocks (`gpSrc` Grand Prix, `bpSrc` Balloon Pop, `tlSrc` Taerigi It Lucky; `</script` escaped as `<\/script`) and get questions from host functions (`GP_MAKE`, `BP_MAKE`, `TL_MAKE`/`TL_INFO`/`TL_RANGE`/`TL_MODE`).
+- Embedded games run in iframes from `<script type="text/plain">` blocks (`gpSrc` Grand Prix, `bpSrc` Balloon Pop, `tlSrc` Taerigi It Lucky, `gsSrc` Grading Simulator; `</script` escaped as `<\/script`) and get questions from host functions (`GP_MAKE`, `BP_MAKE`, `TL_MAKE`/`TL_INFO`/`TL_RANGE`/`TL_MODE`).
 - Grand Prix (3.66, in `gpSrc`): modes Race (3 laps, 9 rivals), Cup (4 circuits x 2 laps, points table, trophy), Time Trial (3 laps, ghost of best lap). Circuits `TRACKS` (Sunrise Park, Blossom Valley, Neon City, Snowy Peaks = fixed seeds; Mystery Track = random), themes `THEMES`/`WEATHERS`, hills `buildHills`, karts `KARTS`, tunes `TUNES`.
   - Driving: auto-accelerate, brake (↓/S/controller), grass slows, hold the inside of a bend for a drift boost, slipstream, combo boost for correct answers in a row. Tuning numbers are in `CFG`.
   - Saved on the device only: `tkd_gp` (theory points = lifetime correct answers, stars/best per circuit, cup trophy, kart, music) and `tkd_gp_ghost`. Theory points unlock circuits (10/25/45), the Cup (45) and karts; Golden kart = gold cup. Helper on = practice, nothing saved. Developer mode (`tkdDev`) unlocks everything.
   - To edit the game: change the text inside `<script type="text/plain" id="gpSrc">` in place (keep `<\/script` escaped); `tools/check.py` does not syntax-check that block, so run `node --check` on its script and play it.
+- Grading Simulator (beta, in `gsSrc`, from Dave's taekwondo-grading-day.html). HIDDEN: menu entry `#gsMode` only shows when developer mode is on AND the "Grading Simulator (beta)" switch under it is on (`tkdGs`, not exported). Keep it hidden until Dave says otherwise.
+  - Stages: Line-up and Name and grade (cutscenes with "Skip this part"); Line work and Step sparring = call and response (examiner calls a Korean technique from `GS_TERMS`, you pick the meaning) until Dave has video clips; Patterns = video quiz ("What's next?", `PATTERN_VIDEOS`, files in `videos/`; only Chon-Ji and Yul-Gok exist, other grades watch the class perform); Free sparring; Terminology (`GS_MAKE` = the app's own questions for that grade).
+  - Hall as in Dave's photos: top table with THREE examiners (main examiner in the middle, drawn as a cartoon likeness: cropped hair, short grey beard), one examiner at each side table; all in navy blazer, gold buttons, navy tie, UK council badge. Cloth logos left to right: Tae Kwon Do Council – UK, Karl James Schools (gold), International Taekwon-Do Council. 3rd Kup and below answer terminology at a side table; red belt and above at the top table.
+  - Sparring: NO scores, no winner, no referee or flags (a grading, not a competition); the examiner gives a short comment at the end. Rebuild of the sparring game (bigger fighters, more techniques, Block and step-back) is the next job.
+  - Its line-work calls and pattern move data still come from Dave's grading workbook (grading-game-data-v2.xlsx, not in this repo).
 - Question engine: `items(fn)` → `makeQ(it,n)` (termQ / patQ / beltQ / qQ). Range for games: `RG` + `inScope`.
 
 ## Parked ideas (not built)
 - Whack-a-Mole: answer signs fixed on 5 holes; moles pop up randomly; whack only the right hole; a hit sign turns green (right) or red (wrong) and stays for the round.
 - Theory Fighter (Street Fighter style), Dojang Dash (platformer), falling-blocks sorter. Invaders-style shooter rejected as too hard.
 - Grand Prix extras not built: rear-view mirror, two-player split screen, a brake button on phones.
-- Grading Simulator (separate project; Dave wants it added as a mini game that stays hidden unless switched on in developer mode), listening quiz, "practise my mistakes", progress meter, certificates (must be properly earned), picture matching with Dave's own photos.
+- Grading Simulator still to do: video clips for the other patterns, line work and step sparring (then they become video quizzes). Listening quiz, "practise my mistakes", progress meter, certificates (must be properly earned), picture matching with Dave's own photos.
 
 ## Open data questions flagged to Dave
 Choi-Jong/Choi-Yong, Yong-Gae/Yon-Gae, So San, Sam-IL/Tong-IL, Gojong/Gojung, Dollymio/Dollimyo, Twimyo/Twio chagi, waving kick Doro/Noollo, Chunbi/Chumbi/Junbi, Noolo/Noollo, Anaero/Anearo/Anuro, Taerigi/Taeregi.
