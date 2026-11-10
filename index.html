@@ -2059,7 +2059,7 @@ function seedRand(seed) {
   };
 }
 function trnd(a, b) { return a + TR() * (b - a); }
-const WALL_PANEL = 4, WALL_H = 950;   // wall panel length (segments) and height (world units)
+const WALL_PANEL = 8, WALL_H = 1700;   // wall panel length (segments) and height (world units); taller and longer so the club logos read clearly
 let bendNo = 0, wallBend = false, wallCount = 0, wallNo = 0, wallLogo = 0;
 function addRoad(enter, hold, leave, curve) {
   if (curve) {
@@ -12932,8 +12932,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.73';
+const APP_VERSION='3.74';
 const VERSION_NOTES=[
+  ['3.74','Grand Prix: the logo barrier walls on bends are taller and longer, so the club logos are about twice as big.'],
   ['3.73','Theory Master and Taekwondo Chaser: tapping an answer no longer makes a sound. The sound now comes when the answer is revealed, one for right and one for wrong.'],
   ['3.72','Who Wants to Be a Taekwondo Theory Master? now has studio lights that sweep in for each question and flash green or red on the answer, a set that gets darker as you climb, a ladder that lights up and moves, animated lifelines (the audience bars grow, the friend\'s reply is typed out, the host leans in), sound effects and a backing beat, a cheque at the end, medals in the Hall of Fame, and a tidier start screen with the sliders under Game settings.'],
   ['3.71','Taekwondo Chaser now feels like a TV game show: five Chasers with their own faces and moods, title cards for each round, a round studio clock, a lit board where you slide down and the red closes in behind you, a locked-in and reveal moment for every answer, quicker offers you can skip, sound effects and a backing beat (Sound button on the start screen), and a proper celebration when you get home.'],
