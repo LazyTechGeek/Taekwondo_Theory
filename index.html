@@ -976,7 +976,7 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 <!-- GRAND PRIX SETUP -->
 <section id="gpSetup" class="hide">
   <div class="topbar"><button class="back" id="gpBack">← Menu</button></div>
-  <div class="chHero"><div style="font-size:60px">🏁</div><div><div class="chTitle" style="font-size:1.5rem">Taekwondo Grand Prix</div><div class="sub">Three laps against nine rival karts. Drive into the sign with the right answer.</div></div></div>
+  <div class="chHero"><div style="font-size:60px">🏁</div><div><div class="chTitle" style="font-size:1.5rem">Taekwondo Grand Prix</div><div class="sub">Race, Cup or Time Trial on four circuits. Drive into the sign with the right answer.</div></div></div>
   <div class="rgBox"></div>
   <label class="gpHelp"><input type="checkbox" id="gpHelper"><span><b>Helper</b><small>Always highlights the correct answer in green</small></span></label>
   <div class="row"><button class="btn red" id="gpGo" style="padding:14px;font-size:1.05rem">Start</button></div>
@@ -1229,6 +1229,9 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
   .pill { background: rgba(10,5,40,.72); border: 2px solid #3de0ff; border-radius: 999px; padding: 4px 12px;
           box-shadow: 0 0 12px rgba(61,224,255,.6); white-space: nowrap; }
   #muteBtn { pointer-events: auto; cursor: pointer; font: inherit; color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,.5); padding: 4px 9px; }
+  #midBtns { display: flex; gap: 6px; }
+  #musicBtn { pointer-events: auto; cursor: pointer; font: inherit; color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,.5); padding: 4px 11px; }
+  #musicBtn.off { opacity: .45; text-decoration: line-through; }
   #quitBtn { pointer-events: auto; cursor: pointer; font: inherit; color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,.5); }
   #quitBtn:active { background: rgba(255,255,255,.35); }
   @media (max-width: 480px) { #hudRow { font-size: 10px; letter-spacing: 0; gap: 4px; } .pill { padding: 4px 7px; } }
@@ -1326,9 +1329,48 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
               padding: .5em 1.4em; border: 0; border-radius: 999px; cursor: pointer;
               background: linear-gradient(180deg,#fff36b,#ff9a3d); box-shadow: 0 6px 0 #a3470c, 0 0 30px rgba(255,170,60,.8); }
   button.go:active { transform: translateY(4px); box-shadow: 0 2px 0 #a3470c; }
-  #endScreen { display: none; }
-  /* How-to-play panel on the title screen */
-  #startScreen { gap: 2vmin; }
+  #endScreen { display: none; gap: 1.8vmin; }
+  #startScreen { gap: 1.7vmin; }
+  /* ---------- Start menu: mode, circuit, kart ---------- */
+  .tabs { display: flex; gap: 4px; background: rgba(10,5,40,.72); border: 2px solid rgba(61,224,255,.6); border-radius: 999px; padding: 4px; }
+  .tabs button { font: inherit; font-weight: 900; font-size: clamp(12px, 2.6vmin, 18px); letter-spacing: .05em; color: #cfd3ff;
+                 background: none; border: 0; border-radius: 999px; padding: .5em 1em; cursor: pointer; white-space: nowrap; }
+  .tabs button.on { background: linear-gradient(180deg,#7df0ff,#2aa7e8); color: #06122a; }
+  #modeText { font-size: clamp(12.5px, 2.5vmin, 18px); }
+  .card { display: flex; align-items: center; gap: 8px; width: 100%; max-width: 480px; background: rgba(10,5,40,.72);
+          border: 2px solid #ffd23d; border-radius: 14px; padding: 8px; box-shadow: 0 0 14px rgba(255,210,61,.35); }
+  .card .mid { flex: 1; min-width: 0; }
+  #trkName { font-size: clamp(18px, 4.4vmin, 30px); font-weight: 900; color: #ffd23d; }
+  #trkInfo { font-size: clamp(12px, 2.5vmin, 17px); margin-top: 2px; }
+  .arrow { font: inherit; font-size: clamp(16px, 4vmin, 26px); width: 2.2em; height: 2.2em; flex: none; border-radius: 50%;
+           border: 2px solid #fff; color: #fff; background: rgba(20,10,60,.6); cursor: pointer; padding: 0; }
+  .arrow:active { background: rgba(61,224,255,.55); }
+  #kartRow { display: flex; gap: 8px; justify-content: center; }
+  .kart { width: clamp(32px, 9vmin, 48px); height: clamp(32px, 9vmin, 48px); border-radius: 12px; border: 3px solid rgba(255,255,255,.35);
+          cursor: pointer; font-size: 14px; padding: 0; background: linear-gradient(90deg, var(--c) 0 38%, var(--s) 38% 62%, var(--c) 62%); }
+  .kart.on { border-color: #fff; box-shadow: 0 0 12px #fff; transform: scale(1.1); }
+  .kart.locked { filter: grayscale(.85) brightness(.5); }
+  #tpLine { font-size: clamp(12px, 2.5vmin, 17px); min-height: 1.3em; max-width: 560px; }
+  button.go:disabled { filter: grayscale(1) brightness(.55); cursor: default; }
+  .row2 { display: flex; gap: 10px; }
+  button.small { font: inherit; font-size: clamp(13px, 3vmin, 20px); font-weight: 900; letter-spacing: .06em; color: #1a0638;
+                 padding: .5em 1.1em; border: 0; border-radius: 999px; cursor: pointer;
+                 background: linear-gradient(180deg,#fff,#b9c3ff); box-shadow: 0 4px 0 #4a4f8a; }
+  button.small:active { transform: translateY(3px); box-shadow: 0 1px 0 #4a4f8a; }
+  #howScreen { display: none; z-index: 5; background: rgba(5,2,20,.95); gap: 2vmin; }
+  /* ---------- Results ---------- */
+  #endStars { font-size: clamp(26px, 7vmin, 52px); color: #ffd23d; letter-spacing: .1em; text-shadow: 0 0 14px rgba(255,210,61,.8); line-height: 1; }
+  #endStars small { display: block; font-size: .36em; color: #fff; letter-spacing: 0; text-shadow: none; margin-top: 5px; }
+  #endNews { font-size: clamp(13px, 2.8vmin, 20px); font-weight: 800; color: #8dff5a; line-height: 1.35; }
+  .cupT { border-collapse: collapse; font-size: clamp(12px, 2.4vmin, 17px); font-weight: 800; margin: 0 auto;
+          background: rgba(10,5,40,.72); border-radius: 10px; }
+  .cupT td { padding: 1.5px 9px; text-align: left; }
+  .cupT td:first-child, .cupT td:nth-child(n+3) { text-align: right; }
+  .cupT i { display: inline-block; width: .8em; height: .8em; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .cupT tr.me { color: #ffd23d; }
+  .combo { font-size: .6em; color: #ffd23d; text-shadow: 0 0 12px rgba(255,210,61,.9), 0 3px 0 #6b4a00; }
+  body.tt #btnR { display: none !important; }       /* no power-ups in a time trial */
+  /* How-to-play panel */
   .howto { width: 100%; max-width: 560px; text-align: left; display: grid; gap: 1.6vmin;
            background: rgba(10,5,40,.72); border: 2px solid rgba(61,224,255,.6); border-radius: 14px; padding: 12px 16px;
            font-size: clamp(12.5px, 2.5vmin, 18px); line-height: 1.35; }
@@ -1336,11 +1378,14 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
   .howto ul { list-style: none; }
   .howto li { position: relative; padding-left: 1.1em; margin: 2px 0; }
   .howto li::before { content: "\2022"; position: absolute; left: 0; color: #3de0ff; }
+  @media (max-width: 480px) and (orientation: portrait) { .howto { font-size: 12px; line-height: 1.28; gap: 1.2vmin; padding: 10px 12px; } }
   @media (orientation: landscape) and (max-height: 520px) {
-    .howto { max-width: 900px; grid-template-columns: 1fr 1fr; gap: 20px; padding: 8px 14px; font-size: 12px; line-height: 1.25; }
-    #startScreen { padding: 8px 20px; gap: 6px; }
-    #startScreen h1 { font-size: 26px; } #startScreen h1 br { display: none; }
-    #startScreen button.go { font-size: 18px; } #startScreen #backBtn { font-size: 13px !important; }
+    .howto { max-width: 900px; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 8px 14px; font-size: 11.5px; line-height: 1.22; }
+    .screen { padding: 6px 20px; gap: 5px !important; }
+    .screen h1 { font-size: 24px; } .screen h1 br { display: none; }
+    .screen button.go { font-size: 18px; } .screen button.small { font-size: 13px; }
+    #modeText { display: none; } .big { font-size: 20px; } #endStars { font-size: 24px; }
+    .card { padding: 4px 8px; } .cupT { font-size: 11px; } .cupT td { padding: 0 9px; }
   }
 </style>
 </head>
@@ -1351,7 +1396,7 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
   <div id="progress"><div id="progressFill"></div></div>
   <div id="hudRow">
     <button class="pill" id="quitBtn" title="Exit to main menu">&#10005; EXIT</button>
-    <button class="pill" id="muteBtn" title="Sound on / off">&#128266;</button>
+    <span id="midBtns"><button class="pill" id="muteBtn" title="Sound on / off">&#128266;</button><button class="pill" id="musicBtn" title="Music on / off">&#9835;</button></span>
     <span class="pill" id="qPill">QUESTION 1</span>
     <span class="pill" id="attemptPill">ATTEMPT 0 / 3</span>
     <span class="pill" id="scorePill">SCORE 0</span>
@@ -1375,39 +1420,66 @@ input[type=range]{width:100%;margin:6px 0;accent-color:var(--red)}
 
 <div class="screen" id="startScreen">
   <h1>TAEKWONDO<br> GRAND PRIX</h1>
+  <div class="tabs" id="modeTabs">
+    <button data-mode="race">RACE</button><button data-mode="cup">CUP</button><button data-mode="tt">TIME TRIAL</button>
+  </div>
+  <div id="modeText"></div>
+  <div class="card">
+    <button class="arrow" id="trkPrev" title="Previous circuit">&#9664;</button>
+    <div class="mid"><div id="trkName"></div><div id="trkInfo"></div></div>
+    <button class="arrow" id="trkNext" title="Next circuit">&#9654;</button>
+  </div>
+  <div id="kartRow"></div>
+  <div id="tpLine"></div>
+  <button class="go" id="startBtn">START</button>
+  <div class="row2">
+    <button class="small" id="howBtn">HOW TO PLAY</button>
+    <button class="small" id="backBtn">BACK</button>
+  </div>
+</div>
+
+<div class="screen" id="howScreen">
   <div class="howto">
     <div>
       <h2>How to play</h2>
       <ul>
-        <li>Three laps against nine rival karts.</li>
-        <li>Steer left/right using &larr; &rarr;, A/D, or the on-screen arrows.</li>
-        <li>Drive into the sign with the correct answer: +1 point.</li>
-        <li>Hit a wrong answer: &minus;1 point.</li>
-        <li>Dodge all answer signs: 0 points.</li>
-        <li>Answer signs change lanes each time.</li>
-        <li>Press EXIT (or Esc) to leave the race.</li>
+        <li>Steer with the arrows, &larr; &rarr;, A/D or a game controller.</li>
+        <li>Drive into the sign with the correct answer: +1 point. A wrong answer: &minus;1. Miss them all: 0.</li>
+        <li>Correct answers in a row make a COMBO: a bigger speed boost each time.</li>
+        <li>A correct answer also earns a power-up. Fire it with USE, Space or &uarr;.</li>
       </ul>
     </div>
     <div>
-      <h2>Power-ups</h2>
+      <h2>Driving</h2>
       <ul>
-        <li>A correct answer earns a power-up.</li>
-        <li>If you're leading: Oil Slick or Force Field.</li>
-        <li>If you're trailing: Boost or Foot Guards.</li>
-        <li>Use your power-up with USE, Space, Shift, or &uarr;.</li>
+        <li>The kart speeds up by itself. Brake with &darr; or S.</li>
+        <li>Bends push you outwards and the grass slows you down.</li>
+        <li>Hold the inside of a bend to charge a drift boost: watch for the sparks.</li>
+        <li>Tuck in behind a rival for extra speed.</li>
+        <li>While answers are on the road the driving is easy, so you can think about the question.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Theory points</h2>
+      <ul>
+        <li>Every correct answer is a theory point. They open new circuits and karts.</li>
+        <li>Stars: 1 for finishing, 2 for 60% correct, 3 for 85% correct.</li>
+        <li>With Helper on it is a practice run: nothing is saved.</li>
       </ul>
     </div>
   </div>
-  <button class="go" id="startBtn">START GAME</button>
-  <button class="go" id="backBtn" style="font-size: clamp(14px, 3.2vmin, 24px); background: linear-gradient(180deg,#fff,#b9c3ff); box-shadow: 0 5px 0 #4a4f8a;">BACK</button>
+  <button class="small" id="howClose">CLOSE</button>
 </div>
 
 <div class="screen" id="endScreen">
-  <h1>RACE COMPLETE</h1>
+  <h1 id="endTitle">RACE COMPLETE</h1>
   <div class="big" id="finalScore">Score: 0 / 0</div>
+  <div id="endStars"></div>
   <p id="finalDetail"></p>
+  <div id="endTable"></div>
+  <div id="endNews"></div>
   <button class="go" id="againBtn">PLAY AGAIN</button>
-  <button class="go" id="menuBtn" style="font-size: clamp(14px, 3.2vmin, 24px); background: linear-gradient(180deg,#fff,#b9c3ff); box-shadow: 0 5px 0 #4a4f8a;">MAIN MENU</button>
+  <button class="small" id="menuBtn">CHANGE CIRCUIT</button>
 </div>
 
 <script>
@@ -1424,6 +1496,43 @@ if (!questions.length) questions.push({ question: "No questions in this grade ra
 const GP_HELPER = !!(HOST && HOST.GP_HELPER);
 
 /* =====================================================================
+   SAVED PROGRESS  -  kept on this device only (localStorage, "tkd_" keys, so the
+   app's own Export / Import game data carries it). Nothing is sent anywhere.
+   tp = theory points (every correct answer, ever); rec = best results per circuit.
+   With Helper on, a race is a practice run and nothing is saved.
+   ===================================================================== */
+const SAVE_KEY = "tkd_gp", GHOST_KEY = "tkd_gp_ghost";
+const SAVE = { tp: 0, kart: 0, track: "park", mode: "race", music: true, rec: {}, cup: 0, streak: 0 };
+let GHOSTS = {};   // best time-trial lap on each circuit: { t: seconds, d: [distance, sideways, distance, sideways, ...] }
+function loadSave() {
+  try { const o = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}"); if (o && typeof o === "object") Object.assign(SAVE, o); } catch (e) { /* first visit */ }
+  try { GHOSTS = JSON.parse(localStorage.getItem(GHOST_KEY) || "{}") || {}; } catch (e) { GHOSTS = {}; }
+  if (!SAVE.rec || typeof SAVE.rec !== "object") SAVE.rec = {};
+  SAVE.tp = Math.max(0, Math.floor(+SAVE.tp || 0));
+}
+function store() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE)); } catch (e) { /* storage is optional */ } }
+function storeGhosts() { try { localStorage.setItem(GHOST_KEY, JSON.stringify(GHOSTS)); } catch (e) { /* storage is optional */ } }
+let DEV_ALL = false;   // the app's hidden developer mode opens every circuit and kart
+try { DEV_ALL = localStorage.getItem("tkdDev") === "1"; } catch (e) { /* ignore */ }
+const CUP_UNLOCK = 45;   // theory points needed for the cup (the same as the last circuit)
+const trackOpen = t => DEV_ALL || SAVE.tp >= t.unlock;
+const cupOpen = () => DEV_ALL || SAVE.tp >= CUP_UNLOCK;
+const kartOpen = k => DEV_ALL || (k.cup ? SAVE.cup >= 3 : SAVE.tp >= k.unlock);
+const rec = id => SAVE.rec[id] || (SAVE.rec[id] = {});
+// The three ways to play
+const MODES = {
+  race: { laps: 3, rivals: 9, text: "Three laps against nine rival karts." },
+  cup:  { laps: 2, rivals: 9, text: "Four circuits, two laps each. The most points wins the cup." },
+  tt:   { laps: 3, rivals: 0, text: "Three laps on your own. Beat your best lap and race its ghost." }
+};
+let LAPS = 3, N_RIVALS = 9;   // set from the mode at the start of each race
+const CUP = { on: false, race: 0, pts: [], me: 0, done: false, form: [] };   // cup in progress: race number (0-3) and everyone's points
+const RIVAL_NAMES = ["Blaze", "Comet", "Dash", "Echo", "Flash", "Jet", "Nova", "Rocket", "Zoom"];
+function fmtTime(t) { const m = Math.floor(t / 60), s = t - m * 60; return m + ":" + (s < 10 ? "0" : "") + s.toFixed(2); }
+function starsText(n) { return "\u2605".repeat(n) + "\u2606".repeat(3 - n); }
+function ord(n) { return n + (n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"); }
+
+/* =====================================================================
    CONFIG
    ===================================================================== */
 const CFG = {
@@ -1438,8 +1547,15 @@ const CFG = {
   LANES: [-0.8, -0.4, 0, 0.4, 0.8],   // 5 imaginary lanes (fraction of road half-width)
   GATE_HALF: 0.13,       // half-width of an answer's hit area (a lane is 0.4 wide)
   KART_HALF: 0.07,       // half-width of the kart hit box
-  MAX_X: 1.0,            // how far the kart can move from the centre
+  MAX_X: 1.16,           // how far the kart can move from the centre (1 = edge of the tarmac; beyond it is the kerb and grass)
+  GRASS_X: 1.04,         // past this you are on the grass and slow down
+  GRASS_SLOW: 0.62,      // top speed on the grass, as a share of normal
   STEER: 1.35,           // sideways speed (road half-widths / second)
+  PUSH: 0.135,           // how hard a bend pushes the kart outwards at full speed (per unit of curve)
+  TURBO: 0.32,           // extra top speed during a drift boost or combo boost (a share of normal speed)
+  DRIFT_T: [0.5, 1.1, 1.8],      // seconds of holding the inside line for a small / medium / big drift boost
+  DRIFT_BOOST: [0.6, 1.1, 1.7],  // seconds of boost each of those gives
+  SLIP_GAIN: 0.09,       // extra top speed when tucked in behind another kart (slipstream)
   WAVES: 3,              // attempts per question
   READ_TIME: 2.5,        // seconds to read a new question before the countdown
   COUNT_TIME: 3,         // countdown seconds
@@ -1448,8 +1564,8 @@ const CFG = {
   START_DIST: 8000,      // how far ahead the answer signs appear
   LAPS: 3,               // laps in a race
   RIVALS: 9,             // rival karts (10 on the grid including you)
-  RIVAL_MIN: 0.8,        // slowest rival's cruising speed, as a multiple of your un-boosted speed
-  RIVAL_MAX: 1.06,       // fastest rival's cruising speed (your boost is 2)
+  RIVAL_MIN: 0.84,       // slowest rival's cruising speed, as a multiple of your un-boosted speed
+  RIVAL_MAX: 1.09,       // fastest rival's cruising speed (your boost is 2); combo and drift boosts are how you keep up with the quick ones
   PUDDLE_SLOW: 0.55,     // speed multiplier while a kart is slowed by a puddle
   PAD_BOOST: 2,          // seconds of boost from driving over a chevron pad
   PAD_COUNT: 0,          // chevron boost pads per lap
@@ -1495,6 +1611,13 @@ const G = {
   goT: 0,           // time left to show "GO!"
   pos: 0,           // distance travelled along the track
   px: 0, pvx: 0,    // kart sideways position / velocity
+  spd: 0,           // forward speed as a share of normal top speed
+  calm: 1,          // 1 = full driving physics; fades to 0 while a question is being read or answered
+  turboT: 0,        // time left on a drift / combo boost
+  drift: 0, driftDir: 0,   // drift charge (seconds) and which way the bend goes
+  slip: 0,          // slipstream strength, 0..1
+  streak: 0, bestStreak: 0,   // correct answers in a row
+  raceT: 0, lapT: 0, lapTimes: [],   // race clock, current lap clock and finished lap times
   bgX: 0,           // background parallax offset
   gates: [],        // active answer signs on the road
   options: [],      // this question's answers
@@ -1502,8 +1625,9 @@ const G = {
   particles: [],
   time: 0
 };
-const keys = { left: false, right: false, boost: false, boostBtn: false };
+const keys = { left: false, right: false, boost: false, boostBtn: false, brake: false };
 let pad = 0;   // on-screen arrow buttons: -1 left, 1 right, 0 neither
+const gpad = { x: 0, brake: false, use: false, start: false };   // game controller, read once a frame
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -1515,7 +1639,8 @@ const el = {
   questionBox: $("questionBox"), progressFill: $("progressFill"), count: $("count"),
   feedback: $("feedback"), flash: $("flash"), start: $("startScreen"), end: $("endScreen"),
   lapMsg: $("lapMsg"), banner: $("banner"), bannerL1: $("bannerL1"), bannerL2: $("bannerL2"),
-  finalScore: $("finalScore"), finalDetail: $("finalDetail")
+  finalScore: $("finalScore"), finalDetail: $("finalDetail"), how: $("howScreen"),
+  endTitle: $("endTitle"), endStars: $("endStars"), endTable: $("endTable"), endNews: $("endNews")
 };
 
 function resize() {
@@ -1578,6 +1703,15 @@ function sfx(name) {
       f.type = "lowpass"; f.frequency.value = 500;
       g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
       n.connect(f); f.connect(g); g.connect(out); n.start(t); n.stop(t + 0.5);
+    } else if (name === "turbo") {                               // drift / combo boost: a quick rising zip with a hiss of air
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = "sawtooth"; o.frequency.setValueAtTime(260, t); o.frequency.exponentialRampToValueAtTime(1150, t + 0.22);
+      g.gain.setValueAtTime(0.001, t); g.gain.exponentialRampToValueAtTime(0.07, t + 0.03); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.32);
+      const n = noise(), f = audio.createBiquadFilter(), g2 = audio.createGain();
+      f.type = "highpass"; f.frequency.value = 2500;
+      g2.gain.setValueAtTime(0.09, t); g2.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      n.connect(f); f.connect(g2); g2.connect(out); n.start(t); n.stop(t + 0.36);
     } else if (name === "shield") {                              // force field on: a springy rising "boing"
       const o = audio.createOscillator(), g = audio.createGain();
       o.type = "triangle";
@@ -1631,10 +1765,96 @@ function squealSet(vol) {
 }
 
 /* =====================================================================
+   MUSIC  -  a short looping tune for each circuit theme, played note by note
+   from the lists below (no audio files). It is kept quiet, has its own on / off
+   button, and speeds up a little on the final lap.
+   chords are four bars, as semitones above the root note (a MIDI note number).
+   ===================================================================== */
+const TUNES = {
+  park:    { bpm: 126, root: 48, wave: "square",   chords: [[0, 4, 7], [7, 11, 14], [9, 12, 16], [5, 9, 12]] },
+  blossom: { bpm: 108, root: 50, wave: "triangle", chords: [[0, 4, 7], [9, 12, 16], [5, 9, 12], [7, 11, 14]] },
+  neon:    { bpm: 132, root: 45, wave: "sawtooth", chords: [[0, 3, 7], [8, 12, 15], [3, 7, 10], [10, 14, 17]] },
+  snow:    { bpm: 116, root: 53, wave: "sine",     chords: [[0, 4, 7], [5, 9, 12], [9, 12, 16], [7, 11, 14]] }
+};
+const MUSIC = { gain: null, next: 0, step: 0, on: false, tune: TUNES.park };
+function musicVol() {
+  if (MUSIC.gain) MUSIC.gain.gain.setTargetAtTime(G.muted || !SAVE.music ? 0 : 0.5, audio.currentTime, 0.05);
+  const b = $("musicBtn"); if (b) b.classList.toggle("off", !SAVE.music);
+}
+function musicStart() {
+  try {
+    if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+    if (!MUSIC.gain) { MUSIC.gain = audio.createGain(); MUSIC.gain.gain.value = 0; MUSIC.gain.connect(audio.destination); }
+    MUSIC.tune = TUNES[TH.music] || TUNES.park; MUSIC.step = 0; MUSIC.next = audio.currentTime + 0.15; MUSIC.on = true;
+    musicVol();
+  } catch (e) { /* sound is optional */ }
+}
+function musicStop() { MUSIC.on = false; }
+function musicNote(freq, t, dur, type, vol) {
+  const o = audio.createOscillator(), g = audio.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(MUSIC.gain); o.start(t); o.stop(t + dur + 0.03);
+}
+let drumNoise = null;
+function musicDrum(kind, t) {
+  if (kind === "kick") {
+    const o = audio.createOscillator(), g = audio.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(g); g.connect(MUSIC.gain); o.start(t); o.stop(t + 0.18);
+    return;
+  }
+  if (!drumNoise) {
+    drumNoise = audio.createBuffer(1, Math.floor(audio.sampleRate * 0.25), audio.sampleRate);
+    const d = drumNoise.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  const n = audio.createBufferSource(), f = audio.createBiquadFilter(), g = audio.createGain(), snare = kind === "snare";
+  n.buffer = drumNoise; f.type = snare ? "bandpass" : "highpass"; f.frequency.value = snare ? 1900 : 7000;
+  g.gain.setValueAtTime(snare ? 0.07 : 0.02, t); g.gain.exponentialRampToValueAtTime(0.0001, t + (snare ? 0.11 : 0.035));
+  n.connect(f); f.connect(g); g.connect(MUSIC.gain); n.start(t); n.stop(t + 0.14);
+}
+// Called every frame: queue up the notes for the next fifth of a second
+function musicTick() {
+  if (!MUSIC.on || !audio || !MUSIC.gain) return;
+  const now = audio.currentTime;
+  if (G.muted || !SAVE.music || MUSIC.next < now - 0.3) { MUSIC.next = Math.max(MUSIC.next, now + 0.05); if (G.muted || !SAVE.music) return; }
+  const T = MUSIC.tune, sd = 60 / (T.bpm * (LAPS > 1 && G.lap === LAPS ? 1.09 : 1)) / 4, hz = n => 440 * Math.pow(2, (n - 69) / 12);
+  const soft = T.wave === "sine" || T.wave === "triangle";
+  while (MUSIC.next < now + 0.2) {
+    const s = MUSIC.step % 16, bar = Math.floor(MUSIC.step / 16), ch = T.chords[bar % 4], t = MUSIC.next, alt = bar % 8 >= 4;
+    if (s % 4 === 0) musicNote(hz(T.root - 12 + ch[0]), t, sd * 3.2, "triangle", 0.1);                 // bass on each beat
+    if (s === 10 || s === 14) musicNote(hz(T.root + ch[0]), t, sd * 1.5, "triangle", 0.06);            // ...with a little skip
+    if (s % 2 === 0) {                                                                                  // the tune: the notes of the chord, in a pattern
+      const k = (alt ? [2, 1, 0, 1, 2, 0, 1, 2] : [0, 1, 2, 1, 0, 2, 1, 2])[s / 2];
+      musicNote(hz(T.root + 12 + ch[k] + (alt && s === 8 ? 12 : 0)), t, sd * 1.7, T.wave, soft ? 0.055 : 0.022);
+    }
+    if (s === 0 || s === 8 || (alt && s === 11)) musicDrum("kick", t);
+    if (s === 4 || s === 12) musicDrum("snare", t);
+    if (s % 2 === 0) musicDrum("hat", t);
+    MUSIC.next += sd; MUSIC.step++;
+  }
+}
+
+/* =====================================================================
    TRACK  -  built once as a looping list of segments
    ===================================================================== */
 const segs = [];
 function rnd(a, b) { return a + Math.random() * (b - a); }
+// The circuit builder has its own random numbers. A named circuit uses a fixed seed, so it is
+// exactly the same every time (best laps and ghosts depend on that); the Mystery Track is random.
+let TR = Math.random;
+function seedRand(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function trnd(a, b) { return a + TR() * (b - a); }
 const WALL_PANEL = 4, WALL_H = 950;   // wall panel length (segments) and height (world units)
 let bendNo = 0, wallBend = false, wallCount = 0, wallNo = 0, wallLogo = 0;
 function addRoad(enter, hold, leave, curve) {
@@ -1651,14 +1871,15 @@ function addSeg(curve) {
   const i = segs.length, sprites = [];
   // Scenery: trees, rocks, signs and flags scattered either side of the road
   if (i % 3 === 0) {
-    const side = Math.random() < 0.5 ? -1 : 1, r = Math.random();
-    const type = r < 0.58 ? "tree" : r < 0.83 ? "rock" : "flag";
-    sprites.push({ type, off: side * rnd(1.6, type === "tree" ? 4.5 : 2.4), v: Math.random() });
+    const side = TR() < 0.5 ? -1 : 1;
+    let r = TR(), type = TH.scenery[0][0];
+    for (const [t, share] of TH.scenery) { if (r < share) { type = t; break; } r -= share; }
+    sprites.push({ type, off: side * trnd(1.6, type === TH.tall ? 4.5 : 2.4), v: TR() });
   }
-  if (i % 7 === 0) sprites.push({ type: "tree", off: (Math.random() < 0.5 ? -1 : 1) * rnd(3, 7), v: Math.random() });
+  if (i % 7 === 0) sprites.push({ type: TR() < (TH.farShare || 0) ? TH.far : TH.tall, off: (TR() < 0.5 ? -1 : 1) * trnd(3.2, 7), v: TR() });
   // Barriers on the outside of bends
   // Every other bend has a white barrier wall carrying the club logos instead of blocks
-  const seg = { curve, sprites, alt: Math.floor(i / 3) % 2, idx: i };
+  const seg = { curve, sprites, alt: Math.floor(i / 3) % 2, idx: i, y: 0 };
   if (Math.abs(curve) > 1.5) {
     if (wallBend) {
       seg.wall = curve > 0 ? -1 : 1;                       // which side of the road
@@ -1677,16 +1898,18 @@ let mapPts = [];       // outline of the circuit for the mini-map, in 0..1 coord
 
 function buildTrack() {
   segs.length = 0; bendNo = 0; wallNo = 0;
-  // A new circuit is generated for every race: a random run of left and right bends
-  // joined by straights, always about the same total length (LAP_SEGS).
+  TR = TRK.seed ? seedRand(TRK.seed) : Math.random;
+  // The circuit is a run of left and right bends joined by straights, always about the same
+  // total length (LAP_SEGS). Each named circuit has its own character (tight, flowing, hilly...).
+  const C = TRK.curve || [2.5, 4], HD = TRK.hold || [30, 80], ST = TRK.straight || [30, 110];
   let plan = [];
   for (let tries = 0; tries < 60; tries++) {
     plan = [];
     let len = 110, net = 0;
-    const rightChance = Math.random() < 0.5 ? 0.75 : 0.25;      // each circuit leans mostly right or mostly left
+    const rightChance = TR() < 0.5 ? 0.75 : 0.25;      // each circuit leans mostly right or mostly left
     while (len < LAP_SEGS - 260) {
-      const curve = (Math.random() < rightChance ? 1 : -1) * rnd(2.5, 4);
-      const ease = Math.round(rnd(25, 40)), hold = Math.round(rnd(30, 80)), straight = Math.round(rnd(30, 110));
+      const curve = (TR() < rightChance ? 1 : -1) * trnd(C[0], C[1]);
+      const ease = Math.round(trnd(25, 40)), hold = Math.round(trnd(HD[0], HD[1])), straight = Math.round(trnd(ST[0], ST[1]));
       plan.push([ease, hold, curve, straight]);
       len += ease * 2 + hold + straight; net += curve * (hold + ease);
     }
@@ -1704,21 +1927,22 @@ function buildTrack() {
   // Wet race: a puddle in one lane on some of the bends
   if (WX.rain) {
     for (const [from, to] of bends) {
-      if (Math.random() > 0.7) continue;
-      const start = from + Math.floor(Math.random() * Math.max(1, to - from - PUDDLE_LEN));
-      const lane = CFG.LANES[Math.floor(Math.random() * CFG.LANES.length)];
+      if (TR() > 0.7) continue;
+      const start = from + Math.floor(TR() * Math.max(1, to - from - PUDDLE_LEN));
+      const lane = CFG.LANES[Math.floor(TR() * CFG.LANES.length)];
       for (let i = start; i < start + PUDDLE_LEN && i < segs.length; i++) segs[i].puddle = lane;
     }
   }
   // Chevron boost pads: a strip of arrows in one lane, scattered round the lap
   for (let n = 0; n < CFG.PAD_COUNT; n++) {
-    const start = 130 + Math.floor(Math.random() * (segs.length - 180));
+    const start = 130 + Math.floor(TR() * (segs.length - 180));
     if (segs[start].puddle != null || segs[start + PAD_LEN].puddle != null || segs[start].pad != null || segs[start + PAD_LEN].pad != null) continue;
-    const lane = CFG.LANES[Math.floor(Math.random() * CFG.LANES.length)];
+    const lane = CFG.LANES[Math.floor(TR() * CFG.LANES.length)];
     for (let i = 0; i < PAD_LEN; i++) { segs[start + i].pad = lane; segs[start + i].padN = i; }
   }
   while (segs.length % 6) addSeg(0);   // keep the stripe pattern seamless at the loop
   TRACK_LEN = segs.length * CFG.SEG_LEN;
+  buildHills(TRK.hills == null ? 0.6 : TRK.hills);
   // Grandstand along the left of the start straight (scenery on that side moves across the road)
   for (let i = STAND_FROM; i <= STAND_TO; i++) {
     segs[i].stand = true;
@@ -1729,6 +1953,28 @@ function buildTrack() {
   segs[ARCH_SEG].line = 1; segs[ARCH_SEG + 1].line = 2;
   buildMap();
 }
+
+// Hills and dips: smooth humps added to the road height. Each one starts and ends at ground
+// level, so the lap joins up, and the start straight is always flat.
+function buildHills(amount) {
+  const N = segs.length;
+  for (const s of segs) s.y = 0;
+  if (!amount) return;
+  let i = 135;
+  while (true) {
+    const len = Math.round(trnd(150, 300)), gap = Math.round(trnd(0, 90));
+    if (i + len > N - 70) break;
+    const h = trnd(1700, 4300) * amount * (TR() < 0.42 ? -0.7 : 1);   // a dip is shallower than a hill is tall
+    for (let k = 0; k < len; k++) segs[i + k].y += h * (1 - Math.cos(2 * Math.PI * k / len)) / 2;
+    i += len + gap;
+  }
+}
+// Height of the road at distance z along the track
+function roadY(z) {
+  const N = segs.length, f = z / CFG.SEG_LEN, i = Math.floor(f), a = segs[((i % N) + N) % N].y, b = segs[(((i + 1) % N) + N) % N].y;
+  return a + (b - a) * (f - i);
+}
+function curveAt(z) { return segs[Math.floor(z / CFG.SEG_LEN) % segs.length].curve; }
 
 // Turn the list of curves into a closed circuit outline for the mini-map
 function buildMap() {
@@ -1754,13 +2000,15 @@ function buildMap() {
    ===================================================================== */
 // Curve offsets for each drawn segment, reused when projecting the answers
 const segX = new Float32Array(CFG.DRAW + 2), segDX = new Float32Array(CFG.DRAW + 2);
+const segClip = new Float32Array(CFG.DRAW + 2);   // screen height of the nearest hill crest in front of each segment
 let baseSeg = 0;
+let CAMY = CFG.CAM_H;   // camera height in the world: it rides CAM_H above the road under the kart
 
 // Project a world point (wx, wy) at distance dz from the camera
 function project(wx, wy, dz, xo) {
   const s = DEPTH / dz;
   return { x: W / 2 + s * (wx - G.px * CFG.ROAD_W + xo) * W / 2,
-           y: HY + s * (CFG.CAM_H - wy) * H / 2,
+           y: HY + s * (CAMY - wy) * H / 2,
            u: s * W / 2 };   // u = pixels per world unit at this depth
 }
 
@@ -1772,14 +2020,61 @@ const WEATHERS = {
   dawn:  { name: "DAWN", sky: ["#1b1464", "#7b2ff7", "#ff9a5a"], sun: ["#fff7b0", "#ffd23d", "rgba(255,120,80,.5)", "rgba(255,120,80,0)"],
            far: ["#4a2a8a", "#6b3fb8"], near: ["#2a1a5e", "#3f2a86"], grass: ["#17a05a", "#1fbf6a"], haze: "255,154,120", dark: 0.14, rain: false },
   rain:  { name: "WET RACE", sky: ["#2c343f", "#4f5c6a", "#8a96a1"], sun: null,
-           far: ["#4a5560", "#66727e"], near: ["#333c46", "#4a5560"], grass: ["#1c7f4d", "#229159"], haze: "170,185,200", dark: 0.1, rain: true }
+           far: ["#4a5560", "#66727e"], near: ["#333c46", "#4a5560"], grass: ["#1c7f4d", "#229159"], haze: "170,185,200", dark: 0.1, rain: true },
+  blossom: { name: "SPRING MORNING", sky: ["#4f9be0", "#a9d3f5", "#ffe6ef"], sun: ["#ffffff", "#fff0c8", "rgba(255,200,215,.5)", "rgba(255,200,215,0)"],
+           far: ["#8f86c4", "#c2b8e6"], near: ["#5b9a72", "#8cc79a"], grass: ["#4fbf63", "#5fd074"], haze: "255,225,235", dark: 0, rain: false,
+           fall: "petals", rumble: ["#ff8fbd", "#ffffff"] },
+  neon:  { name: "NIGHT RACE", sky: ["#04021a", "#120a3c", "#3b1570"], sun: null, moon: true, stars: true, skyline: true,
+           far: ["#1a1250", "#2a1c70"], near: ["#0d0a2e", "#17114a"], grass: ["#141033", "#1a1542"], haze: "120,60,200", dark: 0, rain: false,
+           road: ["#2a2748", "#242140"], rumble: ["#3de0ff", "#ff3d9a"], cloud: "rgba(150,120,255,.14)" },
+  snow:  { name: "SNOW DAY", sky: ["#5d9bd6", "#a9cdf0", "#eaf4ff"], sun: ["#ffffff", "#fffbe0", "rgba(255,255,255,.45)", "rgba(255,255,255,0)"],
+           far: ["#8ea6c4", "#eef4fb"], near: ["#6f8db0", "#d6e2f0"], grass: ["#cbd9e8", "#d9e4f0"], haze: "255,255,255", dark: 0, rain: false,
+           fall: "snow", road: ["#454a66", "#3e435e"], rumble: ["#ff4d4d", "#ffffff"] }
 };
+// Circuit themes: which weathers a theme can have and what stands beside the road.
+// scenery = [type, share] for the close-in scenery; tall = the big one further out; far = an occasional landmark.
+const THEMES = {
+  park:    { music: "park", weathers: ["sunny", "dawn", "rain"], scenery: [["tree", 0.58], ["rock", 0.25], ["flag", 0.17]], tall: "tree" },
+  blossom: { music: "blossom", weathers: ["blossom"], scenery: [["blossom", 0.6], ["lantern", 0.22], ["flag", 0.18]], tall: "blossom", far: "pagoda", farShare: 0.16 },
+  neon:    { music: "neon", weathers: ["neon"], scenery: [["lamp", 0.5], ["holo", 0.22], ["tower", 0.28]], tall: "tower" },
+  snow:    { music: "snow", weathers: ["snow"], scenery: [["pine", 0.62], ["rock", 0.2], ["snowman", 0.18]], tall: "pine" }
+};
+// The circuits. "unlock" is how many theory points (correct answers) open it. Each named circuit
+// has a fixed seed, so it never changes; the Mystery Track is a brand new circuit every race.
+const TRACKS = [
+  { id: "park",    name: "Sunrise Park",   theme: "park",    seed: 4107, unlock: 0,  hills: 0.55 },
+  { id: "blossom", name: "Blossom Valley", theme: "blossom", seed: 2391, unlock: 10, hills: 1.0, curve: [2.2, 3.4], hold: [45, 95], straight: [30, 80] },
+  { id: "neon",    name: "Neon City",      theme: "neon",    seed: 7754, unlock: 25, hills: 0.35, curve: [3, 4.3], hold: [25, 60], straight: [50, 130] },
+  { id: "snow",    name: "Snowy Peaks",    theme: "snow",    seed: 9128, unlock: 45, hills: 1.5, curve: [2.4, 3.8], hold: [30, 75], straight: [30, 90] },
+  { id: "mystery", name: "Mystery Track",  theme: null,      seed: 0,    unlock: 0,  hills: 0.8 }
+];
+let TRK = TRACKS[0], TH = THEMES.park;
 let WX = WEATHERS.dawn;
-function pickWeather() { const k = Object.keys(WEATHERS); WX = WEATHERS[k[Math.floor(Math.random() * k.length)]]; }
+// Choose the circuit: its theme, a weather that theme allows, and (for the Mystery Track) a random theme
+function pickTrack(t, fixedWeather) {
+  TRK = t;
+  const themeKeys = Object.keys(THEMES);
+  TH = THEMES[t.theme || themeKeys[Math.floor(Math.random() * themeKeys.length)]];
+  const w = TH.weathers;
+  WX = WEATHERS[fixedWeather || w[Math.floor(Math.random() * w.length)]];
+}
 
 // Darkening for dawn / rain, and the falling rain itself (drawn over the scene, under the HUD)
 function drawWeather() {
   if (WX.dark) { ctx.fillStyle = "rgba(8,6,30," + WX.dark + ")"; ctx.fillRect(0, 0, W, H); }
+  if (WX.fall) {   // snowflakes or blossom petals drifting down (each one follows its own steady path)
+    const petals = WX.fall === "petals", n = petals ? 26 : 60;
+    ctx.fillStyle = petals ? "rgba(255,170,205,.85)" : "rgba(255,255,255,.85)";
+    for (let i = 0; i < n; i++) {
+      const h1 = (i * 0.6180339) % 1, h2 = (i * 0.3819660 + 0.37) % 1;
+      const sp = (petals ? 60 : 90) * (0.6 + h1), y = ((h2 * H + G.time * sp) % (H + 20)) - 10;
+      const x = (((h1 * 1.7 * W + Math.sin(G.time * (0.7 + h2) + i) * 26 - G.bgX * 0.6) % (W + 40)) + W + 40) % (W + 40) - 20;
+      const r = (petals ? 3.2 : 2.2) * (0.6 + h2 * 0.9);
+      ctx.beginPath();
+      if (petals) ctx.ellipse(x, y, r * 1.5, r * 0.8, G.time * 2 + i, 0, 7); else ctx.arc(x, y, r, 0, 7);
+      ctx.fill();
+    }
+  }
   if (!WX.rain) return;
   ctx.strokeStyle = "rgba(205,225,255,.4)"; ctx.lineWidth = 1.5; ctx.beginPath();
   for (let i = 0; i < 70; i++) {
@@ -1801,8 +2096,25 @@ function drawBackground() {
     sun.addColorStop(0, WX.sun[0]); sun.addColorStop(0.35, WX.sun[1]); sun.addColorStop(0.6, WX.sun[2]); sun.addColorStop(1, WX.sun[3]);
     ctx.fillStyle = sun; ctx.fillRect(0, 0, W, HY);
   }
+  if (WX.stars) {   // a night sky: twinkling stars and a moon
+    for (let i = 0; i < 70; i++) {
+      const h1 = (i * 0.6180339) % 1, h2 = (i * 0.7548776 + 0.21) % 1;
+      const x = ((h1 * W * 1.6 - G.bgX * 0.08) % W + W) % W, y = h2 * HY * 0.82;
+      ctx.globalAlpha = 0.45 + 0.4 * Math.sin(G.time * (1.5 + h1 * 3) + i);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(x, y, 1.6 + h2, 1.6 + h2);
+    }
+    ctx.globalAlpha = 1;
+  }
+  if (WX.moon) {
+    const mx = W * 0.72 - ((G.bgX * 0.1) % (W * 2)) * 0.2, my = HY * 0.3, mr = Math.min(W, H) * 0.06;
+    const glow = ctx.createRadialGradient(mx, my, mr * 0.5, mx, my, mr * 3);
+    glow.addColorStop(0, "rgba(200,190,255,.45)"); glow.addColorStop(1, "rgba(200,190,255,0)");
+    ctx.fillStyle = glow; ctx.fillRect(mx - mr * 3, my - mr * 3, mr * 6, mr * 6);
+    ctx.fillStyle = "#f4f0ff"; ctx.beginPath(); ctx.arc(mx, my, mr, 0, 7); ctx.fill();
+    ctx.fillStyle = "rgba(170,160,220,.5)"; ctx.beginPath(); ctx.arc(mx - mr * 0.3, my - mr * 0.2, mr * 0.2, 0, 7); ctx.arc(mx + mr * 0.25, my + mr * 0.3, mr * 0.14, 0, 7); ctx.fill();
+  }
   // Clouds
-  ctx.fillStyle = "rgba(255,255,255,.35)";
+  ctx.fillStyle = WX.cloud || "rgba(255,255,255,.35)";
   for (let i = 0; i < 6; i++) {
     const span = W + 300;
     const cx = ((i * 331 - G.bgX * 0.25 + G.time * 6) % span + span) % span - 150;
@@ -1812,8 +2124,26 @@ function drawBackground() {
     ctx.fill();
   }
   // Two layers of mountains with parallax
+  if (WX.skyline) { skylineLayer(0.5, 0.26, WX.far[1], 46, 7, false); skylineLayer(1.0, 0.16, WX.near[0], 34, 3, true); return; }
   mountainLayer(0.5, 0.30, WX.far[0], WX.far[1], 0.011, 1.7);
   mountainLayer(1.0, 0.17, WX.near[0], WX.near[1], 0.019, 4.1);
+}
+// A row of city buildings on the horizon (night circuit), with a few lit windows on the nearer row
+function skylineLayer(par, height, colour, bw, seed, lit) {
+  const off = G.bgX * par, first = Math.floor(off / bw);
+  for (let i = first - 1; i < first + W / bw + 2; i++) {
+    const h1 = Math.abs(Math.sin(i * 12.9898 + seed) * 43758.5453) % 1, h2 = Math.abs(Math.sin(i * 78.233 + seed * 3) * 12543.123) % 1;
+    const x = i * bw - off, bh = H * height * (0.3 + 0.7 * h1), w = bw * (0.72 + 0.28 * h2);
+    ctx.fillStyle = colour; ctx.fillRect(x, HY - bh, w + 1, bh + 1);
+    if (!lit) continue;
+    ctx.fillStyle = h2 > 0.5 ? "rgba(255,214,120,.8)" : "rgba(90,220,255,.8)";
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 3; c++) {
+      if (Math.abs(Math.sin(i * 3.1 + r * 7.7 + c * 13.3)) > 0.55) continue;
+      const wy = HY - bh + 5 + r * 9; if (wy > HY - 6) break;
+      ctx.fillRect(x + 4 + c * (w - 8) / 3, wy, Math.max(2, (w - 8) / 3 - 3), 4);
+    }
+    if (h1 > 0.8) { ctx.fillStyle = h2 > 0.5 ? "#ff3d9a" : "#3de0ff"; ctx.fillRect(x, HY - bh, w + 1, 2); }   // a neon roof line here and there
+  }
 }
 function mountainLayer(par, height, c1, c2, f, seed) {
   const off = G.bgX * par, g = ctx.createLinearGradient(0, HY - H * height, 0, HY);
@@ -1841,30 +2171,38 @@ function drawRoad() {
   let x = 0, dx = -segs[baseSeg % N].curve * frac;
   const list = [];
   for (let n = 0; n < CFG.DRAW; n++) {
-    const seg = segs[(baseSeg + n) % N];
-    segX[n] = x; segDX[n] = dx;
+    const seg = segs[(baseSeg + n) % N], nxt = segs[(baseSeg + n + 1) % N];
+    segX[n] = x; segDX[n] = dx; segClip[n] = H + 9;
     const z1 = (baseSeg + n) * SL - G.pos, z2 = z1 + SL;
     if (z1 > SL) {   // skip the segments under / behind the camera
-      list.push({ seg, p1: project(0, 0, z1, x), p2: project(0, 0, z2, x + dx), z1, x, x2: x + dx, n });
+      list.push({ seg, p1: project(0, seg.y, z1, x), p2: project(0, nxt.y, z2, x + dx), z1, x, x2: x + dx, n, y1: seg.y, y2: nxt.y });
     }
     x += dx; dx += seg.curve;
   }
-  segX[CFG.DRAW] = x; segDX[CFG.DRAW] = dx;
+  segX[CFG.DRAW] = x; segDX[CFG.DRAW] = dx; segClip[CFG.DRAW] = segClip[CFG.DRAW + 1] = H + 9;
+  // Hills: for each segment, the highest point on screen reached by the road in front of it.
+  // Anything standing on a segment whose ground is below that line is (partly) hidden by a crest.
+  let crest = H + 9;
+  for (const it of list) { it.clip = crest; segClip[it.n] = crest; crest = Math.min(crest, it.p1.y, it.p2.y); }
 
   // Ground base colour, then paint far to near
+  const RD = WX.road || ["#3b3760", "#34305a"], RM = WX.rumble || ["#ff3d9a", "#ffffff"];
   ctx.fillStyle = WX.grass[0]; ctx.fillRect(0, HY, W, H - HY);
   for (let i = list.length - 1; i >= 0; i--) {
     const { seg, p1, p2 } = list[i];
-    const w1 = p1.u * CFG.ROAD_W, w2 = p2.u * CFG.ROAD_W;
     const yTop = Math.floor(p2.y), yBot = Math.ceil(p1.y) + 1;
+    if (yBot <= yTop) continue;   // the far side of a crest: facing away from the camera
     ctx.fillStyle = seg.alt ? WX.grass[1] : WX.grass[0];
     ctx.fillRect(0, yTop, W, yBot - yTop);
   }
   for (let i = list.length - 1; i >= 0; i--) {   // road on top of all the grass
-    const { seg, p1, p2 } = list[i];
+    const { seg, p1, p2, clip } = list[i];
+    if (p2.y > p1.y + 1 || p2.y >= clip) continue;               // facing away, or completely behind a hill crest
+    const cut = p1.y > clip + 0.5;                               // partly behind a crest: only draw the part above it
+    if (cut) { ctx.save(); ctx.beginPath(); ctx.rect(-60, -60, W + 120, clip + 60); ctx.clip(); }
     const w1 = p1.u * CFG.ROAD_W, w2 = p2.u * CFG.ROAD_W;
-    quad(p1.x, p1.y + 1, w1 * 1.13, p2.x, p2.y, w2 * 1.13, seg.alt ? "#ff3d9a" : "#ffffff");   // rumble strip
-    quad(p1.x, p1.y + 1, w1, p2.x, p2.y, w2, seg.alt ? "#3b3760" : "#34305a");                 // tarmac
+    quad(p1.x, p1.y + 1, w1 * 1.13, p2.x, p2.y, w2 * 1.13, seg.alt ? RM[0] : RM[1]);   // rumble strip
+    quad(p1.x, p1.y + 1, w1, p2.x, p2.y, w2, seg.alt ? RD[0] : RD[1]);                 // tarmac
     if (seg.pad != null) {                                                                      // chevron boost pad in one lane
       const c1 = p1.x + w1 * seg.pad, c2 = p2.x + w2 * seg.pad, h1 = w1 * 0.17, h2 = w2 * 0.17;
       quad(c1, p1.y + 1, h1, c2, p2.y, h2, "rgba(255,140,20,.5)");
@@ -1894,6 +2232,7 @@ function drawRoad() {
         quad(p1.x + w1 * l, p1.y + 1, w1 * 0.02, p2.x + w2 * l, p2.y, w2 * 0.02, "rgba(255,255,255,.9)");
       }
     }
+    if (cut) ctx.restore();
   }
   // Haze near the horizon
   const haze = ctx.createLinearGradient(0, HY, 0, HY + (H - HY) * 0.25);
@@ -1903,15 +2242,25 @@ function drawRoad() {
   // Scenery, far to near
   for (let i = list.length - 1; i >= 0; i--) {
     const it = list[i];
+    if (!it.seg.wall && !it.seg.stand && !it.seg.sprites.length) continue;
+    const hidden = it.p1.y > it.clip + 1;      // its ground is behind a hill crest: cut off whatever is below the crest
+    if (hidden) { ctx.save(); ctx.beginPath(); ctx.rect(-60, -60, W + 120, it.clip + 60); ctx.clip(); }
     if (it.seg.wall) drawWall(it);
     if (it.seg.stand) drawStand(it);
     for (const sp of it.seg.sprites) {
-      if (sp.type === "arch") { G.archDraw = { dz: it.z1, x: it.x }; drawArch(project(0, 0, it.z1, it.x)); continue; }   // remembered so karts beyond it can be tucked behind it
-      const p = project(sp.off * CFG.ROAD_W, 0, it.z1, it.x);
+      if (sp.type === "arch") { G.archDraw = { dz: it.z1, x: it.x }; drawArch(project(0, it.y1, it.z1, it.x)); continue; }   // remembered so karts beyond it can be tucked behind it
+      const p = project(sp.off * CFG.ROAD_W, it.y1, it.z1, it.x);
       if (p.x < -W * 0.6 || p.x > W * 1.6) continue;
       drawScenery(sp, p.x, p.y, p.u);
     }
+    if (hidden) ctx.restore();
   }
+}
+// Draw something standing on the road at distance dz, hidden below any hill crest in front of it
+function withCrest(dz, baseY, draw) {
+  const n = Math.max(0, Math.min(CFG.DRAW, Math.floor((G.pos + dz) / CFG.SEG_LEN) - baseSeg)), clip = segClip[n];
+  if (baseY <= clip + 1) { draw(); return; }
+  ctx.save(); ctx.beginPath(); ctx.rect(-60, -60, W + 120, clip + 60); ctx.clip(); draw(); ctx.restore();
 }
 
 // One segment of the grandstand: five stepped rows of spectators and a back wall
@@ -1922,7 +2271,7 @@ function drawStand(it) {
   const SL = CFG.SEG_LEN, id = it.seg.idx;
   for (let i = STAND_ROWS; i >= 0; i--) {                       // back wall first, then rows from the back to the front
     const wx = -(1.5 + i * 0.13) * CFG.ROAD_W;
-    const a = project(wx, 0, it.z1, it.x), b = project(wx, 0, it.z1 + SL, it.x2);
+    const a = project(wx, it.y1, it.z1, it.x), b = project(wx, it.y2, it.z1 + SL, it.x2);
     const back = i === STAND_ROWS, top = back ? STAND_ROWS * STAND_STEP + 800 : (i + 1) * STAND_STEP;
     ctx.fillStyle = back ? "#1d2148" : i % 2 ? "#7d83ad" : "#989ec6";
     ctx.beginPath();
@@ -1949,7 +2298,7 @@ function drawStand(it) {
 // logo panel) the logo painted on the wall in perspective.
 function drawWall(it) {
   const SL = CFG.SEG_LEN, wx = it.seg.wall * 1.24 * CFG.ROAD_W;
-  const a = project(wx, 0, it.z1, it.x), b = project(wx, 0, it.z1 + SL, it.x2);
+  const a = project(wx, it.y1, it.z1, it.x), b = project(wx, it.y2, it.z1 + SL, it.x2);
   const ha = WALL_H * a.u, hb = WALL_H * b.u;
   ctx.fillStyle = "#ffffff"; ctx.beginPath();
   ctx.moveTo(a.x, a.y + 0.5); ctx.lineTo(b.x, b.y); ctx.lineTo(b.x, b.y - hb); ctx.lineTo(a.x, a.y - ha); ctx.closePath(); ctx.fill();
@@ -1959,7 +2308,7 @@ function drawWall(it) {
   const img = LOGOS[it.seg.logo];
   if (!img.complete || !img.naturalWidth) return;
   // The panel runs from this segment to WALL_PANEL segments further on
-  const c = project(wx, 0, it.z1 + WALL_PANEL * SL, segX[it.n + WALL_PANEL]), hc = WALL_H * c.u;
+  const c = project(wx, segs[(baseSeg + it.n + WALL_PANEL) % segs.length].y, it.z1 + WALL_PANEL * SL, segX[it.n + WALL_PANEL]), hc = WALL_H * c.u;
   // Work left-to-right on screen so the logo is never mirrored
   const L = a.x < c.x ? { x: a.x, y: a.y, h: ha } : { x: c.x, y: c.y, h: hc };
   const R = a.x < c.x ? { x: c.x, y: c.y, h: hc } : { x: a.x, y: a.y, h: ha };
@@ -2039,6 +2388,75 @@ function drawScenery(sp, x, y, u) {
       const ar = img.naturalWidth / img.naturalHeight, ih = bh * 0.88, iw = ih * ar;
       ctx.drawImage(img, x - iw / 2, top + (bh - ih) / 2, iw, ih);
     }
+  } else if (sp.type === "blossom") {       // cherry tree in flower
+    const h = (1500 + sp.v * 800) * u, r = h * 0.3;
+    ctx.fillStyle = "#5a3a2a"; ctx.fillRect(x - h * 0.03, y - h * 0.5, h * 0.06, h * 0.5);
+    const c = sp.v > 0.5 ? ["#f58fb8", "#ffb3d1", "#ffd9e8"] : ["#ee7fae", "#ffa3c6", "#ffcfe0"];
+    ctx.fillStyle = c[0]; dot(x - r * 0.7, y - h * 0.52, r * 0.8); dot(x + r * 0.7, y - h * 0.55, r * 0.8);
+    ctx.fillStyle = c[1]; dot(x, y - h * 0.7, r);
+    ctx.fillStyle = c[2]; dot(x - r * 0.3, y - h * 0.8, r * 0.5);
+  } else if (sp.type === "lantern") {       // stone lantern with a lit window
+    const h = 950 * u, w = h * 0.42;
+    ctx.fillStyle = "#8d8aa3"; ctx.fillRect(x - w * 0.5, y - h * 0.1, w, h * 0.1); ctx.fillRect(x - w * 0.14, y - h * 0.55, w * 0.28, h * 0.45);
+    ctx.fillStyle = "#ffe08a"; ctx.fillRect(x - w * 0.32, y - h * 0.8, w * 0.64, h * 0.25);
+    ctx.fillStyle = "#6f6c88"; ctx.beginPath(); ctx.moveTo(x - w * 0.62, y - h * 0.8); ctx.lineTo(x, y - h); ctx.lineTo(x + w * 0.62, y - h * 0.8); ctx.closePath(); ctx.fill();
+  } else if (sp.type === "pagoda") {        // three-tier pagoda, set well back from the road
+    const h = (3400 + sp.v * 900) * u, w = h * 0.5;
+    for (let i = 0; i < 3; i++) {
+      const by = y - h * 0.27 * i, tw = w * (1 - i * 0.22);
+      ctx.fillStyle = "#c93a4a"; ctx.fillRect(x - tw * 0.32, by - h * 0.2, tw * 0.64, h * 0.2);
+      ctx.fillStyle = "#fff3d6"; ctx.fillRect(x - tw * 0.08, by - h * 0.15, tw * 0.16, h * 0.1);
+      ctx.fillStyle = "#2c2a4a"; ctx.beginPath();
+      ctx.moveTo(x - tw * 0.62, by - h * 0.19); ctx.lineTo(x - tw * 0.3, by - h * 0.29); ctx.lineTo(x + tw * 0.3, by - h * 0.29); ctx.lineTo(x + tw * 0.62, by - h * 0.19);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = "#ffd23d"; ctx.fillRect(x - w * 0.015, y - h, w * 0.03, h * 0.18);
+  } else if (sp.type === "lamp") {          // street light leaning over the road, with a coloured glow
+    const h = 1900 * u, d = sp.off < 0 ? 1 : -1;
+    ctx.fillStyle = "#4a4870"; ctx.fillRect(x - h * 0.012, y - h, h * 0.024, h); ctx.fillRect(d > 0 ? x : x - h * 0.2, y - h, h * 0.2, h * 0.02);
+    const lx = x + d * h * 0.2, ly = y - h * 0.98, col = sp.v > 0.5 ? "255,61,154" : "61,224,255";
+    if (h > 14) {
+      const gl = ctx.createRadialGradient(lx, ly, 0, lx, ly, h * 0.22);
+      gl.addColorStop(0, "rgba(" + col + ",.55)"); gl.addColorStop(1, "rgba(" + col + ",0)");
+      ctx.fillStyle = gl; ctx.fillRect(lx - h * 0.22, ly - h * 0.22, h * 0.44, h * 0.44);
+    }
+    ctx.fillStyle = "#ffffff"; dot(lx, ly, Math.max(1, h * 0.03));
+  } else if (sp.type === "holo") {          // neon sign board with blinking blocks (no words)
+    const h = 1500 * u, w = h * 0.9, col = ["#ff3d9a", "#3de0ff", "#ffd23d", "#8dff5a"][Math.floor(sp.v * 4) % 4];
+    ctx.fillStyle = "#3a3860"; ctx.fillRect(x - h * 0.02, y - h * 0.5, h * 0.04, h * 0.5);
+    ctx.fillStyle = "#0b0820"; ctx.fillRect(x - w / 2, y - h, w, h * 0.5);
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(1, h * 0.03); ctx.strokeRect(x - w / 2, y - h, w, h * 0.5);
+    ctx.fillStyle = col; const off = Math.floor(G.time * 3 + sp.v * 9) % 3;
+    for (let i = 0; i < 3; i++) if (i !== off) ctx.fillRect(x - w * 0.36 + i * w * 0.27, y - h * 0.86, w * 0.18, h * 0.22);
+  } else if (sp.type === "tower") {         // city building with lit windows and a neon roof line
+    const h = (2600 + sp.v * 2600) * u, w = 1150 * u;
+    ctx.fillStyle = sp.v > 0.5 ? "#1c1748" : "#241a5c"; ctx.fillRect(x - w / 2, y - h, w, h);
+    ctx.fillStyle = sp.v > 0.5 ? "#3de0ff" : "#ff3d9a"; ctx.fillRect(x - w / 2, y - h, w, Math.max(1, h * 0.012));
+    if (w > 16) {
+      ctx.fillStyle = "rgba(255,220,130,.85)";
+      const rows = Math.max(1, Math.min(9, Math.floor(h / (w * 0.3))));
+      for (let r = 0; r < rows; r++) for (let c = 0; c < 3; c++) {
+        if (Math.sin(sp.v * 50 + r * 5.3 + c * 9.1) > 0.25) continue;
+        ctx.fillRect(x - w * 0.36 + c * w * 0.28, y - h * 0.93 + r * (h * 0.9 / rows), w * 0.16, h * 0.045);
+      }
+    }
+  } else if (sp.type === "pine") {          // pine tree with snow on its branches
+    const h = (1700 + sp.v * 900) * u, w = h * 0.5;
+    ctx.fillStyle = "#5a3a22"; ctx.fillRect(x - w * 0.07, y - h * 0.3, w * 0.14, h * 0.3);
+    for (let i = 0; i < 3; i++) {
+      const by = y - h * (0.2 + i * 0.24), tw = w * (0.5 - i * 0.11);
+      ctx.fillStyle = ["#1d6b55", "#237a62", "#2a8a70"][i]; ctx.beginPath();
+      ctx.moveTo(x - tw, by); ctx.lineTo(x, by - h * 0.36); ctx.lineTo(x + tw, by); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#f4f9ff"; ctx.beginPath();
+      ctx.moveTo(x - tw * 0.5, by - h * 0.18); ctx.lineTo(x, by - h * 0.36); ctx.lineTo(x + tw * 0.5, by - h * 0.18);
+      ctx.lineTo(x + tw * 0.2, by - h * 0.14); ctx.lineTo(x, by - h * 0.19); ctx.lineTo(x - tw * 0.22, by - h * 0.13); ctx.closePath(); ctx.fill();
+    }
+  } else if (sp.type === "snowman") {
+    const s = 420 * u;
+    ctx.fillStyle = "#ffffff"; dot(x, y - s * 0.6, s * 0.6); dot(x, y - s * 1.45, s * 0.42); dot(x, y - s * 2.05, s * 0.3);
+    ctx.fillStyle = "#ff7a1a"; ctx.fillRect(x, y - s * 2.07, s * 0.3, s * 0.07);
+    ctx.fillStyle = "#12083a"; ctx.fillRect(x - s * 0.24, y - s * 2.5, s * 0.48, s * 0.2); ctx.fillRect(x - s * 0.34, y - s * 2.32, s * 0.68, s * 0.06);
+    ctx.fillStyle = "#e01e6e"; ctx.fillRect(x - s * 0.3, y - s * 1.84, s * 0.6, s * 0.1);
   } else if (sp.type === "barrier") {
     const w = 260 * u, h = 300 * u;
     ctx.fillStyle = sp.v % 4 === 0 ? "#ff3d3d" : "#ffffff"; ctx.fillRect(x - w / 2, y - h, w, h);
@@ -2049,14 +2467,42 @@ function drawScenery(sp, x, y, u) {
 /* =====================================================================
    KART / PLAYER MOVEMENT
    ===================================================================== */
+function driftTier() { const T = CFG.DRIFT_T; return G.drift >= T[2] ? 3 : G.drift >= T[1] ? 2 : G.drift >= T[0] ? 1 : 0; }
 function updatePlayer(dt) {
   let dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
-  if (!dir) dir = pad;   // on-screen arrow buttons
-  // Ease towards the target sideways speed so the kart glides rather than jumps
-  G.pvx += (dir * CFG.STEER - G.pvx) * Math.min(1, dt * 9);
+  if (!dir) dir = pad;                                 // on-screen arrow buttons
+  if (!dir && Math.abs(gpad.x) > 0.18) dir = gpad.x;   // game controller stick
+  const kz = kartZ(), curve = curveAt(kz);
+  // THEORY FIRST: while a question is being read, or its answer signs are on the road, the kart
+  // drives exactly as it always has - no bend push, no sliding - so picking an answer is never
+  // made harder by the driving. The livelier handling only applies in the gaps between answers.
+  const calmTarget = G.state === "read" || G.state === "wave" ? 0 : 1;
+  G.calm += (calmTarget - G.calm) * Math.min(1, dt * 3.5);
+  // --- forward speed: the kart accelerates by itself; grass, hills, braking, boosts and slipstream change the top speed ---
+  const onGrass = Math.abs(G.px) > CFG.GRASS_X, braking = keys.brake || gpad.brake;
+  const slope = (roadY(kz + CFG.SEG_LEN) - roadY(kz)) / CFG.SEG_LEN;
+  let top = 1 - slope * 0.22;                          // a touch slower uphill, quicker downhill
+  if (G.turboT > 0) { G.turboT -= dt; top += CFG.TURBO; }
+  top += CFG.SLIP_GAIN * G.slip;
+  if (onGrass) top *= CFG.GRASS_SLOW;
+  if (braking) top = Math.min(top, 0.45);
+  G.spd += (top - G.spd) * Math.min(1, dt * (top > G.spd ? (G.turboT > 0 ? 4 : 1.15) : braking ? 3.2 : 2.4));
+  // --- steering: ease towards the target sideways speed so the kart glides rather than jumps ---
+  G.pvx += (dir * CFG.STEER * (0.6 + 0.4 * Math.min(1, G.spd)) - G.pvx) * Math.min(1, dt * 9);
   G.px += G.pvx * dt;
+  G.px -= curve * CFG.PUSH * G.spd * G.spd * G.calm * dt;   // a bend pushes the kart towards its outside edge
   if (G.px > CFG.MAX_X) { G.px = CFG.MAX_X; G.pvx = 0; }
   if (G.px < -CFG.MAX_X) { G.px = -CFG.MAX_X; G.pvx = 0; }
+  // --- drift boost: holding the inside line through a bend builds a charge, released as a burst of speed on the way out ---
+  const inBend = Math.abs(curve) > 1.2 && G.calm > 0.5;
+  if (inBend && dir * curve > 0 && G.spd > 0.75 && !onGrass) { G.drift = Math.min(CFG.DRIFT_T[2] + 0.4, G.drift + dt); G.driftDir = Math.sign(curve); }
+  else if (G.drift > 0) {
+    if (!inBend || onGrass || dir * G.driftDir < 0) {
+      const tier = onGrass ? 0 : driftTier();
+      if (tier) { G.turboT = Math.max(G.turboT, CFG.DRIFT_BOOST[tier - 1]); sfx("turbo"); }
+      G.drift = 0;
+    } else G.drift = Math.max(0, G.drift - dt * 0.5);  // eased off for a moment: the charge drains slowly
+  }
 }
 
 function kartPos() {
@@ -2065,34 +2511,62 @@ function kartPos() {
             Math.sin(G.time * 30) * k * 0.012, k };
 }
 
+// The karts you can drive. "unlock" is the number of theory points (correct answers) needed;
+// the Golden kart is the prize for winning the cup. They all drive the same - only the paint differs.
+const KARTS = [
+  { name: "Flame",  body: "#e01e6e", stripe: "#ffd23d", wing: "#3de0ff", unlock: 0 },
+  { name: "Ocean",  body: "#1f6bff", stripe: "#ffffff", wing: "#ffd23d", unlock: 15 },
+  { name: "Jade",   body: "#12b36b", stripe: "#fff36b", wing: "#ffffff", unlock: 35 },
+  { name: "Sunset", body: "#ff7a1a", stripe: "#12083a", wing: "#ff3d9a", unlock: 60 },
+  { name: "Shadow", body: "#2b2f4a", stripe: "#3de0ff", wing: "#b05cff", unlock: 90 },
+  { name: "Royal",  body: "#7a3cff", stripe: "#ffd23d", wing: "#8dff5a", unlock: 130 },
+  { name: "Golden", body: "#e8b62c", stripe: "#ffffff", wing: "#fff36b", cup: true }
+];
+let myKart = KARTS[0];
+
 function drawKart() {
   const { x, y, k } = kartPos();
-  drawKartFull(x, y, k, G.pvx / CFG.STEER, "#e01e6e", true, G.boost, G.spin, G.shieldT,
-               G.items[0] && G.items[0].type === "strike3" ? G.items[0].uses : 0);
+  const lean = G.pvx / CFG.STEER + (G.drift > 0 ? G.driftDir * Math.min(1, G.drift) * 0.8 : 0);   // leans further into a drift
+  const racing = G.state !== "start" && G.state !== "end" && G.state !== "grid";
+  const fx = racing && G.turboT > 0 ? 2 : racing && (keys.brake || gpad.brake) ? 1 : 0;
+  drawKartFull(x, y, k, lean, myKart, true, G.boost, G.spin, G.shieldT,
+               G.items[0] && G.items[0].type === "strike3" ? G.items[0].uses : 0, fx);
 }
 
 // One kart seen from behind. Used for the player and, in other colours, for the rivals.
 // (x, y) is the centre of the kart, k its size, tilt its lean when steering (-1..1).
-function drawKartSprite(x, y, k, tilt, colour, isPlayer, boosting) {
+// colour is a plain colour (rivals) or one of the KARTS; fx: 1 = brake lights on, 2 = boost flames.
+function drawKartSprite(x, y, k, tilt, colour, isPlayer, boosting, fx) {
+  const st = typeof colour === "string" ? { body: colour, stripe: "rgba(255,255,255,.85)", wing: "#e8e8ff" } : colour;
+  const detail = k > 20;
   ctx.save(); ctx.translate(x, y);
   // Shadow
-  ctx.fillStyle = "rgba(0,0,0,.4)"; ctx.beginPath(); ctx.ellipse(0, k * 0.36, k * 0.62, k * 0.13, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "rgba(0,0,0,.4)"; ctx.beginPath(); ctx.ellipse(0, k * 0.36, k * 0.66, k * 0.13, 0, 0, 7); ctx.fill();
   ctx.rotate(tilt * 0.09);
-  // Rear wheels
+  // Front wheels, just visible ahead of the body; they turn with the steering
   ctx.fillStyle = "#15122b";
-  rr(-k * 0.62, -k * 0.02, k * 0.24, k * 0.38, k * 0.07); ctx.fill();
-  rr(k * 0.38, -k * 0.02, k * 0.24, k * 0.38, k * 0.07); ctx.fill();
-  if (k > 30 || boosting) {
-    ctx.fillStyle = "#3de0ff";
-    ctx.fillRect(-k * 0.6, k * 0.12 + ((G.time * 14) % 1) * k * 0.14, k * 0.2, k * 0.03);
-    ctx.fillRect(k * 0.4, k * 0.12 + ((G.time * 14) % 1) * k * 0.14, k * 0.2, k * 0.03);
-    // Thruster glow
-    const big = boosting;
+  rr(-k * 0.6 + tilt * k * 0.05, -k * 0.3, k * 0.17, k * 0.24, k * 0.05); ctx.fill();
+  rr(k * 0.43 + tilt * k * 0.05, -k * 0.3, k * 0.17, k * 0.24, k * 0.05); ctx.fill();
+  // Rear wheels with moving tread
+  rr(-k * 0.66, -k * 0.04, k * 0.27, k * 0.41, k * 0.08); ctx.fill();
+  rr(k * 0.39, -k * 0.04, k * 0.27, k * 0.41, k * 0.08); ctx.fill();
+  if (detail) {
+    ctx.fillStyle = "#3d3960";
+    const ph = (G.time * 9) % 1;
+    for (let i = 0; i < 4; i++) {
+      const ty = -k * 0.02 + ((i + ph) / 4) * k * 0.36;
+      ctx.fillRect(-k * 0.64, ty, k * 0.23, k * 0.025); ctx.fillRect(k * 0.41, ty, k * 0.23, k * 0.025);
+    }
+  }
+  // Engine block between the rear wheels, and the exhaust glow (flames when boosting)
+  ctx.fillStyle = "#23203f"; rr(-k * 0.4, k * 0.02, k * 0.8, k * 0.3, k * 0.05); ctx.fill();
+  if (k > 30 || boosting || fx === 2) {
+    const big = boosting || fx === 2;
     for (const s of [-1, 1]) {
-      const fl = k * (0.13 + Math.random() * 0.05) * (big ? 2.2 : 1);
-      const g = ctx.createRadialGradient(s * k * 0.2, k * 0.22, 0, s * k * 0.2, k * 0.22, fl);
-      g.addColorStop(0, "#fff"); g.addColorStop(0.4, big ? "#ffb03d" : "#3de0ff"); g.addColorStop(1, "rgba(61,224,255,0)");
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(s * k * 0.2, k * 0.22, fl, 0, 7); ctx.fill();
+      const fl = k * (0.13 + Math.random() * 0.05) * (big ? 2.3 : 1), gx = s * k * 0.2, gy = k * 0.24;
+      const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, fl);
+      gr.addColorStop(0, "#fff"); gr.addColorStop(0.4, boosting ? "#ffb03d" : fx === 2 ? "#ff5ad0" : "#3de0ff"); gr.addColorStop(1, "rgba(61,224,255,0)");
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(gx, gy, fl, 0, 7); ctx.fill();
     }
   }
   // Body: flat colour with a light-to-dark sheen over it
@@ -2102,21 +2576,41 @@ function drawKartSprite(x, y, k, tilt, colour, isPlayer, boosting) {
     ctx.lineTo(k * 0.24 + tilt * k * 0.05, -k * 0.3); ctx.lineTo(k * 0.46, -k * 0.02); ctx.lineTo(k * 0.4, k * 0.3);
     ctx.closePath(); ctx.fill();
   };
-  ctx.fillStyle = colour; body();
+  ctx.fillStyle = st.body; body();
   const sheen = ctx.createLinearGradient(0, -k * 0.3, 0, k * 0.3);
   sheen.addColorStop(0, "rgba(255,255,255,.35)"); sheen.addColorStop(0.5, "rgba(255,255,255,0)"); sheen.addColorStop(1, "rgba(0,0,0,.45)");
   ctx.fillStyle = sheen; body();
-  ctx.fillStyle = isPlayer ? "#ffd23d" : "rgba(255,255,255,.85)"; ctx.fillRect(-k * 0.05, -k * 0.28, k * 0.1, k * 0.56);   // racing stripe
-  // Driver helmet
-  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(tilt * k * 0.06, -k * 0.3, k * 0.15, 0, 7); ctx.fill();
-  ctx.fillStyle = "#1a1040"; ctx.fillRect(-k * 0.13 + tilt * k * 0.06, -k * 0.33, k * 0.26, k * 0.04);
+  if (detail) {                                                  // side pods
+    ctx.fillStyle = "rgba(0,0,0,.26)";
+    rr(-k * 0.43, k * 0.02, k * 0.12, k * 0.22, k * 0.04); ctx.fill(); rr(k * 0.31, k * 0.02, k * 0.12, k * 0.22, k * 0.04); ctx.fill();
+  }
+  ctx.fillStyle = st.stripe; ctx.fillRect(-k * 0.05, -k * 0.28, k * 0.1, k * 0.56);   // racing stripe
+  // Rear bumper and tail lights (bright when braking)
+  ctx.fillStyle = "#12083a"; rr(-k * 0.42, k * 0.24, k * 0.84, k * 0.08, k * 0.03); ctx.fill();
+  if (detail) {
+    ctx.save();
+    if (fx === 1) { ctx.shadowColor = "#ff2b2b"; ctx.shadowBlur = k * 0.25; }
+    ctx.fillStyle = fx === 1 ? "#ff3b3b" : "#8a1020";
+    ctx.fillRect(-k * 0.36, k * 0.255, k * 0.14, k * 0.05); ctx.fillRect(k * 0.22, k * 0.255, k * 0.14, k * 0.05);
+    ctx.restore();
+  }
+  // Driver: seat back, shoulders in white, and a helmet with a visor band
+  const hx = tilt * k * 0.06;
+  if (detail) {
+    ctx.fillStyle = "#1a1040"; ctx.beginPath(); ctx.ellipse(hx * 0.6, -k * 0.14, k * 0.21, k * 0.17, 0, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = "#f4f4ff"; ctx.beginPath(); ctx.ellipse(hx * 0.8, -k * 0.15, k * 0.17, k * 0.1, 0, Math.PI, 0); ctx.fill();
+  }
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(hx, -k * 0.3, k * 0.15, 0, 7); ctx.fill();
+  if (detail) { ctx.fillStyle = st.body; ctx.fillRect(hx - k * 0.025, -k * 0.45, k * 0.05, k * 0.11); }   // helmet stripe in the kart's colour
+  ctx.fillStyle = "#1a1040"; ctx.fillRect(-k * 0.13 + hx, -k * 0.33, k * 0.26, k * 0.04);
   // Spoiler
   ctx.fillStyle = "#12083a"; ctx.fillRect(-k * 0.34, -k * 0.24, k * 0.04, k * 0.2); ctx.fillRect(k * 0.3, -k * 0.24, k * 0.04, k * 0.2);
-  ctx.fillStyle = isPlayer ? "#3de0ff" : "#e8e8ff";
-  if (isPlayer) { ctx.shadowColor = "#3de0ff"; ctx.shadowBlur = k * 0.15; }
+  ctx.fillStyle = st.wing;
+  if (isPlayer) { ctx.shadowColor = st.wing; ctx.shadowBlur = k * 0.15; }
   rr(-k * 0.56, -k * 0.16, k * 1.12, k * 0.09, k * 0.04); ctx.fill();
   ctx.restore();
 }
+function dot(x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }   // a filled circle
 function rr(x, y, w, h, r) {   // rounded rectangle path
   r = Math.min(r, w / 2, h / 2);
   ctx.beginPath(); ctx.moveTo(x + r, y);
@@ -2204,12 +2698,12 @@ function drawMarks() {
   if (!G.gates.length) return;
   const z = G.gates[0].z, dz = z - G.pos;
   if (dz < 250) return;
-  const xo = roadX(z);
+  const xo = roadX(z), gy = roadY(z);   // sideways offset and height of the road where the signs are
   // "ATTEMPT 1 OF 3" banner: one wide strip above the whole row of signs, travelling with them
   // shown for about 2.5 seconds, then fades out before it grows wider than the screen
   const ba = Math.max(...G.gates.map(g => g.alpha)) * (G.state === "wave" ? Math.max(0, Math.min(1, (CFG.SKIP_FAR + 3.45 - G.waveT) / 0.45)) : 0);
   if (ba > 0.02 && G.wave >= 1) {
-    const c0 = project(0, 0, dz, xo), sw = 0.39 * CFG.ROAD_W * c0.u, sh = sw * 0.5;
+    const c0 = project(0, gy, dz, xo), sw = 0.39 * CFG.ROAD_W * c0.u, sh = sw * 0.5;
     const full = (Math.max(...CFG.LANES) - Math.min(...CFG.LANES)) * CFG.ROAD_W * c0.u + sw;   // covers every lane
     const span = Math.min(full, W - 16), fit = span / full;                                    // stops growing at the screen edges, so it can always be read
     const bh = sh * 1.17 * fit, bx = c0.x - span / 2, by = c0.y - 270 * c0.u - sh - bh - sh * 0.16;   // always centred over the signs
@@ -2224,7 +2718,7 @@ function drawMarks() {
   }
   for (const g of G.gates) {
     if (g.alpha < 0.02 || g.hit) continue;
-    const p = project(g.x * CFG.ROAD_W, 0, dz, xo);
+    const p = project(g.x * CFG.ROAD_W, gy, dz, xo);
     const pw = 0.39 * CFG.ROAD_W * p.u, ph = pw * 0.5;   // nearly a full lane wide
     const hover = (230 + Math.sin(G.time * 4 + g.x * 5) * 40) * p.u;
     const top = p.y - hover - ph, left = p.x - pw / 2;
@@ -2383,10 +2877,18 @@ function updateFlow(dt) {
    ===================================================================== */
 function registerResult(kind) {
   let text, cls;
-  if (kind === "correct")    { G.score++; G.correct++; G.qCorrect++; text = "+1 CORRECT!"; cls = "good"; beep(660, 0.1, "square"); setTimeout(() => beep(990, 0.2, "square"), 90); }
-  else if (kind === "wrong") { G.score--; G.wrong++;   text = "-1 WRONG!";   cls = "bad";  beep(140, 0.35, "sawtooth"); }
-  else                       { G.dodged++;             text = kind === "late" ? "TOO LATE!" : "NO ANSWER"; cls = "none"; }
-  el.feedback.textContent = text;
+  if (kind === "correct") {
+    G.score++; G.correct++; G.qCorrect++; text = "+1 CORRECT!"; cls = "good"; beep(660, 0.1, "square"); setTimeout(() => beep(990, 0.2, "square"), 90);
+    // Correct answers in a row are a COMBO. Every correct answer gives a burst of speed, and the
+    // burst lasts longer the bigger the combo - so knowing your theory is what wins the race.
+    G.streak++; G.bestStreak = Math.max(G.bestStreak, G.streak);
+    G.turboT = Math.max(G.turboT, 0.7 + 0.35 * Math.min(5, G.streak)); setTimeout(() => sfx("turbo"), 220);
+    if (G.streak >= 2) text += '<br><span class="combo">COMBO \u00D7' + G.streak + "</span>";
+    if (!GP_HELPER) SAVE.tp++;                                    // a theory point
+  }
+  else if (kind === "wrong") { G.score--; G.wrong++;   text = "-1 WRONG!";   cls = "bad";  beep(140, 0.35, "sawtooth"); G.streak = 0; if (G.mode === "tt") G.spd *= 0.55; }
+  else                       { G.dodged++;             text = kind === "late" ? "TOO LATE!" : "NO ANSWER"; cls = "none"; if (kind !== "late") G.streak = 0; }
+  el.feedback.innerHTML = text;
   el.feedback.className = ""; void el.feedback.offsetWidth; el.feedback.className = "show " + cls;
   if (cls !== "none") { el.flash.className = ""; void el.flash.offsetWidth; el.flash.className = cls; }
   updateHUD();
@@ -2399,18 +2901,29 @@ function updateHUD() {
   el.questionBox.textContent = q.question;
 }
 
-function startGame() {
+function startGame(track) {
+  if (track && track.id) TRK = track;
+  G.mode = MODES[SAVE.mode] ? SAVE.mode : "race"; LAPS = MODES[G.mode].laps; N_RIVALS = MODES[G.mode].rivals;
+  document.body.classList.toggle("tt", G.mode === "tt");
+  myKart = KARTS[SAVE.kart] && kartOpen(KARTS[SAVE.kart]) ? KARTS[SAVE.kart] : KARTS[0];
+  Object.assign(G, { tp0: SAVE.tp, cup0: SAVE.cup, lineN: -1, ghostRec: [], ghostKart: null, ghostData: null, newLap: false });
   if (HOST && HOST.GP_MAKE) { const fresh = HOST.GP_MAKE(); if (fresh.length) { questions.length = 0; questions.push(...fresh); } }   // new shuffled questions every race
-  Object.assign(G, { qi: 0, wave: 0, score: 0, correct: 0, wrong: 0, dodged: 0, px: 0, pvx: 0, gates: [], goT: 0, slowT: 0, shake: 0 });
+  Object.assign(G, { qi: 0, wave: 0, score: 0, correct: 0, wrong: 0, dodged: 0, px: 0, pvx: 0, gates: [], goT: 0, slowT: 0, shake: 0,
+                     spd: 0, calm: 1, turboT: 0, drift: 0, slip: 0, streak: 0, bestStreak: 0, raceT: 0, lapT: 0, lapTimes: [] });
   engineStart();
-  pickWeather();    // random weather...
-  buildTrack();     // ...and a freshly generated circuit for every race
+  musicStop();
+  pickTrack(TRK, G.mode === "tt" && TRK.theme === "park" ? "sunny" : null);   // the chosen circuit and its weather (a time trial is never wet)
+  buildTrack();
   initRace();
-  el.start.style.display = "none"; el.end.style.display = "none";
+  el.start.style.display = "none"; el.end.style.display = "none"; el.how.style.display = "none";
   el.hud.style.display = "block"; document.body.classList.add("playing");
   setCount("");
+  // Announce the circuit over the grid
+  el.lapMsg.innerHTML = (CUP.on ? "RACE " + (CUP.race + 1) + " OF 4<br>" : "") + TRK.name.toUpperCase();
+  el.lapMsg.className = ""; void el.lapMsg.offsetWidth; el.lapMsg.className = "show";
   // Standing start: everyone waits on the grid for the lights
   G.state = "grid"; G.t = 0; G.lit = 0; G.greenT = 0;
+  musicStart();
   G.qCorrect = 0; G.attemptShown = -1; setupOptions(); updateHUD();
   el.questionBox.style.visibility = "hidden"; el.questionBox.className = ""; el.questionBox.textContent = "GET READY!  \u2022  " + WX.name;
 }
@@ -2418,7 +2931,8 @@ function startGame() {
 // Abandon the race and go back to the main menu
 function quitGame() {
   if (G.state === "start") return;
-  G.state = "start"; G.gates = []; G.rivals = []; G.greenT = 0; G.goT = 0;
+  store(); musicStop();
+  G.state = "start"; G.gates = []; G.rivals = []; G.greenT = 0; G.goT = 0; CUP.on = false;
   setCount(""); el.banner.style.display = "none";
   el.hud.style.display = "none"; el.end.style.display = "none"; document.body.classList.remove("playing");
   el.start.style.display = "flex";
@@ -2426,18 +2940,85 @@ function quitGame() {
 }
 
 function endGame() {
-  G.state = "end"; G.gates = [];
-  const n = G.place, ord = n + (n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th");
+  G.state = "end"; G.gates = []; musicStop();
+  const tt = G.mode === "tt", karts = N_RIVALS + 1, n = G.place, saved = !GP_HELPER, news = [];
   // Finishing-position bonus: 1st gets as many points as there are karts, and each place lower gets one fewer (last = 1)
-  const karts = CFG.RIVALS + 1, bonus = karts + 1 - n, total = G.score + bonus;
-  el.finalScore.innerHTML = "You finished " + ord + " of " + karts +
-    '<br><span style="font-size:.62em;color:#fff">Answers: ' + G.score + " &nbsp;+&nbsp; " + ord + " place bonus: " + bonus + "</span>" +
-    "<br>TOTAL: " + total + " points";
+  const bonus = tt ? 0 : karts + 1 - n, total = G.score + bonus;
+  // Stars are for knowing the theory: 1 for finishing, 2 for 60% of answers correct, 3 for 85%
+  const faced = G.correct + G.wrong + G.dodged, acc = faced ? G.correct / faced : 0;
+  const stars = faced >= 4 && acc >= 0.85 ? 3 : faced >= 4 && acc >= 0.6 ? 2 : 1;
+  if (saved && TRK.id !== "mystery" && !tt) {
+    const r = rec(TRK.id);
+    if (stars > (r.stars || 0)) r.stars = stars;
+    if (r.score == null || total > r.score) { if (r.score != null) news.push("\u{1F3C5} New best score on " + TRK.name + "!"); r.score = total; r.place = n; }
+  }
+  if (saved && tt && G.newLap) news.push("\u{1F3C5} New best lap on " + TRK.name + "!");
+  if (saved && G.bestStreak > (SAVE.streak || 0)) { SAVE.streak = G.bestStreak; if (G.bestStreak >= 3) news.push("\u{1F525} Your best combo yet: " + G.bestStreak + " in a row!"); }
+  // What the theory points earned in this race have opened
+  if (!DEV_ALL) {
+    for (const t of TRACKS) if (t.unlock > G.tp0 && t.unlock <= SAVE.tp) news.push("\u{1F513} New circuit: " + t.name + "!");
+    if (CUP_UNLOCK > G.tp0 && CUP_UNLOCK <= SAVE.tp) news.push("\u{1F513} The Cup is open!");
+    for (const k of KARTS) if (k.unlock > G.tp0 && k.unlock <= SAVE.tp) news.push("\u{1F513} New kart: " + k.name + "!");
+  }
+  el.endTitle.textContent = tt ? "TIME TRIAL COMPLETE" : CUP.on ? "RACE " + (CUP.race + 1) + " OF 4" : "RACE COMPLETE";
+  if (tt) {
+    const best = G.lapTimes.length ? Math.min(...G.lapTimes) : 0, all = G.lapTimes.reduce((a, b) => a + b, 0);
+    el.finalScore.innerHTML = "Best lap: " + fmtTime(best) +
+      '<br><span style="font-size:.62em;color:#fff">Three laps: ' + fmtTime(all) + " &nbsp;\u2022&nbsp; Answers: " + G.score + " points</span>";
+  } else {
+    el.finalScore.innerHTML = "You finished " + ord(n) + " of " + karts +
+      '<br><span style="font-size:.62em;color:#fff">Answers: ' + G.score + " &nbsp;+&nbsp; " + ord(n) + " place bonus: " + bonus + "</span>" +
+      "<br>TOTAL: " + total + " points";
+  }
+  el.endStars.innerHTML = tt ? "" : starsText(stars) + "<small>" + Math.round(acc * 100) + "% of answers correct</small>";
+  el.finalDetail.textContent = G.correct + " correct  \u2022  " + G.wrong + " wrong  \u2022  " + G.dodged + " dodged" + (G.bestStreak >= 2 ? "  \u2022  best combo " + G.bestStreak : "");
+  el.endTable.innerHTML = "";
+  $("againBtn").textContent = "PLAY AGAIN"; $("menuBtn").textContent = "CHANGE CIRCUIT";
+  if (CUP.on) {
+    // Cup points for this race: everyone scores their answers plus their finishing-place bonus (never less than 0)
+    const rows = G.rivals.map(r => {
+      const gain = Math.max(0, r.score + karts + 1 - placeOf(r));
+      CUP.pts[r.id] += gain;
+      return { name: r.name, colour: r.colour, gain, pts: CUP.pts[r.id] };
+    });
+    const mine = Math.max(0, total); CUP.me += mine;
+    rows.push({ name: "YOU", colour: myKart.body, gain: mine, pts: CUP.me, me: true });
+    CUP.rows = rows;
+    el.finalScore.innerHTML = "You finished " + ord(n) + ' <span style="color:#fff">\u2022</span> +' + mine + " points";
+    el.finalDetail.textContent = TRK.name + "  \u2022  " + el.finalDetail.textContent;
+    el.endTable.innerHTML = cupTable(true);
+    CUP.done = CUP.race >= 3;
+    $("againBtn").textContent = CUP.done ? "CUP RESULT" : "NEXT RACE"; $("menuBtn").textContent = "QUIT CUP";
+  }
+  el.endNews.innerHTML = news.join("<br>") + (GP_HELPER ? (news.length ? "<br>" : "") + '<span style="color:#cfd3ff">Helper is on: practice run, nothing saved.</span>' : "");
+  store();
   el.banner.style.display = "none"; setCount(""); el.lapMsg.className = "";
-  el.finalDetail.textContent = G.correct + " correct  \u2022  " + G.wrong + " wrong  \u2022  " + G.dodged + " dodged";
   el.progressFill.style.width = "100%";
   el.hud.style.display = "none"; document.body.classList.remove("playing");
   el.end.style.display = "flex";
+}
+// Cup standings as a table, leader first. gains = also show the points just scored.
+function cupTable(gains) {
+  const rows = CUP.rows.slice().sort((a, b) => b.pts - a.pts || (b.me ? 1 : 0) - (a.me ? 1 : 0));
+  return '<table class="cupT">' + rows.map((r, i) => '<tr' + (r.me ? ' class="me"' : "") + "><td>" + (i + 1) + '</td><td><i style="background:' + r.colour + '"></i>' + r.name +
+    "</td>" + (gains ? "<td>+" + r.gain + "</td>" : "") + "<td>" + r.pts + "</td></tr>").join("") + "</table>";
+}
+// After the fourth race: the final table and the trophy
+function showCupResult() {
+  const rank = 1 + CUP.pts.filter(p => p > CUP.me).length, trophy = rank <= 3 ? 4 - rank : 0, news = [];
+  el.endTitle.textContent = "CUP COMPLETE";
+  el.finalScore.innerHTML = trophy ? "\u{1F3C6} " + ["", "BRONZE", "SILVER", "GOLD"][trophy] + " TROPHY!" : "You finished " + ord(rank);
+  el.endStars.innerHTML = ""; el.finalDetail.textContent = "Final standings after four races";
+  el.endTable.innerHTML = cupTable(false);
+  if (!GP_HELPER && trophy > (SAVE.cup || 0)) {
+    news.push("\u{1F3C5} Your best cup result yet!");
+    if (trophy === 3) news.push("\u{1F513} New kart: Golden!");
+    SAVE.cup = trophy; store();
+  }
+  el.endNews.innerHTML = news.join("<br>");
+  CUP.on = false; CUP.done = false; CUP.finished = true;
+  $("againBtn").textContent = "NEW CUP"; $("menuBtn").textContent = "MENU";
+  beep(523, 0.14, "square"); setTimeout(() => beep(659, 0.14, "square"), 140); setTimeout(() => beep(784, 0.14, "square"), 280); setTimeout(() => beep(1047, 0.4, "square"), 420);
 }
 
 /* =====================================================================
@@ -2455,18 +3036,20 @@ const archZ = () => ARCH_SEG * CFG.SEG_LEN;                 // the start / finis
 
 // Line everyone up: the player starts at the back of the grid, just before the banner
 function initRace() {
-  G.pos = 0; G.lap = 1; G.place = CFG.RIVALS + 1;
+  G.pos = 0; G.lap = 1; G.place = N_RIVALS + 1;
   G.items = []; G.boostT = 0; G.shieldT = 0; G.spin = 0; G.hazards = []; G.shots = [];
   G.rivals = [];
   // A spread of cruising speeds, dealt out at random so the grid order doesn't give them away
-  const speeds = shuffle(Array.from({ length: CFG.RIVALS }, (_, i) => CFG.RIVAL_MIN + (CFG.RIVAL_MAX - CFG.RIVAL_MIN) * i / Math.max(1, CFG.RIVALS - 1)));
-  for (let i = 0; i < CFG.RIVALS; i++) {
-    G.rivals.push({ colour: RIVAL_COLOURS[i % RIVAL_COLOURS.length], x: RIVAL_LANES[i % RIVAL_LANES.length],
+  // In a cup each rival keeps the same form (pace and theory) for all four races, so there are real front-runners to beat.
+  const form = CUP.on && CUP.form.length === N_RIVALS ? CUP.form : shuffle(Array.from({ length: N_RIVALS }, (_, i) => i / Math.max(1, N_RIVALS - 1)));
+  const speeds = form.map(f => CFG.RIVAL_MIN + (CFG.RIVAL_MAX - CFG.RIVAL_MIN) * f);
+  for (let i = 0; i < N_RIVALS; i++) {
+    G.rivals.push({ id: i, name: RIVAL_NAMES[i % RIVAL_NAMES.length], score: 0, colour: RIVAL_COLOURS[i % RIVAL_COLOURS.length], x: RIVAL_LANES[i % RIVAL_LANES.length],
                     z: kartZ() + 2500 * (i + 1), ph: i * 1.7,
                     // each rival has its own steady pace (some quicker than you, some slower)
                     speed: speeds[i],
                     // how often this rival answers correctly (their "intelligence")
-                    skill: CFG.RIVAL_SKILL_MIN + Math.random() * (CFG.RIVAL_SKILL_MAX - CFG.RIVAL_SKILL_MIN),
+                    skill: CFG.RIVAL_SKILL_MIN + (CUP.on ? 0.7 * form[i] + 0.3 * Math.random() : Math.random()) * (CFG.RIVAL_SKILL_MAX - CFG.RIVAL_SKILL_MIN),
                     item: null, wait: 0, boostT: 0, shieldT: 0, spin: 0, boosting: false });
   }
 }
@@ -2489,13 +3072,19 @@ function updateRace(rawDt) {
     } else if (it.type === "none") it.hold -= rawDt;
   }
   G.items = G.items.filter(it => !(it.type === "none" && it.roll <= 0 && it.hold <= 0));   // the X shows for a moment, then the box empties
+  G.raceT += rawDt; G.lapT += rawDt;
+  const launch = Math.min(1, 0.2 + G.raceT / 1.7);               // everyone pulls away from the grid together
+  let tow = false;
   for (const r of G.rivals) {
+    if (r.ghost) continue;
     if (r.boostT > 0) r.boostT -= rawDt;
     if (r.shieldT > 0) r.shieldT -= rawDt;
     if (r.spin > 0) r.spin -= rawDt;
     r.boosting = r.boostT > 0;
     if (r.item && r.spin <= 0 && (r.wait -= rawDt) <= 0) useItem(r);   // rivals fire their power-ups after a short wait
-    r.z += CFG.SPEED * r.speed * (r.boosting ? CFG.BOOST : 1) * (r.slowT > 0 ? CFG.PUDDLE_SLOW : 1) * (r.spin > 0 ? 0.25 : 1) * rawDt;
+    r.z += CFG.SPEED * r.speed * launch * (r.boosting ? CFG.BOOST : 1) * (r.slowT > 0 ? CFG.PUDDLE_SLOW : 1) * (r.spin > 0 ? 0.25 : 1) * rawDt;
+    const gapAhead = effZ(r) - kartZ();
+    if (gapAhead > 500 && gapAhead < 3200 && Math.abs(r.x - G.px) < 0.14 && r.spin <= 0) tow = true;   // tucked in behind this kart
     if (r.target) {
       // Steer towards the chosen sign; when the signs reach this rival it takes that sign,
       // which then disappears so nobody else (including you) can have it.
@@ -2506,11 +3095,13 @@ function updateRace(rawDt) {
         r.target = null; r.done = true;
         if (g.active && !g.taken && Math.abs(g.x - r.x) < 0.2) {
           g.taken = true; g.active = false; g.respawn = CFG.RESPAWN;   // it comes back shortly for karts further behind
-          if (g.correct) giveItem(r);
+          if (g.correct) { giveItem(r); r.score++; } else r.score--;   // rivals score their answers just as you do
         }
       }
     }
   }
+  // Slipstream: following closely behind another kart builds a little extra speed
+  G.slip = Math.max(0, Math.min(1, G.slip + (tow && G.spin <= 0 ? rawDt / 0.9 : -rawDt * 2)));
   updateItems(rawDt);
   // --- puddles: driving through one slows a kart down for a moment (no spin-out) ---
   const segAt = z => segs[Math.floor(z / CFG.SEG_LEN) % segs.length];
@@ -2567,7 +3158,7 @@ function updateRace(rawDt) {
       const side = dx >= 0 ? 1 : -1;
       G.px = r.x + side * KART_WID; G.pvx = side * 0.5;
     } else if (rel > 0) {                      // you ran into the back of them: you are held behind
-      G.pos -= overlapZ;
+      G.pos -= overlapZ; G.spd = Math.min(G.spd, r.speed * 0.95);
     } else {                                   // they ran into the back of you: they are held behind
       r.z -= overlapZ;
     }
@@ -2576,12 +3167,38 @@ function updateRace(rawDt) {
   }
   G.place = 1 + G.rivals.filter(r => r.z > kartZ()).length;
   const done = (kartZ() - archZ()) / TRACK_LEN;             // laps completed (fractional)
-  el.progressFill.style.width = Math.max(0, Math.min(100, 100 * done / CFG.LAPS)) + "%";
+  el.progressFill.style.width = Math.max(0, Math.min(100, 100 * done / LAPS)) + "%";
+  // Lap clock: a lap is timed from the start / finish line round to the line again
+  const tt = G.mode === "tt", line = Math.floor(done);
+  let lapNote = "";
+  if (line > G.lineN) {
+    if (G.lineN >= 0) {
+      const t = G.lapT; G.lapTimes.push(t); lapNote = fmtTime(t);
+      if (tt && TRK.id !== "mystery" && !GP_HELPER) {
+        const r = rec(TRK.id);
+        if (!r.lap || t < r.lap) {                               // best lap on this circuit: keep the time and the run itself as the ghost
+          r.lap = Math.round(t * 100) / 100; G.newLap = true; lapNote += " \u2B50 BEST LAP";
+          GHOSTS[TRK.id] = { t: r.lap, d: G.ghostRec }; store(); storeGhosts();
+        }
+      }
+    }
+    G.lineN = line; G.lapT = 0; G.ghostRec = []; G.ghostData = tt ? GHOSTS[TRK.id] || null : null;
+  }
+  if (tt && G.lineN >= 0) {
+    // Record this lap five times a second, and move the ghost of the best lap along its own recording
+    while (G.lapT >= G.ghostRec.length / 2 * 0.2) G.ghostRec.push(Math.round(kartZ() - archZ() - G.lineN * TRACK_LEN), Math.round(G.px * 100));
+    const d = G.ghostData && G.ghostData.d, f = G.lapT / 0.2, i = Math.floor(f);
+    if (d && i * 2 + 3 < d.length) {
+      const a = f - i;
+      G.ghostKart = { ghost: true, colour: "#ffffff", ph: 0, spin: 0, shieldT: 0, boosting: false, item: null,
+                      z: archZ() + G.lineN * TRACK_LEN + d[i * 2] + (d[i * 2 + 2] - d[i * 2]) * a, x: (d[i * 2 + 1] + (d[i * 2 + 3] - d[i * 2 + 1]) * a) / 100 };
+    } else G.ghostKart = null;
+  }
   const lap = Math.max(1, Math.floor(done) + 1);
   if (lap > G.lap) {
-    if (lap > CFG.LAPS) { endGame(); return; }
+    if (lap > LAPS) { endGame(); return; }
     G.lap = lap;
-    el.lapMsg.textContent = lap === CFG.LAPS ? "\u{1F3C1} FINAL LAP \u{1F3C1}" : "LAP " + lap;
+    el.lapMsg.innerHTML = (tt && lapNote ? lapNote + "<br>" : "") + (lap === LAPS ? "\u{1F3C1} FINAL LAP \u{1F3C1}" : "LAP " + lap);
     el.lapMsg.className = ""; void el.lapMsg.offsetWidth; el.lapMsg.className = "show";
     beep(660, 0.12, "square"); setTimeout(() => beep(880, 0.3, "square"), 130);   // two-note chime for a new lap
   }
@@ -2614,7 +3231,7 @@ function placeOf(r) {   // race position of a rival (or of you, when r is null)
   const z = r ? r.z : kartZ();
   return 1 + G.rivals.filter(o => o !== r && o.z > z).length + (r && kartZ() > z ? 1 : 0);
 }
-function rouletteFor(place) { return place <= 1 ? ROULETTE.first : place >= CFG.RIVALS + 1 ? ROULETTE.last : ROULETTE.middle; }
+function rouletteFor(place) { return place <= 1 ? ROULETTE.first : place >= N_RIVALS + 1 ? ROULETTE.last : ROULETTE.middle; }
 function rollItem(table) {
   let total = 0;
   for (const o of table.odds) total += o[1];
@@ -2624,7 +3241,10 @@ function rollItem(table) {
 }
 // A correct answer spins the roulette for a rival, or for you when r is null
 function giveItem(r) {
-  const table = rouletteFor(placeOf(r)), type = rollItem(table);
+  if (!r && G.mode === "tt") return;                             // a time trial has no power-ups: the combo boost is the reward
+  const table = rouletteFor(placeOf(r));
+  let type = rollItem(table);
+  if (!r && G.streak >= 3) for (let i = 0; i < 8 && type === "none"; i++) type = rollItem(table);   // a combo of 3 or more never spins a blank
   if (r) { if (type !== "none") { r.item = { type, uses: ITEMS[type].uses }; r.wait = 1 + Math.random() * 4; } return; }
   if (G.items.length >= MAX_ITEMS) return;                       // already holding two: no spin
   // A blank is held only while the roulette spins, then disappears
@@ -2669,7 +3289,8 @@ function rivalsAnswer(playerGotIt) {
     if (r.done) continue;   // already took (or missed) a sign on the road this wave
     const rel = effZ(r) - kartZ();
     if (playerGotIt && rel < 0 && rel > -CFG.SPEED * CFG.RESPAWN) continue;
-    if (Math.random() < r.skill) giveItem(r);
+    if (Math.random() < r.skill) { giveItem(r); r.score++; }
+    else if (Math.random() < 0.5) r.score--;                       // otherwise a wrong answer, or a miss
   }
 }
 
@@ -2763,14 +3384,14 @@ function drawRoadItems(layer) {
   for (const h of G.hazards) {
     const dz = relTo(h.z, kartZ()) + HIT_Z;
     if (dz < 300 || dz > far || itemLayer(dz) !== layer) continue;
-    const p = project(h.x * CFG.ROAD_W, 0, dz, roadX(G.pos + dz));
+    const p = project(h.x * CFG.ROAD_W, roadY(G.pos + dz), dz, roadX(G.pos + dz));
     const hop = h.age < DROP_TIME ? Math.sin(Math.PI * h.age / DROP_TIME) * 260 * p.u : 0;   // bounces out of the kart
-    drawOil(p.x, p.y - hop, Math.min(430 * p.u, kartPos().k * 1.3));
+    withCrest(dz, p.y, () => drawOil(p.x, p.y - hop, Math.min(430 * p.u, kartPos().k * 1.3)));
   }
   for (const sh of G.shots) {
     const dz = sh.z - G.pos;
     if (dz < 300 || dz > far || itemLayer(dz) !== layer) continue;
-    const p = project(sh.x * CFG.ROAD_W, 0, dz, roadX(sh.z));
+    const p = project(sh.x * CFG.ROAD_W, roadY(sh.z), dz, roadX(sh.z));
     const size = Math.max(7, Math.min(380 * p.u, kartPos().k * 0.9));
     ctx.save(); ctx.translate(p.x, p.y - 180 * p.u - size / 2); ctx.rotate(Math.sin(sh.t * 11) * 0.45);
     drawFootGuard(0, 0, size);
@@ -2779,9 +3400,9 @@ function drawRoadItems(layer) {
 }
 
 // A kart with its extras: spinning when spun out, and a Sonic-style force field bubble
-function drawKartFull(x, y, k, tilt, colour, isPlayer, boosting, spin, shieldT, orbit) {
+function drawKartFull(x, y, k, tilt, colour, isPlayer, boosting, spin, shieldT, orbit, fx) {
   if (spin > 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(spin * 13); ctx.translate(-x, -y); }
-  drawKartSprite(x, y, k, spin > 0 ? 0 : tilt, colour, isPlayer, boosting);
+  drawKartSprite(x, y, k, spin > 0 ? 0 : tilt, colour, isPlayer, boosting, fx || 0);
   if (spin > 0) ctx.restore();
   if (shieldT > 0 && (shieldT > 2 || Math.floor(G.time * 8) % 2)) {     // flickers in its last two seconds
     const R = k * 0.92, cy = y + k * 0.02;
@@ -2849,7 +3470,8 @@ function drawItemBox() {
 function drawRivals(layer) {   // 0 = beyond the answer signs, 1 = between the signs and your kart, 2 = closer than your kart
   const signDz = G.gates.length ? G.gates[0].z - G.pos : Infinity;
   let behindArch = false;
-  const list = G.rivals.map(r => ({ r, ez: effZ(r) })).sort((a, b) => b.ez - a.ez);
+  const karts = G.ghostKart ? G.rivals.concat(G.ghostKart) : G.rivals;   // the time-trial ghost is drawn like a (see-through) rival
+  const list = karts.map(r => ({ r, ez: effZ(r) })).sort((a, b) => b.ez - a.ez);
   for (const { r, ez } of list) {
     const dz = ez - G.pos;
     if (dz < 400 || dz > (CFG.DRAW - 2) * CFG.SEG_LEN) continue;
@@ -2858,15 +3480,18 @@ function drawRivals(layer) {   // 0 = beyond the answer signs, 1 = between the s
     // redraw the banner over the karts beyond it, so they pass behind it instead of showing through.
     if (G.archDraw) {
       if (dz > G.archDraw.dz) behindArch = true;
-      else if (behindArch) { drawArch(project(0, 0, G.archDraw.dz, G.archDraw.x)); behindArch = false; }
+      else if (behindArch) { drawArch(project(0, roadY(G.pos + G.archDraw.dz), G.archDraw.dz, G.archDraw.x)); behindArch = false; }
     }
-    const p = project((r.x + 0.04 * Math.sin(G.time * 0.9 + r.ph)) * CFG.ROAD_W, 0, dz, roadX(ez));
+    const p = project((r.x + 0.04 * Math.sin(G.time * 0.9 + r.ph)) * CFG.ROAD_W, roadY(ez), dz, roadX(ez));
     // Exactly the player's kart size, scaled only by distance
     const k = kartPos().k * HIT_Z / dz;
     if (k < 1.5) continue;
-    drawKartFull(p.x, p.y - k * 0.36, k, 0, r.colour, false, r.boosting, r.spin, r.shieldT, r.item && r.item.type === "strike3" ? r.item.uses : 0);
+    const lean = Math.max(-1, Math.min(1, curveAt(ez) / 4));     // rivals lean into the bends too
+    if (r.ghost) ctx.globalAlpha = 0.42;
+    withCrest(dz, p.y, () => drawKartFull(p.x, p.y - k * 0.36, k, lean, r.colour, false, r.boosting, r.spin, r.shieldT, r.item && r.item.type === "strike3" ? r.item.uses : 0));
+    ctx.globalAlpha = 1;
   }
-  if (behindArch && G.archDraw) drawArch(project(0, 0, G.archDraw.dz, G.archDraw.x));
+  if (behindArch && G.archDraw) drawArch(project(0, roadY(G.pos + G.archDraw.dz), G.archDraw.dz, G.archDraw.x));
 }
 
 // Start lights: an upright UK-style traffic light (red, amber, green from the top),
@@ -2912,14 +3537,15 @@ function drawRaceHud() {
   ctx.fillStyle = "rgba(10,5,40,.62)"; rr(10, top, bw, m, 10); ctx.fill();
   ctx.strokeStyle = "#ffd23d"; ctx.lineWidth = 2; rr(10, top, bw, m, 10); ctx.stroke();
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const ttHud = G.mode === "tt", bestLap = ttHud && SAVE.rec[TRK.id] && SAVE.rec[TRK.id].lap;
   ctx.fillStyle = "#cfd3ff"; ctx.font = "800 " + (m * 0.14) + "px Trebuchet MS, Arial, sans-serif";
-  ctx.fillText("POSITION", 10 + bw / 2, top + m * 0.15);
+  ctx.fillText(ttHud ? (bestLap ? "BEST " + fmtTime(bestLap) : "LAP TIME") : "POSITION", 10 + bw / 2, top + m * 0.15);
   ctx.fillStyle = "#ffd23d"; ctx.font = "900 " + (m * 0.42) + "px Trebuchet MS, Arial, sans-serif";
-  const posText = G.place + " / " + (CFG.RIVALS + 1), posW = ctx.measureText(posText).width;
+  const posText = ttHud ? fmtTime(G.lineN >= 0 ? G.lapT : 0).slice(0, -1) : G.place + " / " + (N_RIVALS + 1), posW = ctx.measureText(posText).width;
   if (posW > bw * 0.88) ctx.font = "900 " + (m * 0.42 * bw * 0.88 / posW) + "px Trebuchet MS, Arial, sans-serif";
   ctx.fillText(posText, 10 + bw / 2, top + m * 0.47);
   ctx.fillStyle = "#ffffff"; ctx.font = "900 " + (m * 0.2) + "px Trebuchet MS, Arial, sans-serif";
-  ctx.fillText("LAP " + G.lap + " / " + CFG.LAPS, 10 + bw / 2, top + m * 0.84);
+  ctx.fillText("LAP " + G.lap + " / " + LAPS, 10 + bw / 2, top + m * 0.84);
   // --- mini-map ---
   const mx = W - 10 - bw, pad = m * 0.12, sz = m - pad * 2;   // same width as the position panel
   ctx.fillStyle = "rgba(10,5,40,.62)"; rr(mx, top, bw, m, 10); ctx.fill();
@@ -2969,6 +3595,50 @@ function drawRaceHud() {
   ctx.beginPath(); ctx.arc(X(me), Y(me), Math.max(4.5, m * 0.06), 0, 7); ctx.fill(); ctx.stroke();
 }
 
+// Extra panels when there is room for them (a computer or TV screen): the running order of all
+// the karts, lap times, and a speedometer with the drift-boost charge. Phones keep the simple layout.
+function drawWideHud() {
+  if (W < 900 || W < H * 1.25) return;
+  const F = "px Trebuchet MS, Arial, sans-serif", x = 10, w = 176, row = 21;
+  let y = (G.msgTop || 200) + 2;
+  ctx.textBaseline = "middle";
+  if (G.rivals.length) {
+    const order = G.rivals.map(r => ({ name: r.name, colour: r.colour, z: r.z })).concat({ name: "YOU", colour: myKart.body, z: kartZ(), me: true }).sort((a, b) => b.z - a.z);
+    ctx.fillStyle = "rgba(10,5,40,.62)"; rr(x, y, w, row * order.length + 10, 10); ctx.fill();
+    order.forEach((o, i) => {
+      const cy = y + 5 + row * (i + 0.5);
+      if (o.me) { ctx.fillStyle = "rgba(255,210,61,.22)"; ctx.fillRect(x + 3, cy - row / 2, w - 6, row); }
+      ctx.font = "900 13" + F; ctx.textAlign = "right"; ctx.fillStyle = o.me ? "#ffd23d" : "#cfd3ff"; ctx.fillText(i + 1, x + 26, cy);
+      ctx.fillStyle = o.colour; dot(x + 40, cy, 6);
+      ctx.textAlign = "left"; ctx.fillStyle = o.me ? "#ffd23d" : "#ffffff"; ctx.fillText(o.name, x + 54, cy + 1);
+    });
+    y += row * order.length + 18;
+  }
+  // Lap clock and the laps so far
+  const lines = [["LAP TIME", G.lineN >= 0 ? fmtTime(G.lapT).slice(0, -1) : "0:00.0"]].concat(G.lapTimes.map((t, i) => ["LAP " + (i + 1), fmtTime(t)]));
+  ctx.fillStyle = "rgba(10,5,40,.62)"; rr(x, y, w, row * lines.length + 10, 10); ctx.fill();
+  lines.forEach((l, i) => {
+    const cy = y + 5 + row * (i + 0.5);
+    ctx.font = "800 12" + F; ctx.textAlign = "left"; ctx.fillStyle = "#cfd3ff"; ctx.fillText(l[0], x + 12, cy + 1);
+    ctx.font = "900 14" + F; ctx.textAlign = "right"; ctx.fillStyle = i ? "#ffffff" : "#ffd23d"; ctx.fillText(l[1], x + w - 12, cy + 1);
+  });
+  if (document.body.classList.contains("touch")) return;       // the steering buttons live in that corner on touch screens
+  // Speedometer, bottom-left
+  const R = 58, cx = 24 + R, cy = H - 30 - R * 0.75, a0 = Math.PI * 0.8, a1 = Math.PI * 2.2;
+  const shown = G.state === "grid" ? 0 : G.spd * (G.boost ? CFG.BOOST : 1) * (G.slowT > 0 ? CFG.PUDDLE_SLOW : 1) * (G.spin > 0 ? 0.25 : 1);
+  const frac = Math.min(1, shown / 2.1);
+  ctx.fillStyle = "rgba(10,5,40,.7)"; dot(cx, cy, R + 8);
+  ctx.lineCap = "round"; ctx.lineWidth = 9;
+  ctx.strokeStyle = "#2a2a4a"; ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1); ctx.stroke();
+  const grad = ctx.createLinearGradient(cx - R, 0, cx + R, 0); grad.addColorStop(0, "#3de0ff"); grad.addColorStop(0.6, "#ffd23d"); grad.addColorStop(1, "#ff3d9a");
+  ctx.strokeStyle = grad; ctx.beginPath(); ctx.arc(cx, cy, R, a0, a0 + (a1 - a0) * Math.max(0.005, frac)); ctx.stroke();
+  ctx.textAlign = "center"; ctx.fillStyle = "#ffffff"; ctx.font = "900 30" + F; ctx.fillText(Math.round(shown * 120), cx, cy - 2);
+  ctx.fillStyle = "#cfd3ff"; ctx.font = "800 11" + F; ctx.fillText("KM/H", cx, cy + 22);
+  // Drift charge: three blocks that light up blue, orange, pink
+  const tier = driftTier(), cols = ["#7fd4ff", "#ffb03d", "#ff5ad0"];
+  for (let i = 0; i < 3; i++) { ctx.fillStyle = G.turboT > 0 ? "#ff5ad0" : i < tier ? cols[i] : "#2a2a4a"; rr(cx - 33 + i * 23, cy + 36, 20, 7, 3); ctx.fill(); }
+}
+
 /* =====================================================================
    PARTICLES & SPEED LINES
    ===================================================================== */
@@ -2984,17 +3654,41 @@ function updateParticles(dt) {
   const { x, y, k } = kartPos();
   for (const s of [-1, 1]) {
     G.particles.push({ x: x + s * k * 0.2 + rnd(-3, 3), y: y + k * 0.25, vx: rnd(-25, 25) - G.pvx * 60, vy: rnd(60, 160),
-                       life: 0.35, max: 0.35, size: rnd(2, 5) * k / 80, colour: Math.random() < 0.5 ? "#3de0ff" : "#ffffff", grav: 0 });
+                       life: 0.35, max: 0.35, size: rnd(2, 5) * k / 80, colour: G.turboT > 0 ? "#ff8ad8" : Math.random() < 0.5 ? "#3de0ff" : "#ffffff", grav: 0 });
+  }
+  const racing = G.state !== "start" && G.state !== "end" && G.state !== "grid" && G.spin <= 0;
+  if (racing) {
+    // Drift charge: sparks from the rear wheels - blue, then orange, then pink as the charge builds
+    const tier = driftTier();
+    if (tier) {
+      for (const s of [-1, 1]) for (let n = 0; n < tier; n++) {
+        G.particles.push({ x: x + s * k * 0.52, y: y + k * 0.33, vx: s * rnd(30, 150) - G.driftDir * 70, vy: -rnd(60, 230),
+                           life: rnd(0.18, 0.4), max: 0.4, size: rnd(2.2, 4.6) * k / 60, colour: ["#7fd4ff", "#ffb03d", "#ff5ad0"][tier - 1], grav: 800 });
+      }
+    } else if (G.drift > 0.12) {                                 // tyres starting to slide: a little smoke
+      for (const s of [-1, 1]) if (Math.random() < 0.6) {
+        G.particles.push({ x: x + s * k * 0.52, y: y + k * 0.34, vx: rnd(-20, 20) - G.driftDir * 50, vy: rnd(20, 70),
+                           life: 0.4, max: 0.4, size: rnd(3, 5) * k / 70, grow: 28 * k / 70, a: 0.3, colour: "#e6e9f7", grav: 0 });
+      }
+    }
+    // On the grass: clods kicked up behind the wheels
+    if (Math.abs(G.px) > CFG.GRASS_X && G.spd > 0.25) {
+      for (const s of [-1, 1]) {
+        G.particles.push({ x: x + s * k * 0.52 + rnd(-4, 4), y: y + k * 0.34, vx: s * rnd(10, 90), vy: -rnd(40, 170),
+                           life: rnd(0.25, 0.5), max: 0.5, size: rnd(2, 4.5) * k / 70, colour: Math.random() < 0.5 ? WX.grass[0] : "#7a5a36", grav: 900 });
+      }
+    }
   }
   for (let i = G.particles.length - 1; i >= 0; i--) {
     const p = G.particles[i];
     p.life -= dt; if (p.life <= 0) { G.particles.splice(i, 1); continue; }
     p.vy += p.grav * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.grow) p.size += p.grow * dt;
   }
 }
 function drawParticles() {
   for (const p of G.particles) {
-    ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.colour;
+    ctx.globalAlpha = Math.max(0, p.life / p.max) * (p.a || 1); ctx.fillStyle = p.colour;
     ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 7); ctx.fill();
   }
   ctx.globalAlpha = 1;
@@ -3004,13 +3698,16 @@ const speedLines = [];
 for (let i = 0; i < 22; i++) speedLines.push({ a: Math.random() * Math.PI * 2, r: Math.random(), v: rnd(0.9, 1.6) });
 function drawSpeedLines(dt) {
   const R = Math.hypot(W, H) * 0.62;
+  // Faint at normal speed, stronger in a slipstream, strongest during a boost
+  const power = G.boost ? 1 : G.turboT > 0 ? 0.95 : 0.3 * Math.min(1, G.spd) + 0.45 * G.slip;
+  if (power < 0.03) return;
   ctx.strokeStyle = "#fff"; ctx.lineCap = "round";
   for (const l of speedLines) {
     l.r += dt * l.v;
     if (l.r > 1) { l.r = 0.3; l.a = Math.random() * Math.PI * 2; }
     if (l.r < 0.45) continue;
     const c = Math.cos(l.a), s = Math.sin(l.a), r1 = l.r * R, r2 = (l.r + 0.09) * R;
-    ctx.globalAlpha = (l.r - 0.45) * 0.45; ctx.lineWidth = 1 + l.r * 2;
+    ctx.globalAlpha = (l.r - 0.45) * 0.5 * power; ctx.lineWidth = 1 + l.r * 2;
     ctx.beginPath(); ctx.moveTo(W / 2 + c * r1, HY + s * r1 * 0.8); ctx.lineTo(W / 2 + c * r2, HY + s * r2 * 0.8); ctx.stroke();
   }
   ctx.globalAlpha = 1;
@@ -3021,19 +3718,41 @@ function drawSpeedLines(dt) {
    ===================================================================== */
 window.addEventListener("keydown", e => {
   const k = e.key.toLowerCase();
+  if (G.state === "start" && !e.repeat && (k === "arrowleft" || k === "arrowright")) stepTrack(k === "arrowleft" ? -1 : 1);   // choose a circuit on the menu
   if (k === "arrowleft" || k === "a") { keys.left = true; e.preventDefault(); }
   else if (k === "arrowright" || k === "d") { keys.right = true; e.preventDefault(); }
+  else if (k === "arrowdown" || k === "s") { keys.brake = true; e.preventDefault(); }
   else if (k === "escape") quitGame();
   else if (k === "shift" || k === "arrowup" || k === "w" || (k === " " && G.state !== "start" && G.state !== "end")) { if (!e.repeat) keys.useTap = true; keys.boost = true; e.preventDefault(); }
-  else if ((k === "enter" || k === " ") && (G.state === "start" || G.state === "end")) { e.preventDefault(); startGame(); }
+  else if ((k === "enter" || k === " ") && (G.state === "start" || G.state === "end")) { e.preventDefault(); if (G.state === "start") startFromMenu(); else againAction(); }
 });
 window.addEventListener("keyup", e => {
   const k = e.key.toLowerCase();
   if (k === "arrowleft" || k === "a") keys.left = false;
   else if (k === "arrowright" || k === "d") keys.right = false;
+  else if (k === "arrowdown" || k === "s") keys.brake = false;
   else if (k === "shift" || k === "arrowup" || k === "w" || k === " ") keys.boost = false;
 });
-window.addEventListener("blur", () => { keys.left = keys.right = keys.boost = keys.boostBtn = false; pad = 0; });
+window.addEventListener("blur", () => { keys.left = keys.right = keys.boost = keys.boostBtn = keys.brake = false; pad = 0; });
+
+// Game controller (any standard gamepad): stick or d-pad steers, A / X / right trigger uses a power-up,
+// B / left trigger brakes, Start (or A) starts a race, and left / right on the menu changes circuit.
+function pollPad() {
+  gpad.x = 0; gpad.brake = false;
+  let p = null;
+  try { const all = navigator.getGamepads ? navigator.getGamepads() : []; for (const q of all) if (q && q.connected) { p = q; break; } } catch (e) { /* not available */ }
+  if (!p) { gpad.useWas = gpad.startWas = gpad.navWas = false; return; }
+  const b = i => !!(p.buttons[i] && (p.buttons[i].pressed || p.buttons[i].value > 0.4));
+  let x = Math.abs(p.axes[0] || 0) > 0.18 ? p.axes[0] : 0;
+  if (b(14)) x = -1; if (b(15)) x = 1;
+  gpad.x = Math.max(-1, Math.min(1, x));
+  gpad.brake = b(1) || b(6);
+  const use = b(0) || b(2) || b(7) || b(5), start = b(9) || b(0);
+  if (use && !gpad.useWas) keys.useTap = true;
+  if (start && !gpad.startWas) { if (G.state === "start") startFromMenu(); else if (G.state === "end") againAction(); }
+  if (G.state === "start") { const d = gpad.x < -0.6 ? -1 : gpad.x > 0.6 ? 1 : 0; if (d && !gpad.navWas) stepTrack(d); gpad.navWas = !!d; }
+  gpad.useWas = use; gpad.startWas = start;
+}
 
 // Left / right arrow buttons (bottom-left). Hold to steer. The two buttons share
 // one touch area, so you can also slide your thumb from one to the other.
@@ -3078,15 +3797,94 @@ if ("ontouchstart" in window || navigator.maxTouchPoints > 0) document.body.clas
 document.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
 document.addEventListener("gesturestart", e => e.preventDefault());
 
-$("startBtn").addEventListener("click", startGame);
-$("backBtn").addEventListener("click", () => { if (HOST && HOST.GP_EXIT) HOST.GP_EXIT(); });
-$("againBtn").addEventListener("click", startGame);
-$("menuBtn").addEventListener("click", quitGame);
+/* =====================================================================
+   START MENU  -  choose how to play, the circuit and the kart
+   ===================================================================== */
+let menuTrack = 0, menuNote = "";
+function renderMenu() {
+  const mode = SAVE.mode, t = TRACKS[menuTrack], cup = mode === "cup";
+  document.querySelectorAll("#modeTabs button").forEach(b => b.classList.toggle("on", b.dataset.mode === mode));
+  $("modeText").textContent = MODES[mode].text;
+  $("trkPrev").style.visibility = $("trkNext").style.visibility = cup ? "hidden" : "visible";
+  let name = t.name, info, ok = true;
+  const r = SAVE.rec[t.id] || {};
+  if (cup) {
+    name = "Grand Prix Cup";
+    if (!cupOpen()) { ok = false; info = "\u{1F512} Opens at " + CUP_UNLOCK + " theory points"; }
+    else info = SAVE.cup ? "Your best: " + ["", "Bronze", "Silver", "Gold"][SAVE.cup] + " trophy \u{1F3C6}" : "Can you win the trophy?";
+  }
+  else if (!trackOpen(t)) { ok = false; info = "\u{1F512} Opens at " + t.unlock + " theory points"; }
+  else if (t.id === "mystery") info = "A brand new circuit every time";
+  else if (mode === "tt") info = r.lap ? "Best lap " + fmtTime(r.lap) : "No lap time yet";
+  else info = r.stars ? starsText(r.stars) + " \u2022 Best: " + ord(r.place) + ", " + r.score + " points" : "Not raced yet";
+  $("trkName").textContent = name; $("trkInfo").textContent = info;
+  $("startBtn").disabled = !ok;
+  $("kartRow").innerHTML = KARTS.map((k, i) => '<button class="kart' + (i === SAVE.kart ? " on" : "") + (kartOpen(k) ? "" : " locked") + '" data-k="' + i +
+    '" style="--c:' + k.body + ";--s:" + k.stripe + '" title="' + k.name + '">' + (kartOpen(k) ? "" : "\u{1F512}") + "</button>").join("");
+  // Theory points, and the next thing they will open
+  const goals = TRACKS.filter(x => x.unlock > SAVE.tp).map(x => [x.unlock, x.name]).concat(KARTS.filter(x => x.unlock > SAVE.tp).map(x => [x.unlock, "the " + x.name + " kart"]));
+  goals.sort((a, b) => a[0] - b[0]);
+  $("tpLine").innerHTML = menuNote || (GP_HELPER ? "Helper is on: practice run, nothing is saved." :
+    "\u2B50 Theory points: <b>" + SAVE.tp + "</b>" + (goals.length && !DEV_ALL ? " \u2022 " + goals[0][1] + " opens at " + goals[0][0] : ""));
+}
+// Show the chosen circuit cruising by behind the menu
+function previewTrack() { pickTrack(TRACKS[SAVE.mode === "cup" ? 0 : menuTrack]); buildTrack(); G.pos = 0; }
+function stepTrack(d) {
+  if (SAVE.mode === "cup") return;
+  menuTrack = (menuTrack + d + TRACKS.length) % TRACKS.length; menuNote = "";
+  if (trackOpen(TRACKS[menuTrack])) { SAVE.track = TRACKS[menuTrack].id; store(); }
+  previewTrack(); renderMenu(); beep(520, 0.05, "square", 0.05);
+}
+function startFromMenu() {
+  if ($("startBtn").disabled || el.how.style.display === "flex") return;
+  CUP.on = SAVE.mode === "cup"; CUP.finished = false;
+  if (CUP.on) {
+    CUP.race = 0; CUP.pts = Array(MODES.cup.rivals).fill(0); CUP.me = 0; CUP.done = false;
+    CUP.form = shuffle(Array.from({ length: MODES.cup.rivals }, (_, i) => i / (MODES.cup.rivals - 1)));
+  }
+  startGame(TRACKS[CUP.on ? 0 : menuTrack]);
+}
+// The main button on the results screen: play again, the next cup race, or the cup result
+function againAction() {
+  if (CUP.on && CUP.done) showCupResult();
+  else if (CUP.on) { CUP.race++; startGame(TRACKS[CUP.race]); }
+  else if (CUP.finished) startFromMenu();
+  else startGame(TRK);
+}
+// Back to the start menu (from the results screen)
+function showMenu() {
+  CUP.on = false; CUP.finished = false; menuNote = "";
+  G.state = "start"; G.gates = []; G.rivals = []; G.ghostKart = null;
+  el.end.style.display = "none"; el.hud.style.display = "none"; document.body.classList.remove("playing");
+  el.start.style.display = "flex";
+  previewTrack(); renderMenu();
+}
+$("modeTabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  SAVE.mode = b.dataset.mode; menuNote = ""; store(); previewTrack(); renderMenu(); beep(520, 0.05, "square", 0.05);
+});
+$("trkPrev").addEventListener("click", () => stepTrack(-1));
+$("trkNext").addEventListener("click", () => stepTrack(1));
+$("kartRow").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const i = +b.dataset.k, k = KARTS[i];
+  if (kartOpen(k)) { SAVE.kart = i; myKart = k; menuNote = ""; store(); beep(660, 0.06, "square", 0.05); }
+  else menuNote = "\u{1F512} The " + k.name + " kart " + (k.cup ? "is the prize for a gold trophy in the Cup" : "opens at " + k.unlock + " theory points");
+  renderMenu();
+});
+$("howBtn").addEventListener("click", () => { el.how.style.display = "flex"; });
+$("howClose").addEventListener("click", () => { el.how.style.display = "none"; });
+$("startBtn").addEventListener("click", startFromMenu);
+$("backBtn").addEventListener("click", () => { store(); if (HOST && HOST.GP_EXIT) HOST.GP_EXIT(); });
+$("againBtn").addEventListener("click", againAction);
+$("menuBtn").addEventListener("click", showMenu);
 $("quitBtn").addEventListener("click", quitGame);
 $("muteBtn").addEventListener("click", () => {
   G.muted = !G.muted;
   $("muteBtn").innerHTML = G.muted ? "&#128263;" : "&#128266;";   // speaker with / without a cross
+  musicVol();
 });
+$("musicBtn").addEventListener("click", () => { SAVE.music = !SAVE.music; store(); musicVol(); });
 
 /* =====================================================================
    GAME LOOP
@@ -3096,11 +3894,13 @@ function frame(now) {
   let dt = Math.min(0.05, (now - lastT) / 1000 || 0);
   const rawDt = dt;
   lastT = now;
+  pollPad();
   const playing = G.state !== "start" && G.state !== "end";
   // Boost: the whole game (road, answers, timers) runs twice as fast while held
   const grid = G.state === "grid";
   // USE button: fires once per press
   if (keys.useTap) { keys.useTap = false; if (playing && !grid) useItem(null); }
+  musicTick();
   G.boost = playing && !grid && G.boostT > 0;
   if (G.greenT > 0) G.greenT -= rawDt;
   if (G.boost) dt *= CFG.BOOST;
@@ -3109,7 +3909,7 @@ function frame(now) {
   // Engine note: idle on the grid, steady when cruising, high when boosting, low when slowed or spinning
   if (!playing) { engineSet(140, 0); squealSet(0); }
   else {
-    const base = grid ? 140 : G.spin > 0 ? 115 : G.boost ? 430 : G.slowT > 0 ? 185 : 275 + Math.abs(G.pvx) * 22;
+    const base = grid ? 140 : G.spin > 0 ? 115 : G.boost ? 430 : G.slowT > 0 ? 185 : 150 + 125 * Math.min(1.5, G.spd) + (G.turboT > 0 ? 45 : 0) + Math.abs(G.pvx) * 22;
     // A little life in the note: it drifts up and down by a few per cent, never perfectly steady
     const drift = 1 + 0.028 * Math.sin(G.time * 0.63) + 0.014 * Math.sin(G.time * 2.1 + 1) + 0.008 * Math.sin(G.time * 5.3);
     engineSet(base * drift, CFG.ENGINE_VOL);
@@ -3119,7 +3919,7 @@ function frame(now) {
   }
 
   // --- update ---
-  const speed = grid ? 0 : playing ? CFG.SPEED * (G.slowT > 0 ? CFG.PUDDLE_SLOW : 1) * (G.spin > 0 ? 0.25 : 1) : CFG.SPEED * 0.45;   // gentle cruise behind the menus
+  const speed = grid ? 0 : playing ? CFG.SPEED * G.spd * (G.slowT > 0 ? CFG.PUDDLE_SLOW : 1) * (G.spin > 0 ? 0.25 : 1) : CFG.SPEED * 0.45;   // gentle cruise behind the menus
   G.pos += speed * dt;
   G.bgX += segs[Math.floor(G.pos / CFG.SEG_LEN) % segs.length].curve * dt * 45 * (speed / CFG.SPEED);
   if (playing) {
@@ -3134,6 +3934,7 @@ function frame(now) {
   updateParticles(dt);
 
   // --- draw ---
+  CAMY = roadY(G.pos + HIT_Z) + CFG.CAM_H;   // the camera rides over the hills with the kart
   const sh = playing && G.shake > 0 ? G.shake * 40 : 0;   // shake the picture briefly after a collision
   ctx.setTransform(DPR, 0, 0, DPR, (Math.random() - 0.5) * sh * DPR, (Math.random() - 0.5) * sh * DPR);
   drawBackground();
@@ -3148,13 +3949,21 @@ function frame(now) {
   if (playing) { drawRoadItems(2); drawRivals(2); }
   drawParticles();
   drawWeather();
-  if (playing) { drawRaceHud(); drawItemBox(); drawLights(); }
+  if (playing) { drawRaceHud(); if (G.mode !== "tt") drawItemBox(); drawLights(); drawWideHud(); }
 
   requestAnimationFrame(frame);
 }
 
+loadSave();
+musicVol();
+menuTrack = Math.max(0, TRACKS.findIndex(t => t.id === SAVE.track));
+if (!trackOpen(TRACKS[menuTrack])) menuTrack = 0;
+if (!KARTS[SAVE.kart] || !kartOpen(KARTS[SAVE.kart])) SAVE.kart = 0;
+myKart = KARTS[SAVE.kart];
+if (!MODES[SAVE.mode] || (SAVE.mode === "cup" && !cupOpen())) SAVE.mode = "race";
 resize();
-buildTrack();
+previewTrack();
+renderMenu();
 requestAnimationFrame(frame);
 <\/script>
 </body>
@@ -8130,8 +8939,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.65';
+const APP_VERSION='3.66';
 const VERSION_NOTES=[
+  ['3.66','Taekwondo Grand Prix rebuilt: four themed circuits with hills (plus a Mystery Track), Race, Cup and Time Trial with a ghost of your best lap, drift and combo boosts, slipstream, karts to unlock with theory points, stars and best scores, music, game controller support and a fuller display on big screens. Driving stays easy while answers are on the road.'],
   ['3.65','Pattern meaning audio added for all Dan grade patterns. Pronunciation tweak for one term.'],
   ['3.64','Question wording updated from the All Theory workbook ("What are the tenets of Taekwondo?").'],
   ['3.63','Theory questions only ever use their own wrong answers from the workbook. New and updated questions.'],

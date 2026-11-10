@@ -5,6 +5,7 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 
 ## Files
 - `index.html` — the whole app (single file, ~1.3 MB, vanilla JS). Edit it in place with small targeted replacements; never regenerate it.
+- `index-v3.65.html` — backup of the app as it was before the Grand Prix rebuild (3.66). Playable at `/index-v3.65.html`; to go back, copy it over `index.html`.
 - `all-theory.xlsx` — Dave's master "All Theory" workbook: the single source of truth for all content.
 - `pattern-exam.html` + `videos/` — separate Pattern Exam test page (video pauses, "What's next?" questions), built in another chat; not linked from the app yet.
 - `mp3/` — audio files named in the workbook's MP3 columns (file name only, lower case, e.g. `chon-ji.mp3`).
@@ -33,6 +34,7 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 - Top grade is displayed "5th Dan +" (nothing new after 5th Dan); data still says 5th_Dan.
 - No data collection, ever (children). Progress stays on the device; Export/Import game data is a file the student keeps (only `tkd_` localStorage keys; dev edits excluded).
 - Pattern videos only from the two YouTube channels Dave's instructor approved; no link = no Watch button. Se-Jong and Tong-Il have none yet.
+- Theory first in every game: nothing may make it harder to read a question or pick an answer. In Grand Prix the driving physics (bend push, drift) switch off while a question is being read or its answer signs are on the road.
 - Every game: "← Menu" button top-left. Screens should fit one phone screen. Keep the dark game styling.
 - Main Settings (grade dropdown, Material; Advanced = Topics, Question direction, Backup & Restore) are global defaults. Learn and Practice items follow them (Study Guide, Flashcards and Patterns keep their own scope switch). Every Mini Game / Game Show starts from them and has its own Questions choice (My grade / Up to / All / Between grades) that never changes the globals.
 - Simplified mode hides descriptions and belt names (for children); never mention children in the UI.
@@ -41,12 +43,17 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 - Study Guide: play buttons (MP3 → Pronounced → text as written, en-GB TTS), Play all, Hide Korean/English/answers (answers reveal silently, then ▶ / Hide), Grade questions in each grade, General Knowledge card under the last grade shown, pattern videos.
 - Hidden developer mode: Version history → tap the title 5 times. Edit Pronounced/MP3 per item, Copy changes, Export spreadsheet (rewrites only those cells of the embedded workbook).
 - Embedded games run in iframes from `<script type="text/plain">` blocks (`gpSrc` Grand Prix, `bpSrc` Balloon Pop, `tlSrc` Taerigi It Lucky; `</script` escaped as `<\/script`) and get questions from host functions (`GP_MAKE`, `BP_MAKE`, `TL_MAKE`/`TL_INFO`/`TL_RANGE`/`TL_MODE`).
+- Grand Prix (3.66, in `gpSrc`): modes Race (3 laps, 9 rivals), Cup (4 circuits x 2 laps, points table, trophy), Time Trial (3 laps, ghost of best lap). Circuits `TRACKS` (Sunrise Park, Blossom Valley, Neon City, Snowy Peaks = fixed seeds; Mystery Track = random), themes `THEMES`/`WEATHERS`, hills `buildHills`, karts `KARTS`, tunes `TUNES`.
+  - Driving: auto-accelerate, brake (↓/S/controller), grass slows, hold the inside of a bend for a drift boost, slipstream, combo boost for correct answers in a row. Tuning numbers are in `CFG`.
+  - Saved on the device only: `tkd_gp` (theory points = lifetime correct answers, stars/best per circuit, cup trophy, kart, music) and `tkd_gp_ghost`. Theory points unlock circuits (10/25/45), the Cup (45) and karts; Golden kart = gold cup. Helper on = practice, nothing saved. Developer mode (`tkdDev`) unlocks everything.
+  - To edit the game: change the text inside `<script type="text/plain" id="gpSrc">` in place (keep `<\/script` escaped); `tools/check.py` does not syntax-check that block, so run `node --check` on its script and play it.
 - Question engine: `items(fn)` → `makeQ(it,n)` (termQ / patQ / beltQ / qQ). Range for games: `RG` + `inScope`.
 
 ## Parked ideas (not built)
 - Whack-a-Mole: answer signs fixed on 5 holes; moles pop up randomly; whack only the right hole; a hit sign turns green (right) or red (wrong) and stays for the round.
 - Theory Fighter (Street Fighter style), Dojang Dash (platformer), falling-blocks sorter. Invaders-style shooter rejected as too hard.
-- Grading Simulator (separate project), listening quiz, "practise my mistakes", progress meter, certificates (must be properly earned), picture matching with Dave's own photos.
+- Grand Prix extras not built: rear-view mirror, two-player split screen, a brake button on phones.
+- Grading Simulator (separate project; Dave wants it added as a mini game that stays hidden unless switched on in developer mode), listening quiz, "practise my mistakes", progress meter, certificates (must be properly earned), picture matching with Dave's own photos.
 
 ## Open data questions flagged to Dave
 Choi-Jong/Choi-Yong, Yong-Gae/Yon-Gae, So San, Sam-IL/Tong-IL, Gojong/Gojung, Dollymio/Dollimyo, Twimyo/Twio chagi, waving kick Doro/Noollo, Chunbi/Chumbi/Junbi, Noolo/Noollo, Anaero/Anearo/Anuro, Taerigi/Taeregi.
