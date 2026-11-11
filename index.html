@@ -2059,7 +2059,7 @@ function seedRand(seed) {
   };
 }
 function trnd(a, b) { return a + TR() * (b - a); }
-const WALL_PANEL = 8, WALL_H = 1700;   // wall panel length (segments) and height (world units); taller and longer so the club logos read clearly
+const WALL_PANEL = 5, WALL_H = 1140;   // wall panel length (segments) and height (world units). Dave's scale: 4 / 950 = size 1 (original), 8 / 1700 = size 5 (too big, looked silly); this is size 2
 let bendNo = 0, wallBend = false, wallCount = 0, wallNo = 0, wallLogo = 0;
 function addRoad(enter, hold, leave, curve) {
   if (curve) {
@@ -12932,8 +12932,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.74';
+const APP_VERSION='3.75';
 const VERSION_NOTES=[
+  ['3.75','Grand Prix: the logo barrier walls on bends are smaller again. They are still a little taller than the original, so the club logos stay slightly bigger than they first were.'],
   ['3.74','Grand Prix: the logo barrier walls on bends are taller and longer, so the club logos are about twice as big.'],
   ['3.73','Theory Master and Taekwondo Chaser: tapping an answer no longer makes a sound. The sound now comes when the answer is revealed, one for right and one for wrong.'],
   ['3.72','Who Wants to Be a Taekwondo Theory Master? now has studio lights that sweep in for each question and flash green or red on the answer, a set that gets darker as you climb, a ladder that lights up and moves, animated lifelines (the audience bars grow, the friend\'s reply is typed out, the host leans in), sound effects and a backing beat, a cheque at the end, medals in the Hall of Fame, and a tidier start screen with the sliders under Game settings.'],
