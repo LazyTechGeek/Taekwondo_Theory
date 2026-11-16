@@ -4577,7 +4577,10 @@ function g3Draw(dt, playing, grid, sh) {
   for (let i = kn; i < 10; i++) G3.karts[i].g.visible = false;
   // your kart: always the last of the ten solid ones
   const me = G3.karts[9], racingNow = G.state !== "start" && G.state !== "end" && G.state !== "grid";
-  g3Kart(me, { x: 0, y: roadY(G.pos + HIT_Z) - CAMY, dz: HIT_Z, colour: myKart.body, belt: G.myBelt == null ? 10 : G.myBelt, yaw: tan(G.pos + HIT_Z), steer: G.pvx / CFG.STEER,
+  // The kart turns a little to point the way it is steering (flat on the road, never tipping over), so it drives across the lanes rather than sliding
+  G3.turn = (G3.turn || 0) + ((racingNow && G.spin <= 0 ? Math.max(-1, Math.min(1, G.pvx / CFG.STEER)) * 0.2 : 0) - (G3.turn || 0)) * Math.min(1, dt * 9);
+  const turn = G3.turn;
+  g3Kart(me, { x: 0, y: roadY(G.pos + HIT_Z) - CAMY, dz: HIT_Z, colour: myKart.body, belt: G.myBelt == null ? 10 : G.myBelt, yaw: tan(G.pos + HIT_Z) + turn, steer: G.pvx / CFG.STEER,
                spin: G.spin, boost: racingNow && (G.turboT > 0 || G.boost), brake: racingNow && (keys.brake || gpad.brake), shield: G.shieldT, ph: 0, hop: G.hop || 0, pitch: G.hopPitch || 0 });
   const pod = g3Podium();
   if (G.state === "podium") { for (let i = 3; i < 9; i++) G3.karts[i].g.visible = false; me.g.visible = false; G3.karts[10].g.visible = false; }
@@ -14111,8 +14114,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.79';
+const APP_VERSION='3.80';
 const VERSION_NOTES=[
+  ['3.80','Grand Prix: your kart now turns a little to point the way you steer, so it drives across the lanes instead of sliding sideways. It still never tips over.'],
   ['3.79','Grand Prix: the three foot guards you are holding now circle right round the whole kart and are bigger.'],
   ['3.78','Grand Prix: the go-karts are smaller, so they sit inside one lane, and they no longer lean or twist when you steer.'],
   ['3.77','Taekwondo Grand Prix is now in 3D: real go-karts with drivers in doboks, a 3D track with hills, grandstand, bridges and scenery, and a camera that leans into the bends. Rivals are named after the patterns and wear belts to match your Questions choice. New: a rocket start, jump ramps and boost pads, a rival to beat, a finish-line replay and a podium. Graphics: Classic is in the Sound panel for older phones.'],
