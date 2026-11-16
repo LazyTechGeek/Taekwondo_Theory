@@ -4616,12 +4616,17 @@ function g3Shots() {
     ctx.save(); ctx.translate(p.x, p.y - 180 * p.u - size / 2); ctx.rotate(Math.sin(sh.t * 11) * 0.45); drawFootGuard(0, 0, size); ctx.restore();
   }
 }
-// foot guards waiting to be kicked, circling the kart that holds them
+// foot guards waiting to be kicked circle right round the whole kart, flat over the road (as shells do in a kart game)
 function g3Orbits() {
+  const ring = (wx, gy, dz, xo, n) => {
+    for (let i = 0; i < n; i++) {
+      const a = G.time * 3.2 + i * Math.PI * 2 / 3, p = project(wx + Math.cos(a) * 760, gy, dz + Math.sin(a) * 760, xo), size = Math.max(5, 400 * p.u);
+      drawFootGuard(p.x, p.y - 230 * p.u - size * 0.5, size);
+    }
+  };
   const mine = G.items[0] && G.items[0].type === "strike3" ? G.items[0].uses : 0;
-  if (mine > 0) { const p = project(G.px * CFG.ROAD_W, roadY(G.pos + HIT_Z), HIT_Z, 0), k = 420 * p.u; drawOrbit(p.x, p.y - k * 0.7, k, mine); }
-  for (const t of G3.tags) { const r = t.r, n = r.item && r.item.type === "strike3" ? r.item.uses : 0; if (!n) continue;
-    const p = project(t.wx, roadY(t.ez), t.dz, roadX(t.ez)), k = 420 * p.u; if (k > 6) drawOrbit(p.x, p.y - k * 0.7, k, n); }
+  if (mine > 0) ring(G.px * CFG.ROAD_W, roadY(G.pos + HIT_Z), HIT_Z, 0, mine);
+  for (const t of G3.tags) { const r = t.r, n = r.item && r.item.type === "strike3" ? r.item.uses : 0; if (n && t.dz < 14000) ring(t.wx, roadY(t.ez), t.dz, roadX(t.ez), n); }
 }
 // name tags over nearby rivals: only between questions, so they never sit near the answer signs
 function g3Tags() {
@@ -14106,8 +14111,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.78';
+const APP_VERSION='3.79';
 const VERSION_NOTES=[
+  ['3.79','Grand Prix: the three foot guards you are holding now circle right round the whole kart and are bigger.'],
   ['3.78','Grand Prix: the go-karts are smaller, so they sit inside one lane, and they no longer lean or twist when you steer.'],
   ['3.77','Taekwondo Grand Prix is now in 3D: real go-karts with drivers in doboks, a 3D track with hills, grandstand, bridges and scenery, and a camera that leans into the bends. Rivals are named after the patterns and wear belts to match your Questions choice. New: a rocket start, jump ramps and boost pads, a rival to beat, a finish-line replay and a podium. Graphics: Classic is in the Sound panel for older phones.'],
   ['3.76','Taekwondo Turbo is now in 3D: a proper bike and rider, cars, trucks and scenery with real lighting and shadows, glowing lights in Neon City, drifting petals and snow. It plays exactly as before. A new Graphics button on its start screen switches back to the Classic look for older phones.'],
