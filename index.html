@@ -4385,7 +4385,7 @@ function g3BuildKarts() {
     const shadow = new T.Mesh(pl, shadowMat); shadow.scale.set(1250, 1, 1750); shadow.position.y = 8; g.add(shadow);
     const lights = [new T.Sprite(new T.SpriteMaterial({ map: K.glowTex(), color: "#ff3040", blending: T.AdditiveBlending, depthWrite: false, transparent: true, toneMapped: false, fog: false }))]; lights[0].scale.set(700, 380, 1); lights[0].position.set(0, 170, 620); body.add(lights[0]);
     if (i === 10) [mPaint, mBelt, mTag, mCommon].forEach(m => { m.transparent = true; m.opacity = 0.42; m.depthWrite = false; });     // the time-trial ghost
-    g.visible = false; g.scale.set(0.95, 0.95, 0.8); G3.scene.add(g);
+    g.visible = false; g.scale.set(0.74, 0.74, 0.66); G3.scene.add(g);      // sized to sit inside one lane with room to spare
     G3.karts.push({ g, body, mPaint, mBelt, mTag, tagM, wheels, brake, flames, shield, shadow, lights, key: "" });
   }
 }
@@ -4397,7 +4397,8 @@ function g3Kart(k, o) {
   const key = o.colour + "|" + o.belt;
   if (k.key !== key) { k.key = key; k.mPaint.color.set(o.colour); const b = beltOf(o.belt); k.mBelt.color.set(BELT_MAIN[b]); k.tagM.visible = !!BELT_TAG[b]; if (BELT_TAG[b]) k.mTag.color.set(BELT_TAG[b]); }
   k.g.rotation.y = -(o.yaw || 0) + (o.spin > 0 ? o.spin * 13 : 0);
-  k.body.rotation.z = -(o.lean || 0) * 0.16; k.body.position.y = (o.hop || 0) + Math.abs(Math.sin(G.time * 31 + o.ph)) * 5;
+  k.body.rotation.z = 0;                                           // karts stay flat: they never lean over like a motorbike (Dave)
+  k.body.position.y = (o.hop || 0) + Math.abs(Math.sin(G.time * 31 + o.ph)) * 5;
   k.body.rotation.x = o.pitch || 0;
   k.wheels.forEach(w => w.rotation.y = -(o.steer || 0) * 0.45);
   k.brake.visible = !!o.brake; k.lights[0].visible = !!o.brake || !!WX.stars;
@@ -4567,7 +4568,7 @@ function g3Draw(dt, playing, grid, sh) {
       const ez = effZ(r), dz = ez - G.pos; if (dz < 300 || dz > far) continue;
       const k = r.ghost ? G3.karts[10] : G3.karts[kn++]; if (!k) continue;
       const wx = (r.x + 0.04 * Math.sin(G.time * 0.9 + r.ph)) * RW, cv = curveAt(ez);
-      g3Kart(k, { x: wx + roadX(ez) - camX, y: roadY(ez) - CAMY, dz, colour: r.colour, belt: r.belt == null ? 10 : r.belt, yaw: tan(ez), lean: Math.max(-1, Math.min(1, cv / 4)), steer: Math.max(-1, Math.min(1, cv / 4)),
+      g3Kart(k, { x: wx + roadX(ez) - camX, y: roadY(ez) - CAMY, dz, colour: r.colour, belt: r.belt == null ? 10 : r.belt, yaw: tan(ez), steer: Math.max(-1, Math.min(1, cv / 4)),
                   spin: r.spin, boost: r.boosting, shield: r.shieldT, ph: r.ph || 0, hop: r.hop || 0 });
       if (!r.ghost) G3.tags.push({ r, wx, ez, dz });
     }
@@ -4576,8 +4577,7 @@ function g3Draw(dt, playing, grid, sh) {
   for (let i = kn; i < 10; i++) G3.karts[i].g.visible = false;
   // your kart: always the last of the ten solid ones
   const me = G3.karts[9], racingNow = G.state !== "start" && G.state !== "end" && G.state !== "grid";
-  const lean = G.pvx / CFG.STEER + (G.drift > 0 ? G.driftDir * Math.min(1, G.drift) * 0.8 : 0);
-  g3Kart(me, { x: 0, y: roadY(G.pos + HIT_Z) - CAMY, dz: HIT_Z, colour: myKart.body, belt: G.myBelt == null ? 10 : G.myBelt, yaw: tan(G.pos + HIT_Z) + lean * 0.22, lean: lean * 1.6, steer: G.pvx / CFG.STEER,
+  g3Kart(me, { x: 0, y: roadY(G.pos + HIT_Z) - CAMY, dz: HIT_Z, colour: myKart.body, belt: G.myBelt == null ? 10 : G.myBelt, yaw: tan(G.pos + HIT_Z), steer: G.pvx / CFG.STEER,
                spin: G.spin, boost: racingNow && (G.turboT > 0 || G.boost), brake: racingNow && (keys.brake || gpad.brake), shield: G.shieldT, ph: 0, hop: G.hop || 0, pitch: G.hopPitch || 0 });
   const pod = g3Podium();
   if (G.state === "podium") { for (let i = 3; i < 9; i++) G3.karts[i].g.visible = false; me.g.visible = false; G3.karts[10].g.visible = false; }
@@ -14106,8 +14106,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.77';
+const APP_VERSION='3.78';
 const VERSION_NOTES=[
+  ['3.78','Grand Prix: the go-karts are smaller, so they sit inside one lane, and they no longer lean or twist when you steer.'],
   ['3.77','Taekwondo Grand Prix is now in 3D: real go-karts with drivers in doboks, a 3D track with hills, grandstand, bridges and scenery, and a camera that leans into the bends. Rivals are named after the patterns and wear belts to match your Questions choice. New: a rocket start, jump ramps and boost pads, a rival to beat, a finish-line replay and a podium. Graphics: Classic is in the Sound panel for older phones.'],
   ['3.76','Taekwondo Turbo is now in 3D: a proper bike and rider, cars, trucks and scenery with real lighting and shadows, glowing lights in Neon City, drifting petals and snow. It plays exactly as before. A new Graphics button on its start screen switches back to the Classic look for older phones.'],
   ['3.75','Grand Prix: the logo barrier walls on bends are smaller again. They are still a little taller than the original, so the club logos stay slightly bigger than they first were.'],
