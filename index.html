@@ -3401,9 +3401,20 @@ function updateRace(rawDt) {
       continue;
     }
     const overlapZ = KART_LEN - Math.abs(rel), overlapX = (KART_WID - Math.abs(dx)) * CFG.ROAD_W;
-    if (overlapX < overlapZ) {                 // side-swipe: you bounce off sideways
-      const side = dx >= 0 ? 1 : -1;
-      G.px = r.x + side * KART_WID; G.pvx = side * 0.5;
+    if (G.gates.length > 0 || G.state === "read" || G.state === "count" || G.state === "wave") {
+      // A question is on: you have right of way. The rival is shoved aside and gives up the sign it was heading for,
+      // and you keep your line, so a kart can never stop you reaching an answer.
+      let side = dx >= 0 ? -1 : 1;
+      if (Math.abs(G.px + side * (KART_WID + 0.03)) > 0.98) side = -side;        // no room on that side: it goes the other way
+      r.x = G.px + side * (KART_WID + 0.03); r.target = null;
+      G.shake = Math.max(G.shake, 0.08);
+      if (G.bumpCd <= 0) { G.bumpCd = 0.3; beep(90, 0.12, "sawtooth", 0.08); }
+      continue;
+    }
+    if (overlapX < overlapZ) {                 // side-swipe: you bounce off a little and the rival is nudged across, so ramming it moves it over
+      const side = dx >= 0 ? 1 : -1, push = KART_WID - Math.abs(dx);
+      r.x = Math.max(-0.95, Math.min(0.95, r.x - side * (push * 0.6 + 0.05)));
+      G.px = side > 0 ? Math.max(G.px, r.x + KART_WID) : Math.min(G.px, r.x - KART_WID); G.pvx = side * 0.25;
     } else if (rel > 0) {                      // you ran into the back of them: you are held behind
       G.pos -= overlapZ; G.spd = Math.min(G.spd, r.speed * 0.95);
     } else {                                   // they ran into the back of you: they are held behind
@@ -14114,8 +14125,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.80';
+const APP_VERSION='3.81';
 const VERSION_NOTES=[
+  ['3.81','Grand Prix: a rival kart can no longer block you from an answer. While a question is on, any kart in your way is pushed aside as you steer into it. At other times, ramming a kart nudges it across.'],
   ['3.80','Grand Prix: your kart now turns a little to point the way you steer, so it drives across the lanes instead of sliding sideways. It still never tips over.'],
   ['3.79','Grand Prix: the three foot guards you are holding now circle right round the whole kart and are bigger.'],
   ['3.78','Grand Prix: the go-karts are smaller, so they sit inside one lane, and they no longer lean or twist when you steer.'],
