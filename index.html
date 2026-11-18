@@ -1687,7 +1687,7 @@ section#hf .life.used::after,section#hf .lstack .life.used::after{inset:auto;lef
     <div>
       <h2>Theory points</h2>
       <ul>
-        <li>Every correct answer is a theory point. They open new circuits and karts.</li>
+        <li>Every correct answer is a theory point: your lifetime score. Every circuit and kart is open from the start.</li>
         <li>Stars: 1 for finishing, 2 for 60% correct, 3 for 85% correct.</li>
         <li>With Helper on it is a practice run: nothing is saved.</li>
       </ul>
@@ -1738,8 +1738,7 @@ function loadSave() {
 }
 function store() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE)); } catch (e) { /* storage is optional */ } }
 function storeGhosts() { try { localStorage.setItem(GHOST_KEY, JSON.stringify(GHOSTS)); } catch (e) { /* storage is optional */ } }
-let DEV_ALL = false;   // the app's hidden developer mode opens every circuit and kart
-try { DEV_ALL = localStorage.getItem("tkdDev") === "1"; } catch (e) { /* ignore */ }
+const DEV_ALL = true;   // NOTHING IS LOCKED (3.82): every circuit, the Cup and every kart are open from the start. Dave: a free app for his club, played for five minutes at a time.
 const CUP_UNLOCK = 45;   // theory points needed for the cup (the same as the last circuit)
 const trackOpen = t => DEV_ALL || SAVE.tp >= t.unlock;
 const cupOpen = () => DEV_ALL || SAVE.tp >= CUP_UNLOCK;
@@ -12749,7 +12748,7 @@ const TU_GP_UNLOCKS=[[10,'Blossom Valley'],[25,'Neon City'],[45,'Snowy Peaks and
 const tuGP=()=>{const o=lsGet('tkd_gp');return o&&typeof o==='object'?o:{}};
 const tuTP=()=>Math.max(0,Math.floor(+tuGP().tp||0));
 function tuAddTP(n){if(n>0){const o=tuGP();o.tp=tuTP()+n;lsSet('tkd_gp',o)}}
-const tuBikeOpen=b=>DEV.on||tuTP()>=b.unlock;
+const tuBikeOpen=b=>true;                 // nothing is locked (3.82): every bike is open from the start
 function tuBike(){const i=lsGet('tkd_turbo_bike')||0;return TU_BIKES[i]&&tuBikeOpen(TU_BIKES[i])?TU_BIKES[i]:TU_BIKES[0]}
 // Music settings are shared with Grand Prix (tkd_gp.music / musicVol), so one choice covers both games
 const tuMusicOn=()=>tuGP().music!==false;
@@ -12769,9 +12768,8 @@ function renderTurboSetup(){
   const best=lsGet('tkd_turbo_theory'),stars=lsGet('tkd_turbo_stars')||0,tp=tuTP(),mine=tuBike();
   $('#tuBest').textContent=best!==null?`🏆 Best: ${best} pts${stars?' '+tuStars(stars):''}`:'';
   $('#tuBikes').innerHTML=TU_BIKES.map((b,i)=>`<button class="tuBike${b===mine?' on':''}${tuBikeOpen(b)?'':' locked'}" data-b="${i}" style="--c:${b.col};--d:${b.dark}" title="${b.name}">${tuBikeOpen(b)?'':'🔒'}</button>`).join('');
-  const next=TU_BIKES.filter(b=>b.unlock>tp).sort((a,b)=>a.unlock-b.unlock)[0];
   $('#tuGfx').textContent=t3Want()&&T3.ok!==false?'🎨 3D':'🎨 CLASSIC';
-  $('#tuTP').innerHTML=tuNote||`⭐ Theory points: <b>${tp}</b>${next&&!DEV.on?` · the ${next.name} bike opens at ${next.unlock}`:''}`;
+  $('#tuTP').innerHTML=tuNote||`⭐ Theory points: <b>${tp}</b>`;
   tuPreview();
 }
 // A little strip of road with your bike on it, on the set-up screen
@@ -13066,10 +13064,6 @@ function tFinish(){
     if(stars>(lsGet('tkd_turbo_stars')||0))lsSet('tkd_turbo_stars',stars);
     // Every right word is a theory point (shared with Grand Prix), which opens bikes here and circuits and karts there
     tuAddTP(st.wRight);const tp=tuTP(),news=[];
-    if(!DEV.on){
-      TU_BIKES.forEach(b=>{if(b.unlock>me.tp0&&b.unlock<=tp)news.push(`🔓 New bike: ${b.name}!`)});
-      TU_GP_UNLOCKS.forEach(([n,what])=>{if(n>me.tp0&&n<=tp)news.push(`🔓 Grand Prix: ${what} opened!`)});
-    }
     const row=(a,b2)=>`<div class="r"><span>${a}</span><span style="text-align:right">${b2}</span></div>`;
     openOv(`<h3>🏁 Time's up!</h3><div class="sub">THEORY SCORE</div><div class="big" style="color:${th>0?'var(--good)':th<0?'var(--bad)':'var(--gold)'}">${sc(th)}</div>
       <div class="big" style="color:var(--gold);font-size:1.9rem;letter-spacing:.12em;margin:-4px 0 2px">${tuStars(stars)}</div>
@@ -14125,8 +14119,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.81';
+const APP_VERSION='3.82';
 const VERSION_NOTES=[
+  ['3.82','Nothing is locked any more: every Grand Prix circuit, the Cup, every kart and every Turbo bike is open from the start.'],
   ['3.81','Grand Prix: a rival kart can no longer block you from an answer. While a question is on, any kart in your way is pushed aside as you steer into it. At other times, ramming a kart nudges it across.'],
   ['3.80','Grand Prix: your kart now turns a little to point the way you steer, so it drives across the lanes instead of sliding sideways. It still never tips over.'],
   ['3.79','Grand Prix: the three foot guards you are holding now circle right round the whole kart and are bigger.'],
