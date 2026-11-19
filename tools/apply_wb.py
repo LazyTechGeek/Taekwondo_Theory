@@ -11,7 +11,7 @@ if r.returncode or 'PROBLEMS' in r.stdout:sys.exit('Fix the problems above first
 s=open(html,encoding='utf-8').read();data=json.load(open(tmp))
 js=json.dumps(data,ensure_ascii=False,indent=0).replace('</','<\\/')
 i=s.index('<!-- ALL THEORY:');j=s.index('</script>',s.index('id="allTheory"'))+9
-s=s[:i]+'<!-- ALL THEORY: copied from Dave\'s "All Theory" workbook (Terminology, Patterns, Belt meanings, Questions tabs). Rebuild with tools/apply_wb.py. -->\n<script type="application/json" id="allTheory">\n'+js+'\n</script>'+s[j:]
+s=s[:i]+'<!-- ALL THEORY: copied from Dave\'s "All Theory" workbook (Terminology, Patterns, Belt meanings, Questions, Body parts tabs). Rebuild with tools/apply_wb.py. -->\n<script type="application/json" id="allTheory">\n'+js+'\n</script>'+s[j:]
 b=base64.b64encode(open(xlsx,'rb').read()).decode()
 blk='<!-- WORKBOOK TEMPLATE: Dave\'s All Theory workbook, used only by developer-mode Export. Rebuilt with the data. -->\n<script type="text/plain" id="wbTemplate">'+b+'</script>'
 i=s.index('<!-- WORKBOOK TEMPLATE:');j=s.index('</script>',s.index('id="wbTemplate"'))+9;s=s[:i]+blk+s[j:]

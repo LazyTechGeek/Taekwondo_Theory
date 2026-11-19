@@ -13,6 +13,7 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 - `index-v3.76.html` — backup of the app as it was before Grand Prix went 3D (3.77); same idea.
 - `all-theory.xlsx` — Dave's master "All Theory" workbook: the single source of truth for all content.
 - `pattern-exam.html` + `videos/` — separate Pattern Exam test page (video pauses, "What's next?" questions), built in another chat; not linked from the app yet.
+- `img/body-*.webp` — Dave's cartoon pictures for the Body Map (made in ChatGPT; plain dobok, no TAGB or any logo). Trimmed and resized from his PNGs.
 - `mp3/` — audio files named in the workbook's MP3 columns (file name only, lower case, e.g. `chon-ji.mp3`).
 - `tools/wb2json.py` — reads and validates the workbook (IDs, grades, headers, video links/times) and prints problems.
 - `tools/apply_wb.py all-theory.xlsx` — embeds the workbook data (`<script id="allTheory">`) and the workbook itself (`<script id="wbTemplate">`, used by developer-mode Export) into `index.html`.
@@ -26,12 +27,14 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 5. **Upload (commit + push to `main`) only when Dave says so.** Commit as LazyTechGeek.
 6. Replies: short and plain English; he often asks for the request to be repeated back before building.
 
-## Workbook (tabs: Terminology, Patterns, Belt meanings, Questions, How to fill in)
+## Workbook (tabs: Terminology, Patterns, Belt meanings, Questions, Body parts, How to fill in)
 - Grade column `10th_Kup`…`1st_Kup`, `1st_Dan`…`5th_Dan` (Questions may use `All`). Belt: White, Yellow tag … Black (all Dan grades = Black).
 - IDs: `T_10th-Kup_01`, `P_1st-Dan_3`, `B_White`, `Q_10th-Kup_01`, `Q_All_01`. Never reuse or renumber an ID; a new row takes the next unused number; a wording fix keeps its ID (audio is linked by ID).
 - Yellow columns are Dave's: Pronounced / MP3 (Questions: Question pronounced, Question MP3, Answer pronounced, Answer MP3), Wrong answers, Video link, Video start/end (m:ss).
 - Multiple answers / wrong answers are separated by `|`. A question's wrong answers are only ever used for that question (never borrowed).
 - Watch for slips Dave has made before: a header overwritten (e.g. "Pronounced" typed over), duplicate IDs, editing an older copy.
+
+- Body parts tab (3.84): the labels from four TAGB manual charts (Front/Rear Target Areas, Hand Parts - Sang Basin, Foot Parts - Ha Basin), spelled exactly as printed. Columns ID (`BP_Front_01`, `BP_Rear_`, `BP_Hand_`, `BP_Foot_`), Grade (All for now; Dave may assign grades later), Chart, Section (High/Middle/Low), English, Korean, Pronounced, MP3, Note. "Scrotum" left out on purpose; "Groin" stays. Embedded as `ALL.body`; feeds the Body Map only (not the quizzes/games yet).
 
 ## Standing rules
 - Spellings exactly as in Dave's syllabus (only letter case is tidied for display). "Kup", not "Cup".
@@ -85,6 +88,7 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
   - Hall as in Dave's photos: top table with THREE examiners (main examiner in the middle, drawn as a cartoon likeness: cropped hair, short grey beard), one examiner at each side table; all in navy blazer, gold buttons, navy tie, UK council badge. Cloth logos left to right: Tae Kwon Do Council – UK, Karl James Schools (gold), International Taekwon-Do Council. 3rd Kup and below answer terminology at a side table; red belt and above at the top table.
   - Sparring: NO scores, no winner, no referee or flags, no knock-downs (a grading, not a competition). The examiners watch; the main examiner nods and notes good techniques and gives a comment at the end (`sparComment`, from techniques used, blocks, counters). Controls: ◀ ▶, Punch (twice = reverse punch), Kick (turning; ▶+Kick side piercing, ◀+Kick back kick, jump in + Kick flying kick), Block (hold; block then hit = counter), double-tap ◀ steps back. Callouts show the syllabus's Korean name via `GS_KR`. Tuning in `FIGHT`.
   - Its line-work calls and pattern move data still come from Dave's grading workbook (grading-game-data-v2.xlsx, not in this repo).
+- Body Map (3.84, Learn and Practice, section `#body`, code `BM_TABS` / `BM_POS` / `renderBody`): tabs Front / Rear / Hand / Foot; numbered spots on the picture (positions in `BM_POS` as % of the picture, by ID; view 1 = head-and-neck close-up on Front), High/Middle/Low lines, list grouped by section, play buttons (same audio as the Study Guide), Hide Korean / Hide English (tap the bar or a row to check). A row without a spot is listed without a number. Study Guide has a Body Map card (chart buttons; search finds body words). Dave to check: Side Sole vs Reverse Foot Sword sides on the sole picture.
 - Question engine: `items(fn)` → `makeQ(it,n)` (termQ / patQ / beltQ / qQ). Range for games: `RG` + `inScope`.
 
 ## Parked ideas (not built)

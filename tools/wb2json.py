@@ -68,7 +68,18 @@ if 'Questions' in wb.sheetnames:
         out['questions'].append({'id':i,'g':g,'q':d['Question'],'a':ans,'w':wr,
             'qsay':col(d,'Question pronounced') or d.get('Pronounced',''),'qmp3':col(d,'Question MP3') or d.get('MP3',''),
             'asay':col(d,'Answer pronounced'),'amp3':col(d,'Answer MP3')})
+# Body parts tab (optional): labels from the four body charts; Grade is All or a grade
+out['body']=[]
+if 'Body parts' in wb.sheetnames:
+    for d in rows('Body parts'):
+        w=f"Body parts {d.get('ID')}";chk_id(d.get('ID'),w)
+        g=d.get('Grade','') or 'All'
+        if g!='All' and g not in GR:probs.append(f'{w}: unknown grade "{g}"')
+        if not d.get('English') or not d.get('Korean'):probs.append(f'{w}: English or Korean is empty')
+        if not d.get('Chart'):probs.append(f'{w}: Chart is empty')
+        out['body'].append({'id':d.get('ID',''),'g':g,'chart':d.get('Chart',''),'sec':d.get('Section',''),'en':d.get('English',''),'kr':d.get('Korean',''),
+            'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'note':d.get('Note','')})
 json.dump(out,open(sys.argv[2],'w'),ensure_ascii=False)
-print(len(out.get('questions',[])),'questions,',len(out['terms']),'terms,',len(out['patterns']),'patterns,',len(out['belts']),'belts,',sum(1 for p in out['patterns'] if p['video']),'videos')
+print(len(out.get('questions',[])),'questions,',len(out['body']),'body parts,',len(out['terms']),'terms,',len(out['patterns']),'patterns,',len(out['belts']),'belts,',sum(1 for p in out['patterns'] if p['video']),'videos')
 print('PROBLEMS:' if probs else 'No problems found.');[print(' -',p) for p in probs]
 print('No video:',[p['name'] for p in out['patterns'] if not p['video']])
