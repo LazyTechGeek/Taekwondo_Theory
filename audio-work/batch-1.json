@@ -1,0 +1,1466 @@
+{
+ "pause": "[pause 1.5s]",
+ "voice": "Epidemic Sound Benjamin, ElevenLabs, English, Speed 0.8x",
+ "chunks": [
+  [
+   {
+    "text": "Hanna",
+    "ids": [
+     "T_10th-Kup_01"
+    ]
+   },
+   {
+    "text": "Dool",
+    "ids": [
+     "T_10th-Kup_02"
+    ]
+   },
+   {
+    "text": "Seth",
+    "ids": [
+     "T_10th-Kup_03"
+    ]
+   },
+   {
+    "text": "Neth",
+    "ids": [
+     "T_10th-Kup_04"
+    ]
+   },
+   {
+    "text": "Dasaul",
+    "ids": [
+     "T_10th-Kup_05"
+    ]
+   },
+   {
+    "text": "Yosaul",
+    "ids": [
+     "T_10th-Kup_06"
+    ]
+   },
+   {
+    "text": "Ilgop",
+    "ids": [
+     "T_10th-Kup_07"
+    ]
+   },
+   {
+    "text": "Yodoll",
+    "ids": [
+     "T_10th-Kup_08"
+    ]
+   },
+   {
+    "text": "a-hop",
+    "ids": [
+     "T_10th-Kup_09"
+    ]
+   },
+   {
+    "text": "Yoll",
+    "ids": [
+     "T_10th-Kup_10"
+    ]
+   },
+   {
+    "text": "Dwiyro torro",
+    "ids": [
+     "T_10th-Kup_11"
+    ]
+   },
+   {
+    "text": "charryot",
+    "ids": [
+     "T_10th-Kup_12"
+    ]
+   },
+   {
+    "text": "charryot soggy",
+    "ids": [
+     "T_10th-Kup_13"
+    ]
+   },
+   {
+    "text": "Dwiyro kaggi",
+    "ids": [
+     "T_10th-Kup_14"
+    ]
+   },
+   {
+    "text": "Ti",
+    "ids": [
+     "T_10th-Kup_15"
+    ]
+   },
+   {
+    "text": "Kyong ye",
+    "ids": [
+     "T_10th-Kup_16"
+    ]
+   },
+   {
+    "text": "Haessan",
+    "ids": [
+     "T_10th-Kup_17"
+    ]
+   },
+   {
+    "text": "Tae Kwon-Do",
+    "ids": [
+     "T_10th-Kup_18"
+    ]
+   },
+   {
+    "text": "Palmok",
+    "ids": [
+     "T_10th-Kup_19"
+    ]
+   },
+   {
+    "text": "Ap joomuk",
+    "ids": [
+     "T_10th-Kup_20",
+     "T_2nd-Dan_05",
+     "BP_Hand_02"
+    ]
+   },
+   {
+    "text": "Sajo jirugi",
+    "ids": [
+     "T_10th-Kup_21"
+    ]
+   },
+   {
+    "text": "Apro kaggi",
+    "ids": [
+     "T_10th-Kup_22"
+    ]
+   },
+   {
+    "text": "Ap chaolligi",
+    "ids": [
+     "T_10th-Kup_23"
+    ]
+   },
+   {
+    "text": "Nopunde",
+    "ids": [
+     "T_10th-Kup_24"
+    ]
+   },
+   {
+    "text": "An palmok",
+    "ids": [
+     "T_10th-Kup_25",
+     "BP_Hand_08"
+    ]
+   },
+   {
+    "text": "An palmok makgi",
+    "ids": [
+     "T_10th-Kup_26"
+    ]
+   },
+   {
+    "text": "Sabum",
+    "ids": [
+     "T_10th-Kup_27"
+    ]
+   },
+   {
+    "text": "Najunde",
+    "ids": [
+     "T_10th-Kup_28"
+    ]
+   },
+   {
+    "text": "Kaunde",
+    "ids": [
+     "T_10th-Kup_29"
+    ]
+   },
+   {
+    "text": "Baro jirugi",
+    "ids": [
+     "T_10th-Kup_30"
+    ]
+   },
+   {
+    "text": "Bakat palmok",
+    "ids": [
+     "T_10th-Kup_31",
+     "BP_Hand_07"
+    ]
+   },
+   {
+    "text": "Bakat palmok makgi",
+    "ids": [
+     "T_10th-Kup_32"
+    ]
+   },
+   {
+    "text": "Narani soggy",
+    "ids": [
+     "T_10th-Kup_33"
+    ]
+   },
+   {
+    "text": "Chunbi",
+    "ids": [
+     "T_10th-Kup_34"
+    ]
+   },
+   {
+    "text": "Barrol",
+    "ids": [
+     "T_10th-Kup_35"
+    ]
+   },
+   {
+    "text": "Bandae jirugi",
+    "ids": [
+     "T_10th-Kup_36"
+    ]
+   },
+   {
+    "text": "Yop chaolligi",
+    "ids": [
+     "T_10th-Kup_37"
+    ]
+   },
+   {
+    "text": "Annun soggy",
+    "ids": [
+     "T_10th-Kup_38"
+    ]
+   },
+   {
+    "text": "Si-jak",
+    "ids": [
+     "T_10th-Kup_39"
+    ]
+   },
+   {
+    "text": "Goman",
+    "ids": [
+     "T_10th-Kup_40"
+    ]
+   },
+   {
+    "text": "Jeja",
+    "ids": [
+     "T_10th-Kup_41"
+    ]
+   },
+   {
+    "text": "Dojang",
+    "ids": [
+     "T_10th-Kup_42"
+    ]
+   },
+   {
+    "text": "Dobok",
+    "ids": [
+     "T_10th-Kup_43"
+    ]
+   },
+   {
+    "text": "Gunnun soggy",
+    "ids": [
+     "T_10th-Kup_44"
+    ]
+   },
+   {
+    "text": "Dung",
+    "ids": [
+     "T_9th-Kup_01"
+    ]
+   },
+   {
+    "text": "Ap kumchi",
+    "ids": [
+     "T_9th-Kup_02",
+     "BP_Foot_09"
+    ]
+   },
+   {
+    "text": "Balkal",
+    "ids": [
+     "T_9th-Kup_03",
+     "BP_Foot_04"
+    ]
+   },
+   {
+    "text": "Ap chabusigi",
+    "ids": [
+     "T_9th-Kup_04"
+    ]
+   },
+   {
+    "text": "Daebi makgi",
+    "ids": [
+     "T_9th-Kup_05",
+     "T_8th-Kup_03"
+    ]
+   },
+   {
+    "text": "Mori",
+    "ids": [
+     "T_9th-Kup_06"
+    ]
+   },
+   {
+    "text": "Chaggie",
+    "ids": [
+     "T_9th-Kup_07"
+    ]
+   },
+   {
+    "text": "Niunja sogi",
+    "ids": [
+     "T_9th-Kup_08"
+    ]
+   },
+   {
+    "text": "Wen",
+    "ids": [
+     "T_9th-Kup_09"
+    ]
+   },
+   {
+    "text": "Bakat",
+    "ids": [
+     "T_9th-Kup_10",
+     "T_2nd-Kup_05"
+    ]
+   },
+   {
+    "text": "Tul",
+    "ids": [
+     "T_9th-Kup_11"
+    ]
+   },
+   {
+    "text": "Momtong bachia",
+    "ids": [
+     "T_9th-Kup_12"
+    ]
+   },
+   {
+    "text": "Chumbi sogi",
+    "ids": [
+     "T_9th-Kup_13"
+    ]
+   },
+   {
+    "text": "Orun",
+    "ids": [
+     "T_9th-Kup_14"
+    ]
+   },
+   {
+    "text": "Chookyo makgi",
+    "ids": [
+     "T_9th-Kup_15"
+    ]
+   }
+  ],
+  [
+   {
+    "text": "Yop",
+    "ids": [
+     "T_9th-Kup_16"
+    ]
+   },
+   {
+    "text": "Sambo matsoki",
+    "ids": [
+     "T_9th-Kup_17"
+    ]
+   },
+   {
+    "text": "Dung joomuk",
+    "ids": [
+     "T_8th-Kup_01",
+     "BP_Hand_03"
+    ]
+   },
+   {
+    "text": "Dung joomuk taerigi",
+    "ids": [
+     "T_8th-Kup_02"
+    ]
+   },
+   {
+    "text": "Anaero",
+    "ids": [
+     "T_8th-Kup_04"
+    ]
+   },
+   {
+    "text": "Sonkal",
+    "ids": [
+     "T_8th-Kup_05",
+     "BP_Hand_10"
+    ]
+   },
+   {
+    "text": "Sonkal daebi makgi",
+    "ids": [
+     "T_8th-Kup_06"
+    ]
+   },
+   {
+    "text": "Sonkal taerigi",
+    "ids": [
+     "T_8th-Kup_07"
+    ]
+   },
+   {
+    "text": "Bakaero",
+    "ids": [
+     "T_8th-Kup_08"
+    ]
+   },
+   {
+    "text": "Sonbadak",
+    "ids": [
+     "T_8th-Kup_09",
+     "BP_Hand_13"
+    ]
+   },
+   {
+    "text": "Ban jayoo matsoki",
+    "ids": [
+     "T_8th-Kup_10"
+    ]
+   },
+   {
+    "text": "Yop chajirugi",
+    "ids": [
+     "T_8th-Kup_11"
+    ]
+   },
+   {
+    "text": "Sang palmok makgi",
+    "ids": [
+     "T_8th-Kup_12"
+    ]
+   },
+   {
+    "text": "Sonkut",
+    "ids": [
+     "T_7th-Kup_01",
+     "BP_Hand_11"
+    ]
+   },
+   {
+    "text": "Gojong sogi",
+    "ids": [
+     "T_7th-Kup_02"
+    ]
+   },
+   {
+    "text": "Jayoo matsoki",
+    "ids": [
+     "T_7th-Kup_03"
+    ]
+   },
+   {
+    "text": "Sun",
+    "ids": [
+     "T_7th-Kup_04"
+    ]
+   },
+   {
+    "text": "Sun sonkut tulgi",
+    "ids": [
+     "T_7th-Kup_05"
+    ]
+   },
+   {
+    "text": "Tulgi",
+    "ids": [
+     "T_7th-Kup_06"
+    ]
+   },
+   {
+    "text": "Dollyo chaggie",
+    "ids": [
+     "T_7th-Kup_07"
+    ]
+   },
+   {
+    "text": "Hechyo makgi",
+    "ids": [
+     "T_7th-Kup_08",
+     "T_2nd-Dan_13"
+    ]
+   },
+   {
+    "text": "Jappyosol tae",
+    "ids": [
+     "T_7th-Kup_09"
+    ]
+   },
+   {
+    "text": "Ibo matsoki",
+    "ids": [
+     "T_6th-Kup_01"
+    ]
+   },
+   {
+    "text": "Dwit",
+    "ids": [
+     "T_6th-Kup_02"
+    ]
+   },
+   {
+    "text": "Dwit chook",
+    "ids": [
+     "T_6th-Kup_03",
+     "BP_Foot_05"
+    ]
+   },
+   {
+    "text": "Dwit kumchi",
+    "ids": [
+     "T_6th-Kup_04",
+     "BP_Foot_06"
+    ]
+   },
+   {
+    "text": "Goburyo sogi",
+    "ids": [
+     "T_6th-Kup_05"
+    ]
+   },
+   {
+    "text": "Dollymio makgi",
+    "ids": [
+     "T_6th-Kup_06"
+    ]
+   },
+   {
+    "text": "Moa junbi sogi 'A'",
+    "ids": [
+     "T_6th-Kup_07"
+    ]
+   },
+   {
+    "text": "Hanbansin",
+    "ids": [
+     "T_6th-Kup_08"
+    ]
+   },
+   {
+    "text": "Sangbansin",
+    "ids": [
+     "T_6th-Kup_09"
+    ]
+   },
+   {
+    "text": "Golcho makgi",
+    "ids": [
+     "T_6th-Kup_10",
+     "T_2nd-Dan_06"
+    ]
+   },
+   {
+    "text": "Moorup chaggie",
+    "ids": [
+     "T_6th-Kup_11",
+     "T_4th-Dan_04"
+    ]
+   },
+   {
+    "text": "Bandae dollyo chaggie",
+    "ids": [
+     "T_6th-Kup_12",
+     "T_2nd-Dan_10"
+    ]
+   },
+   {
+    "text": "Yop jirugi",
+    "ids": [
+     "T_6th-Kup_13"
+    ]
+   },
+   {
+    "text": "Matsoki",
+    "ids": [
+     "T_6th-Kup_14"
+    ]
+   },
+   {
+    "text": "Sewo jirugi",
+    "ids": [
+     "T_6th-Kup_15",
+     "T_4th-Dan_11"
+    ]
+   },
+   {
+    "text": "Soojik sogi",
+    "ids": [
+     "T_6th-Kup_16"
+    ]
+   },
+   {
+    "text": "Hori makgi",
+    "ids": [
+     "T_6th-Kup_17"
+    ]
+   },
+   {
+    "text": "Kyocha sogi",
+    "ids": [
+     "T_5th-Kup_01"
+    ]
+   },
+   {
+    "text": "Doo palmok makgi",
+    "ids": [
+     "T_5th-Kup_02"
+    ]
+   },
+   {
+    "text": "Palkup",
+    "ids": [
+     "T_5th-Kup_03",
+     "BP_Rear_04",
+     "BP_Hand_05"
+    ]
+   },
+   {
+    "text": "Golcho chaggie",
+    "ids": [
+     "T_5th-Kup_04",
+     "T_2nd-Dan_07"
+    ]
+   },
+   {
+    "text": "Twigi",
+    "ids": [
+     "T_5th-Kup_05"
+    ]
+   },
+   {
+    "text": "Sonkal dung daebi makgi",
+    "ids": [
+     "T_5th-Kup_06"
+    ]
+   },
+   {
+    "text": "Dwijibo jirugi",
+    "ids": [
+     "T_5th-Kup_07"
+    ]
+   },
+   {
+    "text": "Bandal son",
+    "ids": [
+     "T_4th-Kup_01",
+     "T_2nd-Dan_01"
+    ]
+   },
+   {
+    "text": "Dwit chaggie",
+    "ids": [
+     "T_4th-Kup_02"
+    ]
+   },
+   {
+    "text": "Moa junbi sogi 'B'",
+    "ids": [
+     "T_4th-Kup_03"
+    ]
+   },
+   {
+    "text": "Yonsok chagi",
+    "ids": [
+     "T_4th-Kup_04"
+    ]
+   },
+   {
+    "text": "Naeryo makgi",
+    "ids": [
+     "T_4th-Kup_05"
+    ]
+   },
+   {
+    "text": "Naeryo chaggie",
+    "ids": [
+     "T_4th-Kup_06"
+    ]
+   },
+   {
+    "text": "Dollyon joo",
+    "ids": [
+     "T_4th-Kup_07"
+    ]
+   },
+   {
+    "text": "Ap palkup taerigi",
+    "ids": [
+     "T_4th-Kup_08"
+    ]
+   },
+   {
+    "text": "Anearo sonkal taerigi",
+    "ids": [
+     "T_4th-Kup_09"
+    ]
+   },
+   {
+    "text": "Nachuo sogi",
+    "ids": [
+     "T_4th-Kup_10"
+    ]
+   },
+   {
+    "text": "Ilbo matsoki",
+    "ids": [
+     "T_4th-Kup_11"
+    ]
+   },
+   {
+    "text": "Noollo chaggie",
+    "ids": [
+     "T_4th-Kup_12",
+     "T_3rd-Dan_09"
+    ]
+   },
+   {
+    "text": "Noollo makgi",
+    "ids": [
+     "T_4th-Kup_13",
+     "T_4th-Dan_06"
+    ]
+   }
+  ],
+  [
+   {
+    "text": "Dwit bal sogi",
+    "ids": [
+     "T_4th-Kup_14",
+     "T_2nd-Dan_09"
+    ]
+   },
+   {
+    "text": "Bandae dollyo goro chaggie",
+    "ids": [
+     "T_4th-Kup_15"
+    ]
+   },
+   {
+    "text": "Duro makgi",
+    "ids": [
+     "T_4th-Kup_16",
+     "T_4th-Dan_08"
+    ]
+   },
+   {
+    "text": "Yop palkup taerigi",
+    "ids": [
+     "T_4th-Kup_17"
+    ]
+   },
+   {
+    "text": "Yop joomuk yop taerigi",
+    "ids": [
+     "T_4th-Kup_18"
+    ]
+   },
+   {
+    "text": "Yop bal badak",
+    "ids": [
+     "T_4th-Kup_19",
+     "BP_Foot_07"
+    ]
+   },
+   {
+    "text": "Yop cha tulgi",
+    "ids": [
+     "T_4th-Kup_20"
+    ]
+   },
+   {
+    "text": "Dollyo jirugi",
+    "ids": [
+     "T_4th-Kup_21",
+     "T_2nd-Dan_12"
+    ]
+   },
+   {
+    "text": "Sang sonkal makgi",
+    "ids": [
+     "T_4th-Kup_22"
+    ]
+   },
+   {
+    "text": "Sang dwijibo jirugi",
+    "ids": [
+     "T_4th-Kup_23",
+     "T_4th-Dan_10"
+    ]
+   },
+   {
+    "text": "Wi palkup taeregi",
+    "ids": [
+     "T_4th-Kup_24"
+    ]
+   },
+   {
+    "text": "Kyocha makgi",
+    "ids": [
+     "T_4th-Kup_25"
+    ]
+   },
+   {
+    "text": "Naeryo",
+    "ids": [
+     "T_3rd-Kup_01"
+    ]
+   },
+   {
+    "text": "Twimyo",
+    "ids": [
+     "T_3rd-Kup_02"
+    ]
+   },
+   {
+    "text": "Twimyo chaggie",
+    "ids": [
+     "T_3rd-Kup_03"
+    ]
+   },
+   {
+    "text": "Ap cha milgi",
+    "ids": [
+     "T_3rd-Kup_04"
+    ]
+   },
+   {
+    "text": "Noolo",
+    "ids": [
+     "T_3rd-Kup_05"
+    ]
+   },
+   {
+    "text": "Digutja makgi",
+    "ids": [
+     "T_3rd-Kup_06",
+     "T_3rd-Dan_07"
+    ]
+   },
+   {
+    "text": "Dwijibun sonkut",
+    "ids": [
+     "T_3rd-Kup_07"
+    ]
+   },
+   {
+    "text": "San makgi",
+    "ids": [
+     "T_3rd-Kup_08"
+    ]
+   },
+   {
+    "text": "Doro chaggie",
+    "ids": [
+     "T_3rd-Kup_09"
+    ]
+   },
+   {
+    "text": "Moa chunbi sogi 'C'",
+    "ids": [
+     "T_2nd-Kup_01"
+    ]
+   },
+   {
+    "text": "Twimyo nopi chaggie",
+    "ids": [
+     "T_2nd-Kup_02"
+    ]
+   },
+   {
+    "text": "An",
+    "ids": [
+     "T_2nd-Kup_03"
+    ]
+   },
+   {
+    "text": "Baldung",
+    "ids": [
+     "T_2nd-Kup_04",
+     "BP_Foot_02"
+    ]
+   },
+   {
+    "text": "Miro makgi",
+    "ids": [
+     "T_2nd-Kup_06"
+    ]
+   },
+   {
+    "text": "Balkal dung",
+    "ids": [
+     "T_2nd-Kup_07",
+     "BP_Foot_08"
+    ]
+   },
+   {
+    "text": "Hullyo makgi",
+    "ids": [
+     "T_2nd-Kup_08"
+    ]
+   },
+   {
+    "text": "Sang bal chaggie",
+    "ids": [
+     "T_2nd-Kup_09"
+    ]
+   },
+   {
+    "text": "Bituro chaggie",
+    "ids": [
+     "T_2nd-Kup_10"
+    ]
+   },
+   {
+    "text": "Ollyo jirugi",
+    "ids": [
+     "T_2nd-Kup_11"
+    ]
+   },
+   {
+    "text": "Sewo chaggie",
+    "ids": [
+     "T_2nd-Kup_12"
+    ]
+   },
+   {
+    "text": "Momchau makgi",
+    "ids": [
+     "T_1st-Kup_01"
+    ]
+   },
+   {
+    "text": "Doo bandalson makgi",
+    "ids": [
+     "T_1st-Kup_02"
+    ]
+   },
+   {
+    "text": "Opun sonkut tulgi",
+    "ids": [
+     "T_1st-Kup_03"
+    ]
+   },
+   {
+    "text": "Wae bal sogi",
+    "ids": [
+     "T_1st-Kup_04"
+    ]
+   },
+   {
+    "text": "Twio nomo chaggie",
+    "ids": [
+     "T_1st-Kup_05"
+    ]
+   },
+   {
+    "text": "Sonkal dung",
+    "ids": [
+     "T_1st-Kup_06",
+     "T_4th-Dan_07",
+     "BP_Hand_09"
+    ]
+   },
+   {
+    "text": "Yop joomuk",
+    "ids": [
+     "T_1st-Kup_07",
+     "BP_Hand_04"
+    ]
+   },
+   {
+    "text": "Cha bapgi",
+    "ids": [
+     "T_1st-Kup_08"
+    ]
+   },
+   {
+    "text": "Goro chaggie",
+    "ids": [
+     "T_1st-Kup_09",
+     "T_3rd-Dan_06"
+    ]
+   },
+   {
+    "text": "Gutcha makgi",
+    "ids": [
+     "T_1st-Dan_01"
+    ]
+   },
+   {
+    "text": "Giokja jirugi",
+    "ids": [
+     "T_1st-Dan_02",
+     "T_3rd-Dan_01"
+    ]
+   },
+   {
+    "text": "Pal",
+    "ids": [
+     "T_1st-Dan_03"
+    ]
+   },
+   {
+    "text": "Dwit palkup taerigi",
+    "ids": [
+     "T_1st-Dan_04"
+    ]
+   },
+   {
+    "text": "Sondung",
+    "ids": [
+     "T_1st-Dan_05"
+    ]
+   },
+   {
+    "text": "Dung palmok",
+    "ids": [
+     "T_1st-Dan_06",
+     "BP_Hand_06"
+    ]
+   },
+   {
+    "text": "Sonkal batang",
+    "ids": [
+     "T_1st-Dan_07"
+    ]
+   },
+   {
+    "text": "Gyokpa",
+    "ids": [
+     "T_1st-Dan_08"
+    ]
+   },
+   {
+    "text": "Gasum",
+    "ids": [
+     "T_1st-Dan_09"
+    ]
+   },
+   {
+    "text": "Yonsok chaggie",
+    "ids": [
+     "T_1st-Dan_10",
+     "T_4th-Dan_02"
+    ]
+   },
+   {
+    "text": "Bandal chaggie",
+    "ids": [
+     "T_1st-Dan_11"
+    ]
+   },
+   {
+    "text": "Angoo",
+    "ids": [
+     "T_1st-Dan_12",
+     "BP_Front_03"
+    ]
+   },
+   {
+    "text": "Songarak",
+    "ids": [
+     "T_1st-Dan_13"
+    ]
+   },
+   {
+    "text": "Opun sonkut",
+    "ids": [
+     "T_1st-Dan_14"
+    ]
+   },
+   {
+    "text": "Butjaba",
+    "ids": [
+     "T_1st-Dan_15"
+    ]
+   },
+   {
+    "text": "Soopyong jirugi",
+    "ids": [
+     "T_1st-Dan_16"
+    ]
+   },
+   {
+    "text": "Joongi joomuk",
+    "ids": [
+     "T_1st-Dan_17"
+    ]
+   },
+   {
+    "text": "Dari",
+    "ids": [
+     "T_1st-Dan_18"
+    ]
+   }
+  ],
+  [
+   {
+    "text": "Sonkal dung makgi",
+    "ids": [
+     "T_1st-Dan_19"
+    ]
+   },
+   {
+    "text": "Ollyo moorup chaggie",
+    "ids": [
+     "T_1st-Dan_20"
+    ]
+   },
+   {
+    "text": "Ollyo sonbadak makgi",
+    "ids": [
+     "T_1st-Dan_21"
+    ]
+   },
+   {
+    "text": "Mikulgi",
+    "ids": [
+     "T_1st-Dan_22"
+    ]
+   },
+   {
+    "text": "Sun sonkut",
+    "ids": [
+     "T_1st-Dan_23"
+    ]
+   },
+   {
+    "text": "Dolgi",
+    "ids": [
+     "T_1st-Dan_24"
+    ]
+   },
+   {
+    "text": "Sang yop palkup tulgi",
+    "ids": [
+     "T_1st-Dan_25"
+    ]
+   },
+   {
+    "text": "Mong dung i japki",
+    "ids": [
+     "T_1st-Dan_26"
+    ]
+   },
+   {
+    "text": "Mit",
+    "ids": [
+     "T_1st-Dan_27"
+    ]
+   },
+   {
+    "text": "Mit joomuk",
+    "ids": [
+     "T_1st-Dan_28"
+    ]
+   },
+   {
+    "text": "Mit palmok",
+    "ids": [
+     "T_1st-Dan_29"
+    ]
+   },
+   {
+    "text": "Dollimyo makgi",
+    "ids": [
+     "T_2nd-Dan_02"
+    ]
+   },
+   {
+    "text": "Bandal jirugi",
+    "ids": [
+     "T_2nd-Dan_03"
+    ]
+   },
+   {
+    "text": "Doo sonkut tulgi",
+    "ids": [
+     "T_2nd-Dan_04"
+    ]
+   },
+   {
+    "text": "Sonkal anuro makgi",
+    "ids": [
+     "T_2nd-Dan_08"
+    ]
+   },
+   {
+    "text": "Yop palkup tulgi",
+    "ids": [
+     "T_2nd-Dan_11"
+    ]
+   },
+   {
+    "text": "Dwit palkup tulgi",
+    "ids": [
+     "T_3rd-Dan_02"
+    ]
+   },
+   {
+    "text": "Sasun sogi",
+    "ids": [
+     "T_3rd-Dan_03"
+    ]
+   },
+   {
+    "text": "Gojung sogi",
+    "ids": [
+     "T_3rd-Dan_04"
+    ]
+   },
+   {
+    "text": "Bandae golcho chaggie",
+    "ids": [
+     "T_3rd-Dan_05"
+    ]
+   },
+   {
+    "text": "Dwijibo sonkut tulgi",
+    "ids": [
+     "T_3rd-Dan_08"
+    ]
+   },
+   {
+    "text": "Tongmilgi junbi sogi",
+    "ids": [
+     "T_3rd-Dan_10"
+    ]
+   },
+   {
+    "text": "Dwit cha jirugi",
+    "ids": [
+     "T_4th-Dan_01"
+    ]
+   },
+   {
+    "text": "Twio chaggie",
+    "ids": [
+     "T_4th-Dan_03"
+    ]
+   },
+   {
+    "text": "Joong joomuk",
+    "ids": [
+     "T_4th-Dan_05"
+    ]
+   },
+   {
+    "text": "Jeja dollgi",
+    "ids": [
+     "T_4th-Dan_09"
+    ]
+   },
+   {
+    "text": "Kotdung",
+    "ids": [
+     "BP_Front_01"
+    ]
+   },
+   {
+    "text": "Migan",
+    "ids": [
+     "BP_Front_02"
+    ]
+   },
+   {
+    "text": "Gwanja Nori",
+    "ids": [
+     "BP_Front_04"
+    ]
+   },
+   {
+    "text": "Injung",
+    "ids": [
+     "BP_Front_05"
+    ]
+   },
+   {
+    "text": "Yop Tok",
+    "ids": [
+     "BP_Front_06"
+    ]
+   },
+   {
+    "text": "Mit Tok",
+    "ids": [
+     "BP_Front_07"
+    ]
+   },
+   {
+    "text": "Mok Dongmaek",
+    "ids": [
+     "BP_Front_08"
+    ]
+   },
+   {
+    "text": "Mok",
+    "ids": [
+     "BP_Front_09"
+    ]
+   },
+   {
+    "text": "Soom Tong",
+    "ids": [
+     "BP_Front_10"
+    ]
+   },
+   {
+    "text": "Swe Gol",
+    "ids": [
+     "BP_Front_11"
+    ]
+   },
+   {
+    "text": "Son Mok",
+    "ids": [
+     "BP_Front_12"
+    ]
+   },
+   {
+    "text": "Myong Chi",
+    "ids": [
+     "BP_Front_13"
+    ]
+   },
+   {
+    "text": "Nuk Gol",
+    "ids": [
+     "BP_Front_14"
+    ]
+   },
+   {
+    "text": "Bokboo",
+    "ids": [
+     "BP_Front_15"
+    ]
+   },
+   {
+    "text": "Sataguni",
+    "ids": [
+     "BP_Front_16"
+    ]
+   },
+   {
+    "text": "Anjok Hobok Dari",
+    "ids": [
+     "BP_Front_17"
+    ]
+   },
+   {
+    "text": "Moorup Gwanjol",
+    "ids": [
+     "BP_Front_18"
+    ]
+   },
+   {
+    "text": "Jong Kwaeng-I",
+    "ids": [
+     "BP_Front_19"
+    ]
+   },
+   {
+    "text": "Balmok",
+    "ids": [
+     "BP_Front_20"
+    ]
+   },
+   {
+    "text": "Balkut",
+    "ids": [
+     "BP_Front_21",
+     "BP_Foot_03"
+    ]
+   },
+   {
+    "text": "Dae Sin Moon",
+    "ids": [
+     "BP_Rear_01"
+    ]
+   },
+   {
+    "text": "Hoodoo",
+    "ids": [
+     "BP_Rear_02"
+    ]
+   },
+   {
+    "text": "Gyong Boo",
+    "ids": [
+     "BP_Rear_03"
+    ]
+   },
+   {
+    "text": "Kong Pat",
+    "ids": [
+     "BP_Rear_05"
+    ]
+   },
+   {
+    "text": "Migol",
+    "ids": [
+     "BP_Rear_06"
+    ]
+   },
+   {
+    "text": "Ogum",
+    "ids": [
+     "BP_Rear_07"
+    ]
+   },
+   {
+    "text": "Dwichook Himjool",
+    "ids": [
+     "BP_Rear_08"
+    ]
+   },
+   {
+    "text": "Son",
+    "ids": [
+     "BP_Hand_01"
+    ]
+   },
+   {
+    "text": "Bandalson",
+    "ids": [
+     "BP_Hand_12"
+    ]
+   },
+   {
+    "text": "Son Dung",
+    "ids": [
+     "BP_Hand_14"
+    ]
+   },
+   {
+    "text": "Bal",
+    "ids": [
+     "BP_Foot_01"
+    ]
+   },
+   {
+    "text": "Moorup",
+    "ids": [
+     "BP_Foot_10"
+    ]
+   }
+  ]
+ ]
+}

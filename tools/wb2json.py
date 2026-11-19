@@ -37,11 +37,17 @@ def chk_id(i,where):
     if not i:probs.append(f'{where}: missing ID')
     elif i in seen:probs.append(f'{where}: ID {i} used twice')
     seen.add(i)
+# Audio status: blank / New / Redo / OK (only OK, or blank with an MP3 from before 3.86, plays for everyone)
+def ast(d):
+    v=(d.get('Audio status','') or '').strip()
+    if v and v not in ('New','Redo','OK'):probs.append(f"{d.get('ID')}: Audio status must be New, Redo or OK (is \"{v}\")")
+    if v in ('New','OK') and not d.get('MP3'):probs.append(f"{d.get('ID')}: Audio status {v} but no MP3")
+    return v
 for d in rows('Terminology'):
     w=f"Terminology {d.get('ID')}";chk_id(d.get('ID'),w)
     if d['Grade'] not in GR:probs.append(f'{w}: unknown grade "{d["Grade"]}"')
     if not d['English'] or not d['Korean']:probs.append(f'{w}: English or Korean is empty')
-    out['terms'].append({'id':d['ID'],'g':d['Grade'],'en':d['English'],'kr':d['Korean'],'say':d.get('Pronounced',''),'mp3':d.get('MP3','')})
+    out['terms'].append({'id':d['ID'],'g':d['Grade'],'en':d['English'],'kr':d['Korean'],'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'ast':ast(d)})
 for d in rows('Patterns'):
     w=f"Patterns {d.get('ID')} ({d.get('Pattern')})";chk_id(d.get('ID'),w)
     if d['Grade'] not in GR:probs.append(f'{w}: unknown grade "{d["Grade"]}"')
@@ -49,10 +55,10 @@ for d in rows('Patterns'):
     if v and s is not None and e is not None and e<=s:probs.append(f'{w}: video end {col(d,"Video end")} is not after start {col(d,"Video start")}')
     if not v and (s or e):probs.append(f'{w}: has times but no link')
     out['patterns'].append({'id':d['ID'],'g':d['Grade'],'name':d['Pattern'],'moves':int(float(d['Moves'])) if d['Moves'] else None,'meaning':d['Meaning'],
-        'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'video':{'id':v,'start':s or 0,'end':e} if v else None})
+        'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'ast':ast(d),'video':{'id':v,'start':s or 0,'end':e} if v else None})
 for d in rows('Belt meanings'):
     w=f"Belt meanings {d.get('ID')}";chk_id(d.get('ID'),w)
-    out['belts'].append({'id':d['ID'],'belt':d['Belt'],'g':d['First grade'],'meaning':d['Meaning'],'say':d.get('Pronounced',''),'mp3':d.get('MP3','')})
+    out['belts'].append({'id':d['ID'],'belt':d['Belt'],'g':d['First grade'],'meaning':d['Meaning'],'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'ast':ast(d)})
 # Questions tab (optional): Grade is All or a grade; answers and wrong answers separated by |
 out['questions']=[]
 if 'Questions' in wb.sheetnames:
@@ -78,7 +84,7 @@ if 'Body parts' in wb.sheetnames:
         if not d.get('English') or not d.get('Korean'):probs.append(f'{w}: English or Korean is empty')
         if not d.get('Chart'):probs.append(f'{w}: Chart is empty')
         out['body'].append({'id':d.get('ID',''),'g':g,'chart':d.get('Chart',''),'sec':d.get('Section',''),'en':d.get('English',''),'kr':d.get('Korean',''),
-            'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'note':d.get('Note','')})
+            'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'ast':ast(d),'note':d.get('Note','')})
 json.dump(out,open(sys.argv[2],'w'),ensure_ascii=False)
 print(len(out.get('questions',[])),'questions,',len(out['body']),'body parts,',len(out['terms']),'terms,',len(out['patterns']),'patterns,',len(out['belts']),'belts,',sum(1 for p in out['patterns'] if p['video']),'videos')
 print('PROBLEMS:' if probs else 'No problems found.');[print(' -',p) for p in probs]
