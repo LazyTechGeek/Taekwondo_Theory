@@ -12626,7 +12626,7 @@ function bmSelect(id,say){
   const cap=$('#bmCap');cap.classList.remove('rev');
   cap.innerHTML=b?`<div class="bmTxt"><span class="en">${esc(b.en)}</span><span class="kr">${esc(b.kr)}</span></div><button class="sgPlay" data-id="${b.id}" data-say="${esc(b.kr)}" aria-label="Hear ${esc(b.kr)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.500v13l11-6.500z"/></svg></button>`
     :`<div class="bmTxt hint">${BM.cover==='none'?'Tap a number on the picture or a word in the list.':'Tap a number, then tap the bar to check your answer.'}</div>`;
-  if(b&&say&&BM.cover==='none')sgPlayOne(cap.querySelector('.sgPlay'));   // in Hide modes it stays silent until the answer is shown
+  // never plays by itself (Dave): the ▶ button in the bar plays the Korean when wanted
 }
 $('#bmTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;sgStop();BM.tab=b.dataset.v;BM.sel=null;renderBody()};
 $('#bmCover').onclick=e=>{const b=e.target.closest('button');if(!b)return;sgStop();BM.cover=b.dataset.v;
@@ -12635,7 +12635,7 @@ $('#bmCover').onclick=e=>{const b=e.target.closest('button');if(!b)return;sgStop
 $('#body').addEventListener('click',e=>{
   const pb=e.target.closest('.sgPlay');if(pb){sgPlayOne(pb);return}
   const d=e.target.closest('.bmDot');if(d){sgStop();bmSelect(d.dataset.id,true);return}
-  const cap=e.target.closest('.bmCap');if(cap&&BM.cover!=='none'&&BM.sel){if(!cap.classList.contains('rev')){cap.classList.add('rev');sgPlayOne(cap.querySelector('.sgPlay'))}return}
+  const cap=e.target.closest('.bmCap');if(cap&&BM.cover!=='none'&&BM.sel){cap.classList.add('rev');return}
   const r=e.target.closest('.bmRow');if(r){
     if(BM.cover!=='none'){r.classList.toggle('rev');return}
     sgStop();bmSelect(r.dataset.id,true)}});
@@ -14834,8 +14834,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.84';
+const APP_VERSION='3.85';
 const VERSION_NOTES=[
+['3.85','Body Map: tapping a number or a word shows the English and Korean without playing anything; press ▶ to hear it.'],
 ['3.84','New Body Map in Learn and Practice: front and rear target areas, hand parts and foot parts on cartoon pictures, with numbered spots to tap, the High / Middle / Low sections, play buttons and Hide Korean / Hide English. The words come from the new Body parts tab of the workbook. The Study Guide has a Body Map card too.'],
 ['3.83','Spelling fix: Reverse footsword is Balkal dung (was Baldal dung).'],
   ['3.82','Nothing is locked any more: every Grand Prix circuit, the Cup, every kart and every Turbo bike is open from the start.'],
