@@ -31,6 +31,7 @@ Live on GitHub Pages from this repo. Read this file first; keep it short and upd
 - Grade column `10th_Kup`…`1st_Kup`, `1st_Dan`…`5th_Dan` (Questions may use `All`). Belt: White, Yellow tag … Black (all Dan grades = Black).
 - IDs: `T_10th-Kup_01`, `P_1st-Dan_3`, `B_White`, `Q_10th-Kup_01`, `Q_All_01`. Never reuse or renumber an ID; a new row takes the next unused number; a wording fix keeps its ID (audio is linked by ID).
 - Yellow columns are Dave's: Pronounced / MP3 (Questions: Question pronounced, Question MP3, Answer pronounced, Answer MP3), Wrong answers, Video link, Video start/end (m:ss).
+- Questions tab column "Appears in games" (3.92): blank / Yes = normal; No = Study Guide only (`q.ng`, filtered out of `QS`, so no quiz, game or Grading Simulator ever gets it). For long answers that cannot be multiple choice (`Q_All_07`-`09`, about patterns; no wrong answers; audio = chunk 8, `audio-work/batch-5*`).
 - Multiple answers / wrong answers are separated by `|`. A question's wrong answers are only ever used for that question (never borrowed).
 - Watch for slips Dave has made before: a header overwritten (e.g. "Pronounced" typed over), duplicate IDs, editing an older copy.
 

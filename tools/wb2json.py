@@ -78,6 +78,10 @@ if 'Questions' in wb.sheetnames:
         out['questions'].append({'id':i,'g':g,'q':d['Question'],'a':ans,'w':wr,
             'qsay':col(d,'Question pronounced') or d.get('Pronounced',''),'qmp3':col(d,'Question MP3') or d.get('MP3',''),
             'asay':col(d,'Answer pronounced'),'amp3':col(d,'Answer MP3'),'qast':qa(d,'Question'),'aast':qa(d,'Answer')})
+        # Appears in games: blank / Yes = normal; No = Study Guide only (long answers that cannot be multiple choice)
+        ag=(col(d,'Appears in games') or '').strip().lower()
+        if ag not in ('','yes','no'):probs.append(f'{w}: Appears in games must be Yes or No')
+        if ag=='no':out['questions'][-1]['ng']=1
 # Body parts tab (optional): labels from the four body charts; Grade is All or a grade
 out['body']=[]
 if 'Body parts' in wb.sheetnames:
