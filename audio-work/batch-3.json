@@ -1,0 +1,37 @@
+[
+ {
+  "text": "Kaunde",
+  "say": "Ka-oon-day",
+  "file": "kaunde-2.mp3"
+ },
+ {
+  "text": "Yop chajirugi",
+  "say": "Yop cha-jee-roo-gee",
+  "file": "yop-chajirugi-2.mp3"
+ },
+ {
+  "text": "Jayoo matsoki",
+  "say": "Ja-yoo mat-sog-ee",
+  "file": "jayoo-matsoki-2.mp3"
+ },
+ {
+  "text": "Moa junbi sogi 'A'",
+  "say": "Moa joon-bee sog-ee, A",
+  "file": "moa-junbi-sogi-a-2.mp3"
+ },
+ {
+  "text": "Sewo jirugi",
+  "say": "Seh-wo jee-roo-gee",
+  "file": "sewo-jirugi-2.mp3"
+ },
+ {
+  "text": "Sewo chaggie",
+  "say": "Seh-wo chag-ee",
+  "file": "sewo-chaggie-2.mp3"
+ },
+ {
+  "text": "Wae bal sogi",
+  "say": "Way bal sog-ee",
+  "file": "wae-bal-sogi-2.mp3"
+ }
+]
