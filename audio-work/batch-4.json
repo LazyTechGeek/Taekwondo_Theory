@@ -1,0 +1,51 @@
+[
+ {
+  "id": "Q_All_01",
+  "q": "When was Taekwondo introduced to the UK?",
+  "a": "1967",
+  "qfile": "q-all-01-q.mp3",
+  "afile": "q-all-01-a.mp3"
+ },
+ {
+  "id": "Q_10th-Kup_01",
+  "q": "What are the tenets of Taekwondo?",
+  "a": "Courtesy, Integrity, Perseverance, Self-control and Indomitable spirit",
+  "qfile": "q-10th-kup-01-q.mp3",
+  "afile": "q-10th-kup-01-a.mp3"
+ },
+ {
+  "id": "Q_All_03",
+  "q": "When was taekwondo inaugurated?",
+  "a": "11 April 1955",
+  "qfile": "q-all-03-q.mp3",
+  "afile": "q-all-03-a.mp3"
+ },
+ {
+  "id": "Q_All_02",
+  "q": "Who is the Founder of Taekwon-Do?",
+  "a": "General Choi Hong Hi",
+  "qfile": "q-all-02-q.mp3",
+  "afile": "q-all-02-a.mp3"
+ },
+ {
+  "id": "Q_All_06",
+  "q": "Why are there 24 patterns in Taekwon-Do?",
+  "a": "They represent the 24 hours of a day, symbolising a person's lifetime",
+  "qfile": "q-all-06-q.mp3",
+  "afile": "q-all-06-a.mp3"
+ },
+ {
+  "id": "Q_All_04",
+  "q": "In which country did Taekwon-Do originate?",
+  "a": "Korea",
+  "qfile": "q-all-04-q.mp3",
+  "afile": "q-all-04-a.mp3"
+ },
+ {
+  "id": "Q_All_05",
+  "q": "How many patterns are there in Taekwondo?",
+  "a": "24",
+  "qfile": "q-all-05-q.mp3",
+  "afile": "q-all-05-a.mp3"
+ }
+]

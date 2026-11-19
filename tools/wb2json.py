@@ -43,6 +43,10 @@ def ast(d):
     if v and v not in ('New','Redo','OK'):probs.append(f"{d.get('ID')}: Audio status must be New, Redo or OK (is \"{v}\")")
     if v in ('New','OK') and not d.get('MP3'):probs.append(f"{d.get('ID')}: Audio status {v} but no MP3")
     return v
+def qa(d,w):  # Question / Answer audio status on the Questions tab
+    v=(col(d,w+' audio status') or '').strip()
+    if v and v not in ('New','Redo','OK'):probs.append(f"{d.get('ID')}: {w} audio status must be New, Redo or OK")
+    return v
 for d in rows('Terminology'):
     w=f"Terminology {d.get('ID')}";chk_id(d.get('ID'),w)
     if d['Grade'] not in GR:probs.append(f'{w}: unknown grade "{d["Grade"]}"')
@@ -73,7 +77,7 @@ if 'Questions' in wb.sheetnames:
         ans=split(d.get('Answer'));wr=[x for x in split(d.get('Wrong answers')) if x.lower() not in [a.lower() for a in ans]]
         out['questions'].append({'id':i,'g':g,'q':d['Question'],'a':ans,'w':wr,
             'qsay':col(d,'Question pronounced') or d.get('Pronounced',''),'qmp3':col(d,'Question MP3') or d.get('MP3',''),
-            'asay':col(d,'Answer pronounced'),'amp3':col(d,'Answer MP3')})
+            'asay':col(d,'Answer pronounced'),'amp3':col(d,'Answer MP3'),'qast':qa(d,'Question'),'aast':qa(d,'Answer')})
 # Body parts tab (optional): labels from the four body charts; Grade is All or a grade
 out['body']=[]
 if 'Body parts' in wb.sheetnames:
