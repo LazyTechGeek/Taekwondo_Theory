@@ -123,8 +123,8 @@ if 'Step Sparring' in wb.sheetnames:
         t=num(d.get('Type'),w,'Type')
         if t not in (1,2,3):probs.append(f'{w}: Type must be 1, 2 or 3')
         out['stepspar'].append({'id':d.get('ID',''),'type':t,'no':num(d.get('No.'),w,'No.',0),'start':d.get('Start image',''),
-            'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes','')})
-        r=out['stepspar'][-1];files=[r['start']]+r['moves']+r['counters']
+            'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes',''),'ready':d.get('Ready image','') or ''})
+        r=out['stepspar'][-1];files=[r['ready'],r['start']]+r['moves']+r['counters']
         if d.get('Return image 1'):      # the way back: the other partner attacks
             r['back']={'start':d.get('Return start image',''),'moves':[d.get(f'Return image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Return counter {i}','') for i in (1,2,3)) if x]}
             files+=[r['back']['start']]+r['back']['moves']+r['back']['counters']

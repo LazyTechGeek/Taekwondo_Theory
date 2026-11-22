@@ -1,0 +1,617 @@
+{
+ "fwd1": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "01-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "01-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "01-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "04-counter2.png",
+   0
+  ]
+ ],
+ "fwd2": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "04-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "04-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "04-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "02-counter1.png",
+   0
+  ]
+ ],
+ "fwd3": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "03-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "03-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "03-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "03-counter1.png",
+   0
+  ]
+ ],
+ "fwd4": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "04-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "04-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "04-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "04-counter1.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "04-counter2.png",
+   0
+  ]
+ ],
+ "fwd5": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "05-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "05-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "05-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "05-counter1.png",
+   0
+  ]
+ ],
+ "fwd6": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "06-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "06-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "06-move1-far.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "06-counter1.png",
+   0
+  ]
+ ],
+ "fwd7": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "05-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "05-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "07-move3.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "07-counter1.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "07-counter3.png",
+   0
+  ],
+  [
+   "Counter 3",
+   "07-counter2.png",
+   0
+  ]
+ ],
+ "fwd8": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "06-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "06-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "08-move3.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "08-counter1.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "08-counter2.png",
+   0
+  ]
+ ],
+ "fwd9": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "09-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "09-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "09-move1.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "09-counter1.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "09-counter3.png",
+   0
+  ]
+ ],
+ "fwd10": [
+  [
+   "Start",
+   "ready-lowblock.png",
+   0
+  ],
+  [
+   "Move 1",
+   "06-move1.png",
+   0
+  ],
+  [
+   "Move 2",
+   "06-move2.png",
+   0
+  ],
+  [
+   "Move 3",
+   "06-move1-far.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "10-counter1.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "08-counter1.png",
+   0
+  ],
+  [
+   "Counter 3",
+   "10-counter3.png",
+   0
+  ]
+ ],
+ "back1": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-01-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-01-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-01-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-04-counter1.png",
+   0
+  ]
+ ],
+ "back2": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-04-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-04-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-04-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-02b-counter1.png",
+   0
+  ]
+ ],
+ "back3": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-03-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-03-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-03-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-03-move2-hit.png",
+   0
+  ]
+ ],
+ "back4": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-04-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-04-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-04-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-04-counter2.png",
+   0
+  ],
+  [
+   "Counter 2",
+   "back-04-counter1.png",
+   0
+  ],
+  [
+   "Counter 3",
+   "back-04-counter2.png",
+   0
+  ]
+ ],
+ "back5": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-05-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-05-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-05-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-05-counter1.png",
+   1
+  ]
+ ],
+ "back6": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-06-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-06-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-06-move2-far.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-06-counter1.png",
+   1
+  ]
+ ],
+ "back7": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-05-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-05-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-07-move3.png",
+   1
+  ],
+  [
+   "Counter 1",
+   "back-07-counter1.png",
+   1
+  ],
+  [
+   "Counter 2",
+   "back-07-counter3.png",
+   1
+  ],
+  [
+   "Counter 3",
+   "back-07-counter2.png",
+   1
+  ]
+ ],
+ "back8": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-06-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-06-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-08-move3.png",
+   1
+  ],
+  [
+   "Counter 1",
+   "back-08-counter1.png",
+   1
+  ],
+  [
+   "Counter 2",
+   "back-08-counter2.png",
+   1
+  ]
+ ],
+ "back9": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-09-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-09-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-09-move2.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-09-counter1.png",
+   1
+  ],
+  [
+   "Counter 2",
+   "back-09-counter3.png",
+   1
+  ]
+ ],
+ "back10": [
+  [
+   "Start",
+   "back-ready-lowblock.png",
+   1
+  ],
+  [
+   "Move 1",
+   "back-06-move2.png",
+   0
+  ],
+  [
+   "Move 2",
+   "back-06-move1.png",
+   0
+  ],
+  [
+   "Move 3",
+   "back-06-move2-far.png",
+   0
+  ],
+  [
+   "Counter 1",
+   "back-10-counter1.png",
+   1
+  ],
+  [
+   "Counter 2",
+   "back-08-counter1.png",
+   1
+  ],
+  [
+   "Counter 3",
+   "back-10-counter3.png",
+   1
+  ]
+ ]
+}
