@@ -5088,7 +5088,7 @@ requestAnimationFrame(frame);
   #ssPic .trk.jump img, #ssPic .trk.jump .pend { transition:none; }
   #ssPic .trk img { display:block; object-fit:contain; }
   #ssPic .trk .pend { top:6px; height:116px; display:flex; align-items:center; justify-content:center; color:#666; font-weight:700; font-size:14px; border:2px dashed #bbb; border-radius:8px; background:#f1f1f1; }
-  #ssPic .dots { display:flex; margin:2px 6px 4px; }
+  #ssPic .dots { display:none; margin:2px 6px 4px; }   /* 3.101: no Ready / 1 / 2 / 3 labels; just the title, the picture and the number */
   #ssPic .dots span { flex:1; text-align:center; font-size:11px; font-weight:800; color:#999; border-top:3px solid #ddd; padding-top:2px; }
   #ssPic .dots span.done { border-color:var(--gold); }
   #ssPic .dots span.on { border-color:var(--gold); color:#1d1d1f; }
@@ -6705,7 +6705,7 @@ async function stepSet(run, it, backAttacks) {
   }
   const n = Math.max(1, it.counters.length);
   for (let k = 0; k < n; k++) {
-    showPic(it.counters[k] || "", top, (num ? num + " · " : "") + "Counter", true, it.type, it.type);
+    showPic(it.counters[k] || "", top, num, true, it.type, it.type);   // no "Counter" wording (Dave): only the strip turns red
     each((att, def) => setPose(def, lineWorkPose(k % 2 ? "kick" : "punch", k + 1)));
     await sleep(1500); guard(run);                       // each counter picture stays up for a moment
   }
@@ -16906,8 +16906,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.100';
+const APP_VERSION='3.101';
 const VERSION_NOTES=[
+['3.101','Grading Simulator (still hidden): the step sparring picture only shows its title and the number; no move or counter labels.'],
 ['3.100','Grading Simulator (still hidden): the step sparring picture now slides along a strip, one step for each move, to show the pair travelling.'],
 ['3.99','Grading Simulator (still hidden): the examiner now calls all the line work in the Benjamin voice.'],
 ['3.98','Grading Simulator (still hidden): the examiner no longer says "random line work"; the moves are just called.'],
