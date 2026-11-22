@@ -6141,6 +6141,7 @@ function playerPrompt(label, ms) {
   return new Promise((res, rej) => {
     const b = document.createElement("button");
     b.className = "primary"; b.textContent = label; b.style.fontSize = "16px";
+    b.style.whiteSpace = "pre-line"; b.style.lineHeight = "1.3"; b.style.height = "auto"; b.style.overflowWrap = "anywhere";   // 3.111: long lines wrap (they ran off the side of the button)
     let finished = false;
     const done = () => { if (finished) return; finished = true; clearPrompt(); run === RUN ? res() : rej(CANCEL); };
     b.onclick = done;
@@ -6569,6 +6570,7 @@ const VO_LINES = {
 };
 function voFor(text) {                       // the clips for an examiner's line: [[url, the words (for text-to-speech if the file fails)], ...] or null
   if (!VO_DIR || !text) return null;
+  if (SEQ[curStage] && SEQ[curStage].name === "Questions") return null;   // 3.111 (Dave): the whole question section is text-to-speech until all of it is recorded (one voice, no switching)
   const m = /^(.+)\. Position (\d+)\.$/.exec(text);
   if (m) {                                   // the roll call: a name clip, then a position clip (the player's typed name has no clip: "Your turn." instead)
     const pos = [vo("pos-" + m[2]), "Position " + m[2] + "."];
@@ -7306,7 +7308,7 @@ function renderStepScene() {
     ellipse(px, fl + 1, w * 0.46, 4.5, "rgba(0,0,0,0.2)");
     ctx.drawImage(im, px - w / 2, fl + 2 - h, w, h);
     const belt = ssBelt(p); if (belt) ctx.drawImage(belt, px - w / 2, fl + 2 - h, w, h);
-  } else {                                           // no picture yet
+  } else if (!p || !im || im.bad) {                  // no picture exists (3.111: while one is still downloading nothing is drawn, not this card)
     const w = 96, h = 62;
     ctx.fillStyle = "rgba(241,241,241,0.95)"; rr(sc.x - w / 2, fl - h, w, h, 6); ctx.fill();
     ctx.setLineDash([4, 3]); ctx.strokeStyle = "#9a9a9a"; ctx.lineWidth = 1.2; ctx.stroke(); ctx.setLineDash([]);
@@ -7975,7 +7977,7 @@ const STAGES = [
     for (let p = 1; p <= 10; p++) {
       const c = byPos(p);
       await examinerSay(`${c.name}. Position ${p}.`, 150);
-      if (c.isPlayer) { await playerPrompt("Say out loud: “Yes, sir!” then tap here", 8000); guard(run); }
+      if (c.isPlayer) { await playerPrompt("Say out loud, then tap:\n“Yes, sir!”", 8000); guard(run); }
       const reply = studentSay(c, "Yes, sir!");
       await sleep(250); guard(run);
       const m = markOf(p);
@@ -7986,7 +7988,7 @@ const STAGES = [
     await examinerSay((g.say && g.say["Name and grade"]) || "Name and grade, starting from position one.");
     for (let p = 1; p <= 10; p++) {
       const c = byPos(p);
-      if (c.isPlayer) { await playerPrompt(`Raise your hand and say out loud: “${c.name}, ${g.kupText}, sir!” then tap here`, 9000); guard(run); }
+      if (c.isPlayer) { await playerPrompt(`Raise your hand and say, then tap:\n“${c.name}, ${g.kupText}, sir!”`, 9000); guard(run); }
       setPose(c, { aR: 2.95, lR: 12 });
       await sleep(300); guard(run);
       await studentSay(c, `${c.name}, ${g.kupText}, sir!`);
@@ -8164,11 +8166,7 @@ async function askThree(run, g, c) {
   while (c.asked < c.qs.length) {
     const qi = c.asked, q = c.qs[qi];
     clearPrompt();
-    if (qi === 0 && VO_DIR) {                               // 3.110: recorded first name ("Your turn." for the player), then the question
-      examinerBubble = c.isPlayer ? "Your turn." : c.first + "."; setLine("Examiner", examinerBubble);
-      await playClip(vo(c.isPlayer ? "your-turn" : "first-" + String(c.first).toLowerCase()), examinerBubble, { pitch: 0.8, rate: 0.95 }); guard(run);
-      await examinerSay(q.q, 100);
-    } else await examinerSay(qi === 0 ? `${c.first}. ${q.q}` : q.q, 100);
+    await examinerSay(qi === 0 ? `${c.isPlayer ? "Your turn" : c.first}. ${q.q}` : q.q, 100);   // 3.111: never the player's typed name
     let ans;
     if (c.isPlayer) {
       const ui = showAnswers(q, true, 20000);
@@ -8388,6 +8386,8 @@ function newGame() {
   grade.lw = hostList("GS_LW", key) || (grade.lineWork || []).map(x => ({ dir: x.dir === "backward" ? "Backwards" : "Forwards", text: x.call,
     tts: `Going ${x.dir === "backward" ? "backwards" : "forwards"}, ${x.call}.`, mp3: "", anim: [KW[x.kind] || "punch"], qty: 4, steps: 1 }));
   grade.ss = hostList("GS_SS", key) || [];
+  // 3.111: fetch every step sparring picture as the grading starts, so none is still downloading when its turn comes
+  try { grade.ss.forEach(it => [it.ready, it.start, ...it.moves, ...it.counters, ...(it.back ? [it.back.start, ...it.back.moves, ...it.back.counters] : [])].forEach(ssImage)); } catch (_) {}
   SEQ = STAGES.slice(); grade.planned = false; grade.say = {};
   let plan = null; try { plan = HOST && HOST.GS_PLAN ? HOST.GS_PLAN(key) : null; } catch (_) {}
   if (plan && plan.order && Object.keys(plan.stages).length) {
@@ -17790,8 +17790,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.110';
+const APP_VERSION='3.111';
 const VERSION_NOTES=[
+['3.111','Grading Simulator (still hidden): the button that tells you what to say now fits on the screen (it wraps onto two lines), and the step sparring pictures load before they are needed, so the “Image pending” card no longer flashes up. The question section is spoken in one voice again.'],
 ['3.110','Grading Simulator (still hidden): when it is you, the examiner says “Your turn.” and you say your own lines out loud, then tap. The game no longer speaks for you.'],
 ['3.109','Grading Simulator (still hidden): in step sparring the pair now step the same distance in every number.'],
 ['3.108','Grading Simulator (still hidden): recorded voices. The examiner now speaks the roll call, the stage calls, the step sparring calls and the sparring comments, and the students answer in their own male and female voices.'],
