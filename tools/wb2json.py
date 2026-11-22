@@ -114,6 +114,9 @@ if 'Line Work' in wb.sheetnames:
             'stance':d.get('Stance',''),'qty':num(d.get('Quantity'),w,'Quantity',4),'steps':num(d.get('Steps'),w,'Steps',1),'anim':an,
             'tts':d.get('Text to speech',''),'mp3':d.get('MP3',''),'note':d.get('Notes','')})
 out['stepspar']=[]
+import os as _os
+_sz=_os.path.join(_os.path.dirname(_os.path.abspath(__file__)),'..','img','sparring','sizes.json')
+SIZES=json.load(open(_sz)) if _os.path.exists(_sz) else {}   # made by tools/sparring_sizes.py
 if 'Step Sparring' in wb.sheetnames:
     for d in rows('Step Sparring'):
         w=f"Step Sparring {d.get('ID')}";chk_id(d.get('ID'),w)
@@ -121,6 +124,9 @@ if 'Step Sparring' in wb.sheetnames:
         if t not in (1,2,3):probs.append(f'{w}: Type must be 1, 2 or 3')
         out['stepspar'].append({'id':d.get('ID',''),'type':t,'no':num(d.get('No.'),w,'No.',0),'start':d.get('Start image',''),
             'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes','')})
+        r=out['stepspar'][-1];r['size']={f:[SIZES[f]['w'],SIZES[f]['h'],SIZES[f].get('head') or 110] for f in [r['start']]+r['moves']+r['counters'] if f in SIZES}
+        for f in [r['start']]+r['moves']+r['counters']:
+            if f and f not in SIZES:probs.append(f'{w}: picture "{f}" is not in img/sparring (or run tools/sparring_sizes.py)')
 STAGES=['Line-up','Name and grade','Line work','Patterns','Step sparring','Free sparring','Questions']
 out['gorder']=[];out['gsay']={}
 if 'Grading Order' in wb.sheetnames:

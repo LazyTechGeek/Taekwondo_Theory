@@ -6460,6 +6460,7 @@ function render() {
   ctx.setTransform(...base);
   ctx.clearRect(view.x, view.y, view.w, view.h);
   if (fight) { renderFight(); return; }
+  if (stepScene) { renderStepScene(); return; }
   // camera: zooms in on you during the interactive pattern
   cam.z += (cam.target - cam.z) * 0.08;
   if (player) { cam.fx += (player.x - cam.fx) * 0.12; cam.fy += (player.y + 12 - cam.fy) * 0.12; }
@@ -6686,32 +6687,19 @@ async function stepSparringPair(f, b, durMs) {
     }
   }
 }
-// One number of step sparring, every pair together. backAttacks: the back row attacks (everyone moves up the hall).
-async function stepSet(run, it, backAttacks) {
-  const dir = backAttacks ? -1 : 1, pairs = frontRow().map(f => ({ f, b: byPos(f.pos + 1) }));
-  const top = `${it.type}-step sparring`, num = it.no ? `Number ${it.no}` : "";
-  const each = fn => pairs.forEach(({ f, b }) => fn(backAttacks ? b : f, backAttacks ? f : b));
-  const moveAll = s => Promise.all(pairs.map(({ f, b }) => { const hf = pairHome(f, true), hb = pairHome(b, true);
-    return Promise.all([moveTo(f, hf.x, hf.y + dir * 5 * s, 26, { face: false }), moveTo(b, hb.x, hb.y + dir * 5 * s, 26, { face: false })]); }));
-  // ready: 3-step starts from a low block, 2-step from a guarding block, 1-step from ready stance
-  showPic(it.start, top, num, false, 0, it.type);
-  each((att, def) => { setPose(att, it.type === 3 ? lineWorkPose("lowblock", 2) : it.type === 2 ? lineWorkPose("knife", 1) : REST); setPose(def, REST); });
+// One number of step sparring in the close-up: ready (left), then each move slides one place along, then the counter(s).
+async function stepSet(run, it) {
+  const sc = stepScene, all = [it.start, ...it.moves, ...it.counters];
+  all.forEach(ssImage);
+  const maxW = Math.max(...all.map(ssWidth)), room = Math.max(0, view.w - 3 - maxW);   // the widest picture still fits at both ends
+  sc.c0 = view.x + view.w / 2 - room / 2; sc.c1 = view.x + view.w / 2 + room / 2;
+  sc.num = it.no ? "Number " + it.no : "";
+  ssShow(it.start, 0, true);
   await sleep(1300); guard(run);
-  for (let s = 1; s <= it.type; s++) {
-    showPic(it.moves[s - 1], top, num, false, s, it.type);
-    each((att, def) => { setPose(att, lineWorkPose(it.type === 2 && s === 2 ? "kick" : "punch", s)); setPose(def, lineWorkPose("inblock", s + 1)); });
-    await moveAll(s); guard(run);
-    await sleep(1000); guard(run);
-  }
+  for (let s = 1; s <= it.type; s++) { ssShow(it.moves[s - 1], s / it.type); await sleep(1450); guard(run); }
   const n = Math.max(1, it.counters.length);
-  for (let k = 0; k < n; k++) {
-    showPic(it.counters[k] || "", top, num, true, it.type, it.type);   // no "Counter" wording (Dave): only the strip turns red
-    each((att, def) => setPose(def, lineWorkPose(k % 2 ? "kick" : "punch", k + 1)));
-    await sleep(1500); guard(run);                       // each counter picture stays up for a moment
-  }
-  each((att, def) => { setPose(att, REST); setPose(def, REST); });
-  await moveAll(0); guard(run);
-  await sleep(350); guard(run);
+  for (let k = 0; k < n; k++) { ssShow(it.counters[k] || null, 1); await sleep(1500); guard(run); }   // each counter picture stays up for a moment
+  await sleep(250); guard(run);
 }
 const guardPose = () => ({ aL: 2.0, lL: 6, aR: 2.1, lR: 6, spread: rand(2, 4) });
 // A sparring pair moves as one unit: whoever moves, their partner follows, always facing each other
@@ -7169,11 +7157,10 @@ function bigText(text, x, y, size, col) {
   ctx.lineWidth = size / 5; ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineJoin = "round";
   ctx.strokeText(text, x, y); ctx.fillStyle = col; ctx.fillText(text, x, y);
 }
-function renderFight() {
-  const f = fight, S = FIGHT.size;
+// The close-up hall (top table with the three examiners watching, mat in front): free sparring and step sparring share it.
+// mid = where the examiners look; noting = the main examiner nods and writes.
+function drawCloseHall(mid, noting, now) {
   const vTop = Math.min(0, view.y) - 6, vBot = Math.max(VH, view.y + view.h) + 6;   // fill the whole picture on a tall screen
-  ctx.save();
-  if (f.shake > 0) ctx.translate(rand(-3, 3), rand(-2.5, 2.5));
   // back wall, floor and mat first — the table sits in front of them
   ctx.fillStyle = "#EFE8DA"; ctx.fillRect(VX0 - 6, vTop, VW + 12, 132 - vTop);
   ctx.fillStyle = "#F6F1E6"; ctx.fillRect(VX0 - 6, vTop, VW + 12, 30 - vTop);
@@ -7188,18 +7175,17 @@ function renderFight() {
   ctx.fillStyle = "rgba(255,255,255,0.07)"; ctx.fillRect(VX0 - 6, 214, VW + 12, 5);
   ctx.strokeStyle = "#D84A3C"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(VX0 + 22, 226); ctx.lineTo(VX0 + VW - 22, 226); ctx.stroke();
   // top table, close up. The three examiners watch the sparring; after a good technique the main examiner nods and makes a note.
-  const mid = (f.me.x + f.op.x) / 2, noting = f.note > 0;
   ctx.save(); ctx.translate(190, 0); ctx.scale(2, 2); ctx.translate(-190, -20);
   const table = [{ x: 160, y: 76, skin: "#E9C6A0", hair: "#9A9A9A" }, { x: 190, y: 76, skin: "#E6BE9C", hair: "#4A423C", look: "main" }, { x: 220, y: 76, skin: "#E9C6A0", hair: "#3A2A20" }];
   for (const e of table) {
     e.lookX = Math.max(-1, Math.min(1, (mid - (190 + (e.x - 190) * 2)) / 60));
-    if (e.look === "main" && noting) { e.nod = 0.5 + Math.sin(f.now * 0.012) * 0.5; e.lookX *= 0.3; }
+    if (e.look === "main" && noting) { e.nod = 0.5 + Math.sin(now * 0.012) * 0.5; e.lookX *= 0.3; }
     drawExaminer(e);
   }
   ctx.fillStyle = "#1A3399"; ctx.fillRect(126, 90, 128, 5);
   for (const px of [160, 190, 220]) drawPaper(px, 90.4);
   if (noting) {                                                          // his hand writing on the sheet
-    const hx = 191.5 + Math.sin(f.now * 0.03) * 1.6, hy = 92;
+    const hx = 191.5 + Math.sin(now * 0.03) * 1.6, hy = 92;
     ctx.strokeStyle = "#14213D"; ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(196, 89.4); ctx.lineTo(hx + 1, hy); ctx.stroke();
     circle(hx, hy, 1.25, "#E6BE9C");
     ctx.strokeStyle = "#1B2A55"; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(hx - 0.4, hy + 0.6); ctx.lineTo(hx + 1.4, hy - 2.4); ctx.stroke();
@@ -7208,6 +7194,56 @@ function renderFight() {
   badge(imgs.L, 147, 106, 8.5); badge(imgs.R, 233, 106, 8.5);
   if (imgs.M.complete && imgs.M.naturalWidth) ctx.drawImage(imgs.M, 176.5, 96.5, 27, 17.2);
   ctx.restore();
+}
+// ---------------------------------------------------------------------
+//  STEP SPARRING close-up (3.102): no little figures; the cartoon pair for each move stands on the mat in front of the
+//  top table, every picture at one scale (by the defender's head width), sliding one place along for each step.
+// ---------------------------------------------------------------------
+let stepScene = null;                        // { title, num, pic, x, tx, c0, c1 } while the pictures are showing
+const SS_HEAD = 17.2;                        // how wide a head is drawn, in hall units (Dave: a little smaller than the examiners')
+const ssCache = {};
+function ssImage(p) {                        // p = { url, w, h, head } or null
+  if (!p) return null;
+  if (!ssCache[p.url]) { const im = new Image(); im.onerror = () => { im.bad = true; }; im.src = p.url; ssCache[p.url] = im; }
+  return ssCache[p.url];
+}
+const ssWidth = p => p ? p.w * SS_HEAD / (p.head || 110) : 96;
+function ssShow(p, frac, jump) {             // frac 0..1 = how far along the mat; jump = no slide (the ready position)
+  const sc = stepScene; if (!sc) return;
+  sc.pic = p; ssImage(p);
+  sc.tx = sc.c0 + (sc.c1 - sc.c0) * frac; if (jump) sc.x = sc.tx;
+}
+function renderStepScene() {
+  const sc = stepScene;
+  sc.x += (sc.tx - sc.x) * 0.14;                     // the slide
+  ctx.save();
+  drawCloseHall(sc.x, false, 0);
+  const p = sc.pic, im = ssImage(p), fl = FIGHT.floor;
+  if (p && im && im.complete && im.naturalWidth && !im.bad) {
+    const w = ssWidth(p), h = w * p.h / p.w;
+    ellipse(sc.x, fl + 1, w * 0.46, 4.5, "rgba(0,0,0,0.2)");
+    ctx.drawImage(im, sc.x - w / 2, fl + 2 - h, w, h);
+  } else {                                           // no picture yet
+    const w = 96, h = 62;
+    ctx.fillStyle = "rgba(241,241,241,0.95)"; rr(sc.x - w / 2, fl - h, w, h, 6); ctx.fill();
+    ctx.setLineDash([4, 3]); ctx.strokeStyle = "#9a9a9a"; ctx.lineWidth = 1.2; ctx.stroke(); ctx.setLineDash([]);
+    ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.font = "800 9px system-ui, -apple-system, sans-serif"; ctx.fillStyle = "#666";
+    ctx.fillText("Image pending", sc.x, fl - h / 2);
+  }
+  ctx.restore();
+  // what is being done, top centre (where the round clock is in free sparring): no other words, nothing to read while it moves
+  ctx.textBaseline = "middle"; ctx.font = "800 8.5px system-ui, -apple-system, sans-serif";
+  const t1 = sc.title, t2 = sc.num ? "  " + sc.num : "", w1 = ctx.measureText(t1).width, w2 = ctx.measureText(t2).width, bw = w1 + w2 + 16;
+  ctx.fillStyle = "rgba(20,20,22,0.9)"; rr(190 - bw / 2, view.y + 5, bw, 19, 6); ctx.fill(); ctx.strokeStyle = "#F5D547"; ctx.lineWidth = 1; ctx.stroke();
+  ctx.textAlign = "left"; ctx.fillStyle = "#F5D547"; ctx.fillText(t1, 190 - bw / 2 + 8, view.y + 15);
+  ctx.fillStyle = "#fff"; ctx.fillText(t2, 190 - bw / 2 + 8 + w1, view.y + 15);
+}
+function renderFight() {
+  const f = fight, S = FIGHT.size;
+  const vTop = Math.min(0, view.y) - 6, vBot = Math.max(VH, view.y + view.h) + 6;   // fill the whole picture on a tall screen
+  ctx.save();
+  if (f.shake > 0) ctx.translate(rand(-3, 3), rand(-2.5, 2.5));
+  drawCloseHall((f.me.x + f.op.x) / 2, f.note > 0, f.now);
   // dust from dashes
   for (const e of f.fx) if (e.kind === "dust") { const p = 1 - e.t / e.max; ctx.fillStyle = `rgba(255,255,255,${0.5 * (1 - p)})`; ctx.beginPath(); ctx.arc(e.x, e.y - p * 6, 3 + p * 5, 0, 7); ctx.fill(); }
   // fighters (whoever is attacking is drawn on top), a little larger than life
@@ -7957,14 +7993,17 @@ const STAGES = [
     await toPairHomes(all(), 40, true); guard(run);
     await sleep(400); guard(run);
     const WORD = ["", "One", "Two", "Three"];
-    let turn = 0;
     for (let a = 0; a < list.length;) {                 // the examiner calls each set once ("numbers 1 to 4"), not every number
       let b = a; while (b + 1 < list.length && list[b + 1].type === list[a].type) b++;
       const t = list[a].type, lo = list[a].no, hi = list[b].no;
       const nums = !lo ? "" : lo === hi ? `, number ${lo}` : `, numbers ${lo} to ${hi}`;
       await examinerSay(`${t}-step sparring${nums}. In your own time, go.`, 150, `${WORD[t]} step sparring${nums}. In your own time, go.`);
-      examinerBubble = null;                             // the pictures go where the speech bubble was
-      for (; a <= b; a++) { await stepSet(run, list[a], turn++ % 2 === 0); guard(run); }
+      examinerBubble = null;
+      stepScene = { title: `${t}-step sparring`, num: "", pic: null, x: 190, tx: 190, c0: 190, c1: 190 };   // into the close-up for this set
+      setView(FIGHT_VIEW);
+      for (; a <= b; a++) { await stepSet(run, list[a]); guard(run); }
+      stepScene = null; setView(MAT_VIEW);                // back to the hall
+      await sleep(400); guard(run);
     }
     hidePic();
     await examinerSay("Baro.", 150);
@@ -8180,7 +8219,7 @@ function skipToMyQuestions() {
 // Puts everyone where a stage expects them (used when jumping between stages)
 function placeForStage(i) {
   if (fight) endFight(true);
-  hideVideo(); hidePic(); stopClip();
+  hideVideo(); hidePic(); stopClip(); stepScene = null;
   cam.target = 1; cam.z = 1; document.body.classList.remove("compact", "term");
   showSkip(false); termCtx = null; document.body.classList.remove("term");
   exAnchor = { x: 190, y: 75 }; if (view.w !== VW || view.h !== VH || view.y !== 0) setView(FULL_VIEW);
@@ -8306,7 +8345,7 @@ $("againBtn").onclick = () => { $("results").classList.add("hidden"); $("startSc
 $("menuBtn").onclick = () => {
   RUN++; if (window.speechSynthesis) speechSynthesis.cancel();
   if (fight) endFight(true);
-  hideVideo(); hidePic(); stopClip(); stageSkip(false);
+  hideVideo(); hidePic(); stopClip(); stepScene = null; stageSkip(false);
   document.body.classList.remove("term", "compact"); showSkip(false); termCtx = null; cam.target = 1; cam.z = 1;
   exAnchor = { x: 190, y: 75 }; setView(FULL_VIEW);
   stopTimer(); clearPrompt(); examinerBubble = null; setStage(0, "Ready"); setLine("Examiner", "Press Start grading to begin.");
@@ -12960,7 +12999,29 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 "counters": [
 "step3-01-counter1.webp"
 ],
-"note": "Start image is the same for every 3-step number"
+"note": "Start image is the same for every 3-step number",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+],
+"step3-01-move1.webp": [
+900,
+675,
+107
+],
+"step3-01-move2.webp": [
+900,
+613,
+98
+],
+"step3-01-counter1.webp": [
+900,
+785,
+113
+]
+}
 },
 {
 "id": "SS_3_02",
@@ -12975,7 +13036,29 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 "counters": [
 "step3-02-counter1.webp"
 ],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+],
+"step3-02-move1.webp": [
+900,
+858,
+126
+],
+"step3-02-move2.webp": [
+900,
+829,
+125
+],
+"step3-02-counter1.webp": [
+900,
+1150,
+162
+]
+}
 },
 {
 "id": "SS_3_03",
@@ -12988,7 +13071,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_04",
@@ -13001,7 +13091,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_05",
@@ -13014,7 +13111,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_06",
@@ -13027,7 +13131,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_07",
@@ -13040,7 +13151,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_08",
@@ -13053,7 +13171,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_09",
@@ -13066,7 +13191,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_3_10",
@@ -13079,7 +13211,14 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {
+"step3-start.webp": [
+900,
+813,
+114
+]
+}
 },
 {
 "id": "SS_2_01",
@@ -13091,7 +13230,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_02",
@@ -13103,7 +13243,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_03",
@@ -13115,7 +13256,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_04",
@@ -13127,7 +13269,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_05",
@@ -13139,7 +13282,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_06",
@@ -13151,7 +13295,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_07",
@@ -13163,7 +13308,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_2_08",
@@ -13175,7 +13321,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": ""
+"note": "",
+"size": {}
 },
 {
 "id": "SS_1_00",
@@ -13186,7 +13333,8 @@ $('exitApp').onclick=()=>{clearJobs();if(HOST&&HOST.TL_EXIT)HOST.TL_EXIT()};   /
 ""
 ],
 "counters": [],
-"note": "No numbers: about 4 different ones, then the examiner says stop"
+"note": "No numbers: about 4 different ones, then the examiner says stop",
+"size": {}
 }
 ],
 "gorder": [
@@ -15011,7 +15159,9 @@ window.GS_LW=key=>{const gi=gsIx(key),out=[];if(gi<0)return out;
 const gsPlanRows=key=>{const gi=gsIx(key);return gi<0?[]:ALL.gplan.filter(e=>gradeIx(e.g)===gi)};
 window.GS_PLAN=key=>{const stages={};gsPlanRows(key).forEach(e=>{stages[e.stage]=e});return {order:ALL.gorder.slice(),stages,say:ALL.gsay||{}}};
 window.GS_SS=key=>{const e=gsPlanRows(key).find(e=>e.stage==='Step sparring'),out=[];if(!e||!e.done)return out;
-  const pic=f=>gsUrl('img/sparring/',f),item=r=>({type:r.type,no:r.no,start:pic(r.start),moves:r.moves.map(pic),counters:r.counters.map(pic)});
+  // each picture: its address and size, and how wide the defender's head is drawn in it (so the game shows every picture at one scale); null = no picture yet
+  const item=r=>{const pic=f=>{if(!f)return null;const z=(r.size||{})[f]||[900,700,110];return {url:gsUrl('img/sparring/',f),w:z[0],h:z[1],head:z[2]}};
+    return {type:r.type,no:r.no,start:pic(r.start),moves:r.moves.map(pic),counters:r.counters.map(pic)}};
   for(const st of e.sets||[]){
     if(st.type===1){const r=ALL.stepspar.find(r=>r.type===1)||{type:1,no:0,start:'',moves:[''],counters:[]};for(let i=0;i<4;i++)out.push(item(r));continue}
     for(let n=st.from;n<=st.to;n++)out.push(item(ALL.stepspar.find(r=>r.type===st.type&&r.no===n)||{type:st.type,no:n,start:'',moves:Array(st.type).fill(''),counters:[]}))}
@@ -16906,8 +17056,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.101';
+const APP_VERSION='3.102';
 const VERSION_NOTES=[
+['3.102','Grading Simulator (still hidden): step sparring now zooms in like free sparring, with the cartoon pair on the mat in front of the examiners, all at one size.'],
 ['3.101','Grading Simulator (still hidden): the step sparring picture only shows its title and the number; no move or counter labels.'],
 ['3.100','Grading Simulator (still hidden): the step sparring picture now slides along a strip, one step for each move, to show the pair travelling.'],
 ['3.99','Grading Simulator (still hidden): the examiner now calls all the line work in the Benjamin voice.'],

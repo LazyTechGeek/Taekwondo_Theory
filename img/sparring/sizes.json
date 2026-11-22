@@ -1,0 +1,37 @@
+{
+ "step3-01-counter1.webp": {
+  "w": 900,
+  "h": 785,
+  "head": 113
+ },
+ "step3-01-move1.webp": {
+  "w": 900,
+  "h": 675,
+  "head": 107
+ },
+ "step3-01-move2.webp": {
+  "w": 900,
+  "h": 613,
+  "head": 98
+ },
+ "step3-02-counter1.webp": {
+  "w": 900,
+  "h": 1150,
+  "head": 162
+ },
+ "step3-02-move1.webp": {
+  "w": 900,
+  "h": 858,
+  "head": 126
+ },
+ "step3-02-move2.webp": {
+  "w": 900,
+  "h": 829,
+  "head": 125
+ },
+ "step3-start.webp": {
+  "w": 900,
+  "h": 813,
+  "head": 114
+ }
+}
