@@ -6108,7 +6108,9 @@ async function examinerSay(text, hold = 350, spoken) {
   const run = RUN;
   examinerBubble = text;
   setLine("Examiner", text);
-  await speak(spoken || text, { pitch: 0.8, rate: 0.95 });
+  const vc = voFor(text);                                   // 3.108: recorded voice when every part of the line has a clip
+  if (vc) { for (const [u, t] of vc) { await playClip(u, t, { pitch: 0.8, rate: 0.95 }); guard(run); } }
+  else await speak(spoken || text, { pitch: 0.8, rate: 0.95 });
   guard(run);
   await sleep(hold);
 }
@@ -6116,7 +6118,9 @@ async function studentSay(c, text, spoken) {
   const run = RUN;
   c.bubble = text;
   setLine(c.isPlayer ? c.name + " (you)" : c.name, text);
-  await speak(spoken || text, { pitch: c.pitch, female: c.female, rate: 1.05 });
+  const vc = c.isPlayer ? null : voStudent(c, text);        // 3.108: the students have their own recorded voices (not the player)
+  if (vc) { for (const [u, t] of vc) { await playClip(u, t, { pitch: c.pitch, female: c.female, rate: 1.05, clipRate: c.vr }); guard(run); } }
+  else await speak(spoken || text, { pitch: c.pitch, female: c.female, rate: 1.05 });
   guard(run);
   await sleep(250);
   c.bubble = null;
@@ -6533,9 +6537,61 @@ function playClip(url, text, opts) {
     };
     a.onended = () => fin(true); a.onerror = () => fin(false);
     const tm = setTimeout(() => fin(true), 20000);
-    try { a.playbackRate = speed >= 4 ? 1.6 : speed >= 2 ? 1.3 : 1; } catch (_) {}
+    try { const cr = (opts && opts.clipRate) || 1; if (cr !== 1) { a.preservesPitch = false; a.mozPreservesPitch = false; a.webkitPreservesPitch = false; } a.playbackRate = (speed >= 4 ? 1.6 : speed >= 2 ? 1.3 : 1) * cr; } catch (_) {}
     a.play().catch(() => fin(false));
   });
+}
+// ---------------------------------------------------------------------
+//  3.108 VOICE-OVERS: the examiner (Benjamin) and the students (Paul / Helen) speak from recorded clips, mp3/gs-*.mp3.
+//  A line is only played from clips when every sentence of it has one; otherwise the whole line is text-to-speech.
+//  Not recorded yet (still text-to-speech): pattern calls, the theory questions and answers, the player's own name.
+// ---------------------------------------------------------------------
+const VO_DIR = (() => { try { return HOST && HOST.GS_VO ? HOST.GS_VO() : ""; } catch (_) { return ""; } })();
+const vo = n => VO_DIR + "gs-" + n + ".mp3";
+const VO_NAMES = {}; for (const [a, b] of NAMES) VO_NAMES[a + " " + b] = (a + "-" + b).toLowerCase();
+const VO_LINES = {
+  "Name and grade, starting from position one.": "name-and-grade", "Line work.": "line-work", "Baro.": "baro",
+  "Front row, turn and face the back row.": "front-row-turn", "Return to your marks and face the front.": "return-to-marks",
+  "Moving on to sparring.": "moving-on-to-sparring", "Go and put your sparring gear on.": "gear-on",
+  "Round 1.": "round-1", "Round 2.": "round-2", "Round 3.": "round-3", "Stop.": "stop",
+  "3-step sparring, numbers 1 to 4. In your own time, go.": "ss-3-1-4", "3-step sparring, numbers 5 to 7. In your own time, go.": "ss-3-5-7",
+  "3-step sparring, numbers 8 to 10. In your own time, go.": "ss-3-8-10", "2-step sparring, numbers 1 to 2. In your own time, go.": "ss-2-1-2",
+  "2-step sparring, numbers 1 to 4. In your own time, go.": "ss-2-1-4", "2-step sparring, numbers 1 to 6. In your own time, go.": "ss-2-1-6",
+  "2-step sparring, numbers 1 to 8. In your own time, go.": "ss-2-1-8", "1-step sparring. In your own time, go.": "ss-1",
+  "Take your sparring gear off and return to your seats.": "gear-off-seats", "Return to your seats.": "return-to-seats", "Return to your seat.": "return-to-seat",
+  "Moving on to terminology. Come forward.": "terminology-forward", "Moving on to terminology. Line up at the side tables.": "terminology-side",
+  "That is the end of your grading.": "end-your-grading", "That is the end of the grading.": "end-grading",
+  "I saw a good variety of techniques.": "saw-variety", "I saw some good clean techniques.": "saw-clean", "I saw well-timed counters.": "saw-counters",
+  "I saw a strong guard.": "saw-guard", "Good effort.": "good-effort", "Well done.": "well-done", "Remember to attack as well as defend.": "fix-attack",
+  "Keep your guard up.": "fix-guard", "Mix your techniques: use your hands and your feet.": "fix-mix", "Let me see more kicks next time.": "fix-kicks",
+  "Keep moving and stay light on your feet.": "fix-moving"
+};
+function voFor(text) {                       // the clips for an examiner's line: [[url, the words (for text-to-speech if the file fails)], ...] or null
+  if (!VO_DIR || !text) return null;
+  const m = /^(.+)\. Position (\d+)\.$/.exec(text);
+  if (m) {                                   // the roll call: a name clip, then a position clip (the player's typed name has no clip: position only)
+    const pos = [vo("pos-" + m[2]), "Position " + m[2] + "."];
+    return VO_NAMES[m[1]] ? [[vo("name-" + VO_NAMES[m[1]]), m[1] + "."], pos] : [pos];
+  }
+  if (VO_LINES[text]) return [[vo(VO_LINES[text]), text]];
+  const parts = text.match(/[^.!?]+[.!?]+/g); if (!parts) return null;
+  const out = [];
+  for (const q of parts) { const k = VO_LINES[q.trim()]; if (!k) return null; out.push([vo(k), q.trim()]); }
+  return out;
+}
+function voStudent(c, text) {                // a student's own voice: "Yes, sir!" and "<name>, 8th Kup, sir!"
+  if (!VO_DIR) return null;
+  const g = c.female ? "f" : "m";
+  c.vr = c.vr || rand(0.95, 1.07);           // each student a little higher or lower, so ten students are not two voices
+  if (text === "Yes, sir!") return [[vo(g + "-yes"), text]];
+  const m = /^(.+), (\d+)(?:st|nd|rd|th) Kup, sir!$/.exec(text);
+  if (m && VO_NAMES[m[1]]) return [[vo(g + "-name-" + VO_NAMES[m[1]]), m[1] + ","], [vo(g + "-kup-" + m[2]), text.slice(m[1].length + 2)]];
+  return null;
+}
+function voShout(n, text, opts) {            // everyone together ("Kihap!", "Thank you, sir!"): both voices at once
+  if (!VO_DIR || !voiceOn) return speak(text, opts);
+  try { const a = new Audio(vo("f-" + n)); a.play().catch(() => {}); } catch (_) {}
+  return playClip(vo("m-" + n), text, opts);
 }
 async function examinerCall(text, url, spoken, hold = 300) {      // like examinerSay, with a voice-over file when there is one
   const run = RUN;
@@ -6640,7 +6696,7 @@ async function scriptedPattern(c, script, tempo, mistakeAt) {
     await moveTo(c, m.x + gx * 6, m.y + gy * 5, 22 / tempo, { face: false }); guard(run);
     if (kihap) {
       c.bubble = "Kihap!";
-      if (!kihapDone) { kihapDone = true; speak("Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
+      if (!kihapDone) { kihapDone = true; voShout("kihap", "Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
       await beat(550); guard(run); c.bubble = null;
     }
     await beat(560); guard(run);
@@ -6994,7 +7050,7 @@ function sparComment(st) {
   else if (st.taken > st.landed + 2 && st.blocks < 3) fix.push("Keep your guard up.");
   else if (kinds <= 1) fix.push("Mix your techniques: use your hands and your feet.");
   else if (!Object.keys(st.types).some(k => /kick/.test(k))) fix.push("Let me see more kicks next time.");
-  const praise = good.length ? "I saw " + (good.length > 1 ? good.slice(0, -1).join(", ") + " and " + good[good.length - 1] : good[0]) + "." : st.landed ? "Good effort." : "";
+  const praise = good.length ? good.slice(0, 2).map(x => "I saw " + x + ".").join(" ") : st.landed ? "Good effort." : "";   // 3.108: whole sentences, so each has a voice clip
   return [praise, fix[0] || (good.length ? "Well done." : "Keep moving and stay light on your feet.")].filter(Boolean).join(" ");
 }
 
@@ -7462,7 +7518,7 @@ function planV2(rows) {
         if (t > 1) { await sleep(450 * tempo * (t - 1)); guard(run); }          // slow motion is held
         if (kihap) {
           c.bubble = "Kihap!";
-          if (!kihapDone) { kihapDone = true; speak("Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
+          if (!kihapDone) { kihapDone = true; voShout("kihap", "Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
           await sleep(550 * tempo); guard(run); c.bubble = null;
         }
       } };
@@ -7545,7 +7601,7 @@ async function performMove(c, row, st, tempo) {
   await moveTo(c, m.x + st.gx * 6, m.y + st.gy * 5, 22 / tempo, { face: false }); guard(run);
   if (kihap) {
     c.bubble = "Kihap!";
-    if (!kihapDone) { kihapDone = true; speak("Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
+    if (!kihapDone) { kihapDone = true; voShout("kihap", "Kihap!", { pitch: 1.15, rate: 1.1 }).catch(() => {}); }
     await sleep(550 * tempo); guard(run); c.bubble = null;
   }
 }
@@ -8126,7 +8182,10 @@ async function askThree(run, g, c) {
 }
 async function thankBowLeave(run, list) {
   list.forEach(c => { c.bubble = "Thank you, sir!"; });
-  await speak("Thank you, sir!", { pitch: list.length > 1 ? 1.1 : list[0].pitch, female: list.length === 1 && list[0].female, rate: 1 }); guard(run);
+  if (list.length > 1) await voShout("thanks", "Thank you, sir!", { pitch: 1.1, rate: 1 });
+  else if (VO_DIR && !list[0].isPlayer) await playClip(vo((list[0].female ? "f" : "m") + "-thanks"), "Thank you, sir!", { pitch: list[0].pitch, female: list[0].female, rate: 1, clipRate: list[0].vr });
+  else await speak("Thank you, sir!", { pitch: list[0].pitch, female: list[0].female, rate: 1 });
+  guard(run);
   list.forEach(c => setPose(c, { bow: 1 }));
   await sleep(1000); guard(run);
   list.forEach(c => { setPose(c, REST); c.bubble = null; c.spot = false; });
@@ -15829,6 +15888,8 @@ window.GS_SS=key=>{const e=gsPlanRows(key).find(e=>e.stage==='Step sparring'),ou
     if(st.type===1){const r=ALL.stepspar.find(r=>r.type===1)||{type:1,no:0,start:'',moves:[''],counters:[]};for(let i=0;i<4;i++)out.push(item(r));continue}
     for(let n=st.from;n<=st.to;n++)out.push(item(ALL.stepspar.find(r=>r.type===st.type&&r.no===n)||{type:st.type,no:n,start:'',moves:Array(st.type).fill(''),counters:[]}))}
   return out};
+// 3.108: the folder of the Grading Simulator's voice-over clips (mp3/gs-*.mp3)
+window.GS_VO=()=>gsUrl(AUDIO_FOLDER,'x.mp3').slice(0,-5);
 // One to ten in Korean as the syllabus spells them, with their approved voice files
 window.GS_COUNT=()=>['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'].map(n=>{const t=ALL.terms.find(x=>String(x.en).toLowerCase()===n.toLowerCase());if(!t)return null;
   const p=PRONOUNCE[t.id]||{};return {w:krCase(t.kr),say:p.say||t.kr,url:gsUrl(AUDIO_FOLDER,p.file)}}).filter(Boolean);
@@ -17719,8 +17780,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.107';
+const APP_VERSION='3.108';
 const VERSION_NOTES=[
+['3.108','Grading Simulator (still hidden): recorded voices. The examiner now speaks the roll call, the stage calls, the step sparring calls and the sparring comments, and the students answer in their own male and female voices.'],
 ['3.107','Grading Simulator (still hidden): the step sparring pair now wear plain colour-belt suits (no black collar or trouser stripe), and their belts match the grade you are playing.'],
 ['3.106','Grading Simulator (still hidden): when a step sparring number has two or three counter moves, they now follow each other twice as fast.'],
 ['3.105','Grading Simulator (still hidden): new step sparring pictures for all ten 3-step numbers, there and back, with one brown-haired and one black-haired partner. Each number starts and ends with both in ready stance.'],
