@@ -124,8 +124,12 @@ if 'Step Sparring' in wb.sheetnames:
         if t not in (1,2,3):probs.append(f'{w}: Type must be 1, 2 or 3')
         out['stepspar'].append({'id':d.get('ID',''),'type':t,'no':num(d.get('No.'),w,'No.',0),'start':d.get('Start image',''),
             'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes','')})
-        r=out['stepspar'][-1];r['size']={f:[SIZES[f]['w'],SIZES[f]['h'],SIZES[f].get('head') or 110] for f in [r['start']]+r['moves']+r['counters'] if f in SIZES}
-        for f in [r['start']]+r['moves']+r['counters']:
+        r=out['stepspar'][-1];files=[r['start']]+r['moves']+r['counters']
+        if d.get('Return image 1'):      # the way back: the other partner attacks
+            r['back']={'start':d.get('Return start image',''),'moves':[d.get(f'Return image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Return counter {i}','') for i in (1,2,3)) if x]}
+            files+=[r['back']['start']]+r['back']['moves']+r['back']['counters']
+        r['size']={f:[SIZES[f]['w'],SIZES[f]['h'],SIZES[f].get('head') or 110] for f in files if f in SIZES}
+        for f in files:
             if f and f not in SIZES:probs.append(f'{w}: picture "{f}" is not in img/sparring (or run tools/sparring_sizes.py)')
 STAGES=['Line-up','Name and grade','Line work','Patterns','Step sparring','Free sparring','Questions']
 out['gorder']=[];out['gsay']={}
