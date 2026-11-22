@@ -14993,8 +14993,8 @@ window.GS_LW=key=>{const gi=gsIx(key),out=[];if(gi<0)return out;
     if(!x.anim.includes('random')){out.push(gsLwRow(x));continue}
     // "random line work": the examiner's pick = four moving rows from the grades below, forwards and backwards in turn
     const pool=ALL.linework.filter(y=>gradeIx(y.g)<gi&&!y.anim.includes('random')),F=shuffle(pool.filter(y=>y.dir==='Forwards')),B=shuffle(pool.filter(y=>y.dir==='Backwards'));
-    const first=out.length;for(let i=0;i<2;i++){if(F[i])out.push(gsLwRow(F[i]));if(B[i])out.push(gsLwRow(B[i]))}
-    if(out[first])out[first].intro=x.tts||x.text}
+    for(let i=0;i<2;i++){if(F[i])out.push(gsLwRow(F[i]));if(B[i])out.push(gsLwRow(B[i]))}
+    }   // 3.98: the examiner never says "random line work"; the picked moves are simply called like any others
   return out};
 const gsPlanRows=key=>{const gi=gsIx(key);return gi<0?[]:ALL.gplan.filter(e=>gradeIx(e.g)===gi)};
 window.GS_PLAN=key=>{const stages={};gsPlanRows(key).forEach(e=>{stages[e.stage]=e});return {order:ALL.gorder.slice(),stages,say:ALL.gsay||{}}};
@@ -16894,8 +16894,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.97';
+const APP_VERSION='3.98';
 const VERSION_NOTES=[
+['3.98','Grading Simulator (still hidden): the examiner no longer says "random line work"; the moves are just called.'],
 ['3.97','Grading Simulator (still hidden): shorter pause between each count and the move in line work.'],
 ['3.96','Grading Simulator (still hidden): step sparring is called once per set, the picture card shows the number and turns red for the counter, the class moves half a second after each count, and the examiner\'s opening lines come from the workbook.'],
 ['3.95','Grading Simulator (still hidden): the examiner now calls the real line work for your grade and counts it in Korean, step sparring shows a picture of each move, and the stages follow the new Grading Order tabs in the workbook.'],
