@@ -122,11 +122,13 @@ if 'Step Sparring' in wb.sheetnames:
         out['stepspar'].append({'id':d.get('ID',''),'type':t,'no':num(d.get('No.'),w,'No.',0),'start':d.get('Start image',''),
             'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes','')})
 STAGES=['Line-up','Name and grade','Line work','Patterns','Step sparring','Free sparring','Questions']
-out['gorder']=[]
+out['gorder']=[];out['gsay']={}
 if 'Grading Order' in wb.sheetnames:
     for d in sorted(rows('Grading Order'),key=lambda d:float(d.get('Order') or 99)):
         if d.get('Stage') not in STAGES:probs.append(f'Grading Order: unknown stage "{d.get("Stage")}" (stages are {STAGES})')
-        else:out['gorder'].append(d['Stage'])
+        else:
+            out['gorder'].append(d['Stage'])
+            if d.get('Examiner says'):out['gsay'][d['Stage']]=d['Examiner says']
     for s in STAGES:
         if s not in out['gorder']:probs.append(f'Grading Order: stage "{s}" is missing')
 out['gplan']=[]
