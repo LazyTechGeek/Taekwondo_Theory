@@ -7209,8 +7209,24 @@ const SS_HEAD = 20.6;                        // how wide a head is drawn, in hal
 const ssCache = {};
 function ssImage(p) {                        // p = { url, w, h, head } or null
   if (!p) return null;
-  if (!ssCache[p.url]) { const im = new Image(); im.onerror = () => { im.bad = true; }; im.src = p.url; ssCache[p.url] = im; }
+  if (!ssCache[p.url]) {
+    const im = new Image(); im.onerror = () => { im.bad = true; }; im.src = p.url; ssCache[p.url] = im;
+    const bm = new Image(); bm.onerror = () => { bm.bad = true; }; bm.src = p.url.replace(/\.webp$/, "-belt.webp"); ssCache[p.url + "#belt"] = bm;   // 3.107: where the belts are
+  }
   return ssCache[p.url];
+}
+// 3.107: the pair wear plain colour-belt suits, and their belts take the colour of the grade being played (no tags).
+// Each picture has a "-belt" twin that is only the belt shapes; it is filled with the belt colour and drawn on top.
+const ssTint = {};
+function ssBelt(p) {
+  const bm = ssCache[p.url + "#belt"]; if (!bm || bm.bad || !bm.complete || !bm.naturalWidth) return null;
+  const col = (typeof grade !== "undefined" && grade && grade.belt && grade.belt.base) || "#151515", key = p.url + col;
+  if (!ssTint[key]) {
+    const c = document.createElement("canvas"); c.width = bm.naturalWidth; c.height = bm.naturalHeight;
+    const g = c.getContext("2d"); g.drawImage(bm, 0, 0); g.globalCompositeOperation = "source-in"; g.fillStyle = col; g.fillRect(0, 0, c.width, c.height);
+    ssTint[key] = c;
+  }
+  return ssTint[key];
 }
 const ssWidth = p => p ? p.w * SS_HEAD / (p.head || 110) : 96;
 function ssShow(p, frac, jump) {             // frac 0..1 = how far along the mat; jump = no slide (the ready position)
@@ -7228,6 +7244,7 @@ function renderStepScene() {
     const w = ssWidth(p), h = w * p.h / p.w;
     ellipse(sc.x, fl + 1, w * 0.46, 4.5, "rgba(0,0,0,0.2)");
     ctx.drawImage(im, sc.x - w / 2, fl + 2 - h, w, h);
+    const belt = ssBelt(p); if (belt) ctx.drawImage(belt, sc.x - w / 2, fl + 2 - h, w, h);
   } else {                                           // no picture yet
     const w = 96, h = 62;
     ctx.fillStyle = "rgba(241,241,241,0.95)"; rr(sc.x - w / 2, fl - h, w, h, 6); ctx.fill();
@@ -17702,8 +17719,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.106';
+const APP_VERSION='3.107';
 const VERSION_NOTES=[
+['3.107','Grading Simulator (still hidden): the step sparring pair now wear plain colour-belt suits (no black collar or trouser stripe), and their belts match the grade you are playing.'],
 ['3.106','Grading Simulator (still hidden): when a step sparring number has two or three counter moves, they now follow each other twice as fast.'],
 ['3.105','Grading Simulator (still hidden): new step sparring pictures for all ten 3-step numbers, there and back, with one brown-haired and one black-haired partner. Each number starts and ends with both in ready stance.'],
 ['3.104','Grading Simulator (still hidden): the step sparring pair are 20% bigger, and the main examiner no longer smiles.'],

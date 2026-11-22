@@ -6,16 +6,21 @@ h3=json.load(open('head3.json'))
 G=0.55; HEADW=198*G
 OVR={'3step-10-counter1-defender':1.03}
 os.makedirs('fig',exist_ok=True); os.makedirs('pairs',exist_ok=True)
-FIG={}
+FIG={}; BM={}; MASK={}
 def fig(n):
     if n in FIG: return FIG[n]
     f=glob.glob('in/**/'+n+'.png',recursive=True)[0]
     a=np.array(Image.open(f).convert('RGBA')); m=a[...,3]>40
     lab,k=ndi.label(m); sz=ndi.sum(m,lab,range(1,k+1))
     keep=np.isin(lab,[i+1 for i,s in enumerate(sz) if s>0.004*sz.max()]); a[~keep,3]=0
-    ys,xs=np.where(keep); a=a[ys.min():ys.max()+1,xs.min():xs.max()+1]
+    import suit as SU
+    base=n.replace('3step-02b-counter1-attacker','3step-04-move2-attacker')
+    a,bm,_=SU.suit(a,base)
+    ys,xs=np.where(keep); a=a[ys.min():ys.max()+1,xs.min():xs.max()+1]; bm=bm[ys.min():ys.max()+1,xs.min():xs.max()+1]
+    BM[n]=bm
     s=OVR.get(n,min(1.1,max(0.92,((180/h3[n]['sq'])*(198/min(h3[n]['w'],215)))**0.5)))*G
     im=Image.fromarray(a).resize((round(a.shape[1]*s),round(a.shape[0]*s)),Image.LANCZOS)
+    MASK[n]=Image.fromarray((BM[n]*255).astype('uint8')).resize(im.size,Image.LANCZOS)
     im.save('fig/'+n+'.png'); FIG[n]=im; return im
 def edges(im):
     m=np.array(im)[...,3]>40; H=m.shape[0]
@@ -59,9 +64,15 @@ def pair(stem,kind,front='d',opt=None,hair=('brown','black')):
     W=max(A.size[0],dx+D.size[0])+20; la=max(0,-lift); lift=max(0,lift); Ht=max(A.size[1]+la,D.size[1]+lift)+10
     C=Image.new('RGBA',(W,Ht),(0,0,0,0))
     pa=(10,Ht-A.size[1]-5-la); pd=(10+dx,Ht-D.size[1]-5-lift)
+    M=Image.new('L',(W,Ht),0)
+    from PIL import ImageChops
     for who in (('a','d') if front=='d' else ('d','a')):
-        if who=='a': C.alpha_composite(A,pa)
-        else: C.alpha_composite(D,pd)
+        fg,pos,mk=(A,pa,MASK[stem+'-attacker']) if who=='a' else (D,pd,MASK[stem+'-defender'])
+        C.alpha_composite(fg,pos)
+        hole=Image.new('L',(W,Ht),0); hole.paste(fg.getchannel('A'),pos)
+        M=ImageChops.multiply(M,ImageChops.invert(hole))          # whoever is in front hides the belt behind
+        lay=Image.new('L',(W,Ht),0); lay.paste(mk,pos); M=ImageChops.lighter(M,lay)
+    pair.mask=M
     return C
 if __name__=='__main__':
     SEQ={ 1:['01-move1','01-move2','01-move1','04-counter2'],

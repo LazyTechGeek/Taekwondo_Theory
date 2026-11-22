@@ -19,6 +19,8 @@ def get(st,ret):
     if '@close' in st: o=dict(P.OPT.get('3step-'+base,{})); o['shift']=o.get('shift',0)-0.5
     hair=('black','brown') if ret else ('brown','black')
     im=P.pair('3step-'+base,kind,opt=o,hair=hair)
+    mk=P.pair.mask
+    get.mask=ImageOps.mirror(mk) if ret else mk
     return ImageOps.mirror(im) if ret else im
 def retseq(n):
     f=SEQ[n]; m=f[:3]; c=f[3:]
@@ -52,7 +54,8 @@ for ret in (0,1):
                 Dr.text((x+8,y+34),st+(' (flipped)' if ret else ''),font=F2,fill=(40,40,40))
                 if mir: Dr.text((x+CW-110,y+8),'MIRRORED',font=F2,fill=(170,0,0))
                 im=get(st,ret)
-                fn=('back-' if ret else '')+st.replace('@','-')+'.png'; im.save('final/'+fn); names.append((lab,fn,mir))
+                fn=('back-' if ret else '')+st.replace('@','-')+'.png'; im.save('final/'+fn); get.mask.save('final/'+fn[:-4]+'-belt.png'); names.append((lab,fn,mir))
+                yb=Image.new('RGBA',im.size,(242,194,0,255)); im=im.copy(); im.paste(yb,(0,0),get.mask)
                 kf=min(0.46,(CW-16)/im.size[0],(CH-66)/im.size[1]); t=im.resize((int(im.size[0]*kf),int(im.size[1]*kf)))
                 S.paste(t,(x+(CW-t.size[0])//2,y+CH-6-t.size[1]),t)
             man[('back' if ret else 'fwd')+str(nn)]=names
