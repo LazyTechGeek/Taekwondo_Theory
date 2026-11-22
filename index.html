@@ -7883,7 +7883,7 @@ const STAGES = [
         const cnt = KOREAN_COUNT[i % KOREAN_COUNT.length];
         examinerBubble = cnt.w; setLine("Examiner", cnt.w);
         await playClip(cnt.url, cnt.say || cnt.w, { pitch: 0.8, rate: 1 }); guard(run);
-        await sleep(500); guard(run);                     // the count is heard first; the class moves half a second later
+        await sleep(250); guard(run);                     // the count is heard first; the class moves a quarter of a second later (Dave: half a second was too long)
         await Promise.all(all().map(async c => {          // same move, but everyone's timing is a little different
           const m = markOf(c.pos);
           await sleep(c.lag * rand(0.2, 0.7));
@@ -16894,8 +16894,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.96';
+const APP_VERSION='3.97';
 const VERSION_NOTES=[
+['3.97','Grading Simulator (still hidden): shorter pause between each count and the move in line work.'],
 ['3.96','Grading Simulator (still hidden): step sparring is called once per set, the picture card shows the number and turns red for the counter, the class moves half a second after each count, and the examiner\'s opening lines come from the workbook.'],
 ['3.95','Grading Simulator (still hidden): the examiner now calls the real line work for your grade and counts it in Korean, step sparring shows a picture of each move, and the stages follow the new Grading Order tabs in the workbook.'],
 ['3.94','Workbook only: new Line Work tab (grading line work by grade). Not used by the app yet.'],
