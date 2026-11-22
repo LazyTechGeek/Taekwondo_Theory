@@ -6119,7 +6119,8 @@ async function studentSay(c, text, spoken) {
   c.bubble = text;
   setLine(c.isPlayer ? c.name + " (you)" : c.name, text);
   const vc = c.isPlayer ? null : voStudent(c, text);        // 3.108: the students have their own recorded voices (not the player)
-  if (vc) { for (const [u, t] of vc) { await playClip(u, t, { pitch: c.pitch, female: c.female, rate: 1.05, clipRate: c.vr }); guard(run); } }
+  if (c.isPlayer && (text === "Yes, sir!" || /Kup, sir!$/.test(text))) await sleep(700);   // 3.110: you say your own lines out loud; the game stays quiet
+  else if (vc) { for (const [u, t] of vc) { await playClip(u, t, { pitch: c.pitch, female: c.female, rate: 1.05, clipRate: c.vr }); guard(run); } }
   else await speak(spoken || text, { pitch: c.pitch, female: c.female, rate: 1.05 });
   guard(run);
   await sleep(250);
@@ -6569,9 +6570,9 @@ const VO_LINES = {
 function voFor(text) {                       // the clips for an examiner's line: [[url, the words (for text-to-speech if the file fails)], ...] or null
   if (!VO_DIR || !text) return null;
   const m = /^(.+)\. Position (\d+)\.$/.exec(text);
-  if (m) {                                   // the roll call: a name clip, then a position clip (the player's typed name has no clip: position only)
+  if (m) {                                   // the roll call: a name clip, then a position clip (the player's typed name has no clip: "Your turn." instead)
     const pos = [vo("pos-" + m[2]), "Position " + m[2] + "."];
-    return VO_NAMES[m[1]] ? [[vo("name-" + VO_NAMES[m[1]]), m[1] + "."], pos] : [pos];
+    return VO_NAMES[m[1]] ? [[vo("name-" + VO_NAMES[m[1]]), m[1] + "."], pos] : [[vo("your-turn"), "Your turn."], pos];   // 3.110: the player is called with "Your turn."
   }
   if (VO_LINES[text]) return [[vo(VO_LINES[text]), text]];
   const parts = text.match(/[^.!?]+[.!?]+/g); if (!parts) return null;
@@ -6747,7 +6748,10 @@ async function stepSet(run, it) {
   const sc = stepScene, trips = [it].concat(it.back ? [it.back] : []);
   const pics = trips.flatMap(t => [t.start, ...t.moves, ...t.counters]).concat(it.ready ? [it.ready] : []);
   pics.forEach(ssImage);
-  const maxW = Math.max(...pics.map(ssWidth)), room = Math.max(0, view.w - 3 - maxW);   // the widest picture still fits at both ends
+  // 3.109: every number steps the same distance. The room used to come from the WIDEST picture of the number, so numbers with a wide
+  // picture (a kick, or the pair standing apart) barely moved. Now it comes from the narrowest move picture (much the same in every
+  // number), and a picture too wide for where it stands is simply kept on the screen when it is drawn (renderStepScene).
+  const moveW = Math.min(...trips.flatMap(t => t.moves).filter(Boolean).map(ssWidth).concat(ssWidth(null) * 2)), room = Math.min(48, Math.max(0, view.w - 3 - moveW));
   sc.c0 = view.x + view.w / 2 - room / 2; sc.c1 = view.x + view.w / 2 + room / 2;
   sc.num = it.no ? "Number " + it.no : "";
   for (let k = 0; k < trips.length; k++) {
@@ -7298,9 +7302,10 @@ function renderStepScene() {
   const p = sc.pic, im = ssImage(p), fl = FIGHT.floor;
   if (p && im && im.complete && im.naturalWidth && !im.bad) {
     const w = ssWidth(p), h = w * p.h / p.w;
-    ellipse(sc.x, fl + 1, w * 0.46, 4.5, "rgba(0,0,0,0.2)");
-    ctx.drawImage(im, sc.x - w / 2, fl + 2 - h, w, h);
-    const belt = ssBelt(p); if (belt) ctx.drawImage(belt, sc.x - w / 2, fl + 2 - h, w, h);
+    const lo = view.x + 1.5 + w / 2, hi = view.x + view.w - 1.5 - w / 2, px = lo > hi ? view.x + view.w / 2 : Math.max(lo, Math.min(hi, sc.x));   // 3.109: a wide picture stays on the screen
+    ellipse(px, fl + 1, w * 0.46, 4.5, "rgba(0,0,0,0.2)");
+    ctx.drawImage(im, px - w / 2, fl + 2 - h, w, h);
+    const belt = ssBelt(p); if (belt) ctx.drawImage(belt, px - w / 2, fl + 2 - h, w, h);
   } else {                                           // no picture yet
     const w = 96, h = 62;
     ctx.fillStyle = "rgba(241,241,241,0.95)"; rr(sc.x - w / 2, fl - h, w, h, 6); ctx.fill();
@@ -7970,7 +7975,7 @@ const STAGES = [
     for (let p = 1; p <= 10; p++) {
       const c = byPos(p);
       await examinerSay(`${c.name}. Position ${p}.`, 150);
-      if (c.isPlayer) { await playerPrompt("Yes, sir!", 8000); guard(run); }
+      if (c.isPlayer) { await playerPrompt("Say out loud: “Yes, sir!” then tap here", 8000); guard(run); }
       const reply = studentSay(c, "Yes, sir!");
       await sleep(250); guard(run);
       const m = markOf(p);
@@ -7981,7 +7986,7 @@ const STAGES = [
     await examinerSay((g.say && g.say["Name and grade"]) || "Name and grade, starting from position one.");
     for (let p = 1; p <= 10; p++) {
       const c = byPos(p);
-      if (c.isPlayer) { await playerPrompt(`Raise your hand: “${c.name}, ${g.kupText}, sir!”`, 9000); guard(run); }
+      if (c.isPlayer) { await playerPrompt(`Raise your hand and say out loud: “${c.name}, ${g.kupText}, sir!” then tap here`, 9000); guard(run); }
       setPose(c, { aR: 2.95, lR: 12 });
       await sleep(300); guard(run);
       await studentSay(c, `${c.name}, ${g.kupText}, sir!`);
@@ -8159,7 +8164,11 @@ async function askThree(run, g, c) {
   while (c.asked < c.qs.length) {
     const qi = c.asked, q = c.qs[qi];
     clearPrompt();
-    await examinerSay(qi === 0 ? `${c.first}. ${q.q}` : q.q, 100);
+    if (qi === 0 && VO_DIR) {                               // 3.110: recorded first name ("Your turn." for the player), then the question
+      examinerBubble = c.isPlayer ? "Your turn." : c.first + "."; setLine("Examiner", examinerBubble);
+      await playClip(vo(c.isPlayer ? "your-turn" : "first-" + String(c.first).toLowerCase()), examinerBubble, { pitch: 0.8, rate: 0.95 }); guard(run);
+      await examinerSay(q.q, 100);
+    } else await examinerSay(qi === 0 ? `${c.first}. ${q.q}` : q.q, 100);
     let ans;
     if (c.isPlayer) {
       const ui = showAnswers(q, true, 20000);
@@ -8184,6 +8193,7 @@ async function thankBowLeave(run, list) {
   list.forEach(c => { c.bubble = "Thank you, sir!"; });
   if (list.length > 1) await voShout("thanks", "Thank you, sir!", { pitch: 1.1, rate: 1 });
   else if (VO_DIR && !list[0].isPlayer) await playClip(vo((list[0].female ? "f" : "m") + "-thanks"), "Thank you, sir!", { pitch: list[0].pitch, female: list[0].female, rate: 1, clipRate: list[0].vr });
+  else if (list[0].isPlayer) await sleep(900);               // 3.110: your own "Thank you, sir!" is yours to say
   else await speak("Thank you, sir!", { pitch: list[0].pitch, female: list[0].female, rate: 1 });
   guard(run);
   list.forEach(c => setPose(c, { bow: 1 }));
@@ -17780,8 +17790,10 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.108';
+const APP_VERSION='3.110';
 const VERSION_NOTES=[
+['3.110','Grading Simulator (still hidden): when it is you, the examiner says “Your turn.” and you say your own lines out loud, then tap. The game no longer speaks for you.'],
+['3.109','Grading Simulator (still hidden): in step sparring the pair now step the same distance in every number.'],
 ['3.108','Grading Simulator (still hidden): recorded voices. The examiner now speaks the roll call, the stage calls, the step sparring calls and the sparring comments, and the students answer in their own male and female voices.'],
 ['3.107','Grading Simulator (still hidden): the step sparring pair now wear plain colour-belt suits (no black collar or trouser stripe), and their belts match the grade you are playing.'],
 ['3.106','Grading Simulator (still hidden): when a step sparring number has two or three counter moves, they now follow each other twice as fast.'],
