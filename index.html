@@ -5080,10 +5080,18 @@ requestAnimationFrame(frame);
   .sparHelp b.t { display:block; font-size:15px; margin-bottom:4px; color:var(--gold); }
   .sparHelp ul { margin:0; padding-left:18px; } .sparHelp li { margin:2px 0; }
   .beta { font-size:12px; font-weight:700; color:#1d1d1f; background:var(--gold); border-radius:999px; padding:2px 9px; vertical-align:middle; margin-left:6px; }
-  #ssPic { position:absolute; right:8px; top:8px; width:48%; max-width:230px; background:#fff; border-radius:12px; border:2px solid var(--gold); overflow:hidden; z-index:2; box-shadow:0 4px 14px rgba(0,0,0,.45); }
+  /* Step sparring pictures (3.100): a strip across the top; the picture slides one step along it for each move */
+  #ssPic { position:absolute; left:8px; right:8px; top:8px; background:#fff; border-radius:12px; border:2px solid var(--gold); overflow:hidden; z-index:2; box-shadow:0 4px 14px rgba(0,0,0,.45); }
   #ssPic .top { background:#1d1d1f; color:var(--gold); font-weight:800; font-size:13px; text-align:center; padding:5px 4px; }
-  #ssPic img { display:block; width:100%; height:124px; object-fit:contain; margin:4px 0; }
-  #ssPic .pend { height:116px; margin:8px; display:flex; align-items:center; justify-content:center; color:#666; font-weight:700; font-size:14px; border:2px dashed #bbb; border-radius:8px; background:#f1f1f1; }
+  #ssPic .trk { position:relative; height:128px; margin:4px 6px 0; }
+  #ssPic .trk img, #ssPic .trk .pend { position:absolute; top:0; left:0; width:150px; height:128px; transition:left .45s ease; }
+  #ssPic .trk.jump img, #ssPic .trk.jump .pend { transition:none; }
+  #ssPic .trk img { display:block; object-fit:contain; }
+  #ssPic .trk .pend { top:6px; height:116px; display:flex; align-items:center; justify-content:center; color:#666; font-weight:700; font-size:14px; border:2px dashed #bbb; border-radius:8px; background:#f1f1f1; }
+  #ssPic .dots { display:flex; margin:2px 6px 4px; }
+  #ssPic .dots span { flex:1; text-align:center; font-size:11px; font-weight:800; color:#999; border-top:3px solid #ddd; padding-top:2px; }
+  #ssPic .dots span.done { border-color:var(--gold); }
+  #ssPic .dots span.on { border-color:var(--gold); color:#1d1d1f; }
   #ssPic .cap { font-size:14px; font-weight:800; color:#1d1d1f; background:#f1f1f1; text-align:center; padding:4px; min-height:26px; }
   #ssPic.ctr .cap { background:var(--bad); color:#fff; }
   .stages { font-size:13px; color:var(--muted); text-align:left; max-width:340px; line-height:1.7; margin:0; padding-left:20px; }
@@ -5093,7 +5101,7 @@ requestAnimationFrame(frame);
 <div id="app">
   <div id="stageWrap"><canvas id="cv"></canvas>
     <div id="vidBox" class="hidden"><video id="vid" playsinline webkit-playsinline muted preload="metadata"></video><div id="vidTag" class="hidden">What's next?</div></div>
-    <div id="ssPic" class="hidden"><div class="top" id="ssTop"></div><img id="ssImg" alt=""><div class="pend hidden" id="ssPend">Image pending</div><div class="cap" id="ssCap"></div></div>
+    <div id="ssPic" class="hidden"><div class="top" id="ssTop"></div><div class="trk" id="ssTrk"><img id="ssImg" alt=""><div class="pend hidden" id="ssPend">Image pending</div></div><div class="dots" id="ssDots"></div><div class="cap" id="ssCap"></div></div>
   </div>
   <div id="hud">
     <div class="row">
@@ -6538,10 +6546,14 @@ async function examinerCall(text, url, spoken, hold = 300) {      // like examin
   await sleep(hold);
 }
 // The picture of a step-sparring move, top right. No picture yet = an "Image pending" card.
-function showPic(url, top, cap, counter) {          // title along the top, the number underneath; the strip turns red for the counter
-  const img = $("ssImg"), pend = $("ssPend");
+function showPic(url, top, cap, counter, step, total) {   // step 0 = ready (left); each move slides the picture one place along; counter = red strip
+  const img = $("ssImg"), pend = $("ssPend"), trk = $("ssTrk");
   $("ssTop").textContent = top || ""; $("ssCap").textContent = cap || "";
   $("ssPic").classList.toggle("ctr", !!counter);
+  step = step || 0; total = total || 3;
+  $("ssDots").innerHTML = Array.from({ length: total + 1 }, (_, i) => `<span class="${i === step ? "on" : i < step ? "done" : ""}">${i ? i : "Ready"}</span>`).join("");
+  trk.classList.toggle("jump", !step);                // back to the start without sliding
+  const left = `calc((100% - 150px) * ${step / total})`; img.style.left = left; pend.style.left = left;
   if (url) { img.onerror = () => { img.classList.add("hidden"); pend.classList.remove("hidden"); }; img.classList.remove("hidden"); pend.classList.add("hidden"); if (img.getAttribute("src") !== url) img.src = url; }
   else { img.classList.add("hidden"); pend.classList.remove("hidden"); }
   $("ssPic").classList.remove("hidden");
@@ -6682,18 +6694,18 @@ async function stepSet(run, it, backAttacks) {
   const moveAll = s => Promise.all(pairs.map(({ f, b }) => { const hf = pairHome(f, true), hb = pairHome(b, true);
     return Promise.all([moveTo(f, hf.x, hf.y + dir * 5 * s, 26, { face: false }), moveTo(b, hb.x, hb.y + dir * 5 * s, 26, { face: false })]); }));
   // ready: 3-step starts from a low block, 2-step from a guarding block, 1-step from ready stance
-  showPic(it.start, top, num);
+  showPic(it.start, top, num, false, 0, it.type);
   each((att, def) => { setPose(att, it.type === 3 ? lineWorkPose("lowblock", 2) : it.type === 2 ? lineWorkPose("knife", 1) : REST); setPose(def, REST); });
   await sleep(1300); guard(run);
   for (let s = 1; s <= it.type; s++) {
-    showPic(it.moves[s - 1], top, num);
+    showPic(it.moves[s - 1], top, num, false, s, it.type);
     each((att, def) => { setPose(att, lineWorkPose(it.type === 2 && s === 2 ? "kick" : "punch", s)); setPose(def, lineWorkPose("inblock", s + 1)); });
     await moveAll(s); guard(run);
     await sleep(1000); guard(run);
   }
   const n = Math.max(1, it.counters.length);
   for (let k = 0; k < n; k++) {
-    showPic(it.counters[k] || "", top, (num ? num + " · " : "") + "Counter", true);
+    showPic(it.counters[k] || "", top, (num ? num + " · " : "") + "Counter", true, it.type, it.type);
     each((att, def) => setPose(def, lineWorkPose(k % 2 ? "kick" : "punch", k + 1)));
     await sleep(1500); guard(run);                       // each counter picture stays up for a moment
   }
@@ -16894,8 +16906,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.99';
+const APP_VERSION='3.100';
 const VERSION_NOTES=[
+['3.100','Grading Simulator (still hidden): the step sparring picture now slides along a strip, one step for each move, to show the pair travelling.'],
 ['3.99','Grading Simulator (still hidden): the examiner now calls all the line work in the Benjamin voice.'],
 ['3.98','Grading Simulator (still hidden): the examiner no longer says "random line work"; the moves are just called.'],
 ['3.97','Grading Simulator (still hidden): shorter pause between each count and the move in line work.'],
