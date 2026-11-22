@@ -6,202 +6,157 @@
     "text": "Ten press ups.",
     "ids": [
      "LW_10th-Kup_01"
-    ]
+    ],
+    "file": "lw-10th-kup-01.mp3"
    },
    {
     "text": "Sitting stance single punches.",
     "ids": [
      "LW_10th-Kup_02"
-    ]
+    ],
+    "file": "lw-10th-kup-02.mp3"
    },
    {
     "text": "Front rising kicks.",
     "ids": [
      "LW_10th-Kup_03"
-    ]
+    ],
+    "file": "lw-10th-kup-03.mp3"
    },
    {
     "text": "Going forwards, walking stance middle section punch.",
     "ids": [
      "LW_10th-Kup_04"
-    ]
+    ],
+    "file": "lw-10th-kup-04.mp3"
    },
    {
     "text": "Going backwards, walking stance middle section punch.",
     "ids": [
      "LW_10th-Kup_05"
-    ]
+    ],
+    "file": "lw-10th-kup-05.mp3"
    },
    {
     "text": "Going forwards, walking stance middle block.",
     "ids": [
      "LW_10th-Kup_06"
-    ]
+    ],
+    "file": "lw-10th-kup-06.mp3"
    },
    {
     "text": "Going backwards, walking stance low block.",
     "ids": [
      "LW_10th-Kup_07"
-    ]
+    ],
+    "file": "lw-10th-kup-07.mp3"
    },
    {
     "text": "Going forwards, walking stance middle block, reverse punch.",
     "ids": [
      "LW_10th-Kup_08"
-    ]
+    ],
+    "file": "lw-10th-kup-08.mp3"
    },
    {
     "text": "Going backwards, walking stance low block, reverse punch.",
     "ids": [
      "LW_10th-Kup_09"
-    ]
+    ],
+    "file": "lw-10th-kup-09.mp3"
    },
    {
     "text": "Sitting stance double punch.",
     "ids": [
      "LW_9th-Kup_01"
-    ]
+    ],
+    "file": "lw-9th-kup-01.mp3"
    },
    {
     "text": "Going forwards, front kick, low block.",
     "ids": [
      "LW_9th-Kup_02"
-    ]
+    ],
+    "file": "lw-9th-kup-02.mp3"
    },
    {
     "text": "Going backwards, middle block L-stance.",
     "ids": [
      "LW_9th-Kup_03"
-    ]
+    ],
+    "file": "lw-9th-kup-03.mp3"
    },
    {
     "text": "Going forwards, double punch, obverse reverse.",
     "ids": [
      "LW_9th-Kup_04"
-    ]
+    ],
+    "file": "lw-9th-kup-04.mp3"
    },
    {
     "text": "Going backwards, low block, rising block combo, obverse arm.",
     "ids": [
      "LW_9th-Kup_05"
-    ]
+    ],
+    "file": "lw-9th-kup-05.mp3"
    },
    {
     "text": "Going forwards, knife hand side strike L-stance.",
     "ids": [
      "LW_9th-Kup_06"
-    ]
+    ],
+    "file": "lw-9th-kup-06.mp3"
    },
    {
     "text": "Going backwards, knife hand side strike L-stance.",
     "ids": [
      "LW_9th-Kup_07"
-    ]
+    ],
+    "file": "lw-9th-kup-07.mp3"
    },
    {
     "text": "Going forwards, front kick, double punch.",
     "ids": [
      "LW_8th-Kup_01"
-    ]
+    ],
+    "file": "lw-8th-kup-01.mp3"
    },
    {
     "text": "Going backwards, inwards middle block L-stance.",
     "ids": [
      "LW_8th-Kup_02"
-    ]
+    ],
+    "file": "lw-8th-kup-02.mp3"
    },
    {
     "text": "Going forwards, turning kick, forearm guarding block.",
     "ids": [
      "LW_8th-Kup_03",
      "LW_7th-Kup_01"
-    ]
+    ],
+    "file": "lw-8th-kup-03.mp3"
    },
    {
     "text": "Going backwards, twin forearm block.",
     "ids": [
      "LW_8th-Kup_04"
-    ]
+    ],
+    "file": "lw-8th-kup-04.mp3"
    },
    {
     "text": "Going forwards, forearm guarding block.",
     "ids": [
      "LW_8th-Kup_05"
-    ]
+    ],
+    "file": "lw-8th-kup-05.mp3"
    },
    {
     "text": "Going backwards, knife hand guarding block.",
     "ids": [
      "LW_8th-Kup_06",
      "LW_7th-Kup_06"
-    ]
-   },
-   {
-    "text": "Going backwards, side backfist strike walking stance.",
-    "ids": [
-     "LW_7th-Kup_02"
-    ]
-   },
-   {
-    "text": "Going forwards, side kick, knife hand guarding block.",
-    "ids": [
-     "LW_7th-Kup_03"
-    ]
-   },
-   {
-    "text": "Going backwards, wedging block.",
-    "ids": [
-     "LW_7th-Kup_04"
-    ]
-   },
-   {
-    "text": "Going forwards, straight fingertip thrust.",
-    "ids": [
-     "LW_7th-Kup_05"
-    ]
-   },
-   {
-    "text": "Going forwards, side kick, turning kick.",
-    "ids": [
-     "LW_6th-Kup_01"
-    ]
-   },
-   {
-    "text": "Going backwards, first 2 moves of Do San.",
-    "ids": [
-     "LW_6th-Kup_02"
-    ]
-   },
-   {
-    "text": "Going forwards, side kick, back kick.",
-    "ids": [
-     "LW_6th-Kup_03",
-     "LW_5th-Kup_01"
-    ]
-   },
-   {
-    "text": "Going backwards, circular block.",
-    "ids": [
-     "LW_6th-Kup_04"
-    ]
-   },
-   {
-    "text": "Going forwards, turning kick, back kick.",
-    "ids": [
-     "LW_6th-Kup_05"
-    ]
-   },
-   {
-    "text": "Going backwards, first 3 moves of Won Hyo.",
-    "ids": [
-     "LW_6th-Kup_06"
-    ]
-   },
-   {
-    "text": "Going backwards, double forearm block walking stance.",
-    "ids": [
-     "LW_5th-Kup_02"
-    ]
+    ],
+    "file": "lw-8th-kup-06.mp3"
    }
   ]
  },
@@ -213,31 +168,119 @@
     "ids": [
      "LW_5th-Kup_03",
      "LW_5th-Kup_05"
-    ]
+    ],
+    "file": "lw-5th-kup-03.mp3"
    },
    {
     "text": "Going backwards, obverse and reverse hook block, obverse punch.",
     "ids": [
      "LW_5th-Kup_04"
-    ]
+    ],
+    "file": "lw-5th-kup-04.mp3"
    },
    {
     "text": "Going backwards, X pressing block, twin vertical punch.",
     "ids": [
      "LW_5th-Kup_06"
-    ]
+    ],
+    "file": "lw-5th-kup-06.mp3"
    },
    {
     "text": "Jump front kicks.",
     "ids": [
      "LW_2nd-Kup_02"
-    ]
+    ],
+    "file": "lw-2nd-kup-02.mp3"
    },
    {
     "text": "Jump side kicks.",
     "ids": [
      "LW_2nd-Kup_03"
-    ]
+    ],
+    "file": "lw-2nd-kup-03.mp3"
+   }
+  ]
+ },
+ {
+  "chunk": 12,
+  "clips": [
+   {
+    "text": "Going backwards, side backfist strike walking stance.",
+    "ids": [
+     "LW_7th-Kup_02"
+    ],
+    "file": "lw-7th-kup-02.mp3"
+   },
+   {
+    "text": "Going forwards, side kick, knife hand guarding block.",
+    "ids": [
+     "LW_7th-Kup_03"
+    ],
+    "file": "lw-7th-kup-03.mp3"
+   },
+   {
+    "text": "Going backwards, wedging block.",
+    "ids": [
+     "LW_7th-Kup_04"
+    ],
+    "file": "lw-7th-kup-04.mp3"
+   },
+   {
+    "text": "Going forwards, straight fingertip thrust.",
+    "ids": [
+     "LW_7th-Kup_05"
+    ],
+    "file": "lw-7th-kup-05.mp3"
+   },
+   {
+    "text": "Going forwards, side kick, turning kick.",
+    "ids": [
+     "LW_6th-Kup_01"
+    ],
+    "file": "lw-6th-kup-01.mp3"
+   },
+   {
+    "text": "Going backwards, first 2 moves of Do San.",
+    "ids": [
+     "LW_6th-Kup_02"
+    ],
+    "file": "lw-6th-kup-02.mp3"
+   },
+   {
+    "text": "Going forwards, side kick, back kick.",
+    "ids": [
+     "LW_6th-Kup_03",
+     "LW_5th-Kup_01"
+    ],
+    "file": "lw-6th-kup-03.mp3"
+   },
+   {
+    "text": "Going backwards, circular block.",
+    "ids": [
+     "LW_6th-Kup_04"
+    ],
+    "file": "lw-6th-kup-04.mp3"
+   },
+   {
+    "text": "Going forwards, turning kick, back kick.",
+    "ids": [
+     "LW_6th-Kup_05"
+    ],
+    "file": "lw-6th-kup-05.mp3"
+   },
+   {
+    "text": "Going backwards, first 3 moves of Won Hyo.",
+    "ids": [
+     "LW_6th-Kup_06"
+    ],
+    "file": "lw-6th-kup-06.mp3"
+   },
+   {
+    "text": "Going backwards, double forearm block walking stance.",
+    "ids": [
+     "LW_5th-Kup_02"
+    ],
+    "file": "lw-5th-kup-02.mp3"
    }
   ]
  }
