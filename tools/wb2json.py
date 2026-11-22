@@ -93,7 +93,64 @@ if 'Body parts' in wb.sheetnames:
         if not d.get('Chart'):probs.append(f'{w}: Chart is empty')
         out['body'].append({'id':d.get('ID',''),'g':g,'chart':d.get('Chart',''),'sec':d.get('Section',''),'en':d.get('English',''),'kr':d.get('Korean',''),
             'say':d.get('Pronounced',''),'mp3':d.get('MP3',''),'ast':ast(d),'note':d.get('Note','')})
+# Grading Simulator tabs (optional): Line Work, Step Sparring, Grading Order, Grading by Grade
+import re as _re
+def num(v,w,what,blank=None):
+    if v in ('',None):return blank
+    try:return int(float(v))
+    except Exception:probs.append(f'{w}: {what} must be a number (is "{v}")');return blank
+ANIMS={'press-ups','punch','kick','jump kick','block','low block','rising block','knife hand','guard','strike','twin','random'}
+out['linework']=[]
+if 'Line Work' in wb.sheetnames:
+    for d in rows('Line Work'):
+        w=f"Line Work {d.get('ID')}";chk_id(d.get('ID'),w)
+        if d.get('Grade') not in GR:probs.append(f'{w}: unknown grade "{d.get("Grade")}"')
+        if d.get('Direction','') not in ('','Stationary','Forwards','Backwards'):probs.append(f'{w}: Direction must be Stationary, Forwards or Backwards')
+        if not d.get('Line work'):probs.append(f'{w}: Line work is empty')
+        an=[x.strip().lower() for x in d.get('Animation','').split(',') if x.strip()]
+        for x in an:
+            if x not in ANIMS:probs.append(f'{w}: Animation "{x}" is not one of {sorted(ANIMS)}')
+        out['linework'].append({'id':d.get('ID',''),'g':d.get('Grade',''),'no':num(d.get('No.'),w,'No.',0),'dir':d.get('Direction',''),'text':d.get('Line work',''),
+            'stance':d.get('Stance',''),'qty':num(d.get('Quantity'),w,'Quantity',4),'steps':num(d.get('Steps'),w,'Steps',1),'anim':an,
+            'tts':d.get('Text to speech',''),'mp3':d.get('MP3',''),'note':d.get('Notes','')})
+out['stepspar']=[]
+if 'Step Sparring' in wb.sheetnames:
+    for d in rows('Step Sparring'):
+        w=f"Step Sparring {d.get('ID')}";chk_id(d.get('ID'),w)
+        t=num(d.get('Type'),w,'Type')
+        if t not in (1,2,3):probs.append(f'{w}: Type must be 1, 2 or 3')
+        out['stepspar'].append({'id':d.get('ID',''),'type':t,'no':num(d.get('No.'),w,'No.',0),'start':d.get('Start image',''),
+            'moves':[d.get(f'Image {i}','') for i in (1,2,3)][:t or 3],'counters':[x for x in (d.get(f'Counter {i}','') for i in (1,2,3)) if x],'note':d.get('Notes','')})
+STAGES=['Line-up','Name and grade','Line work','Patterns','Step sparring','Free sparring','Questions']
+out['gorder']=[]
+if 'Grading Order' in wb.sheetnames:
+    for d in sorted(rows('Grading Order'),key=lambda d:float(d.get('Order') or 99)):
+        if d.get('Stage') not in STAGES:probs.append(f'Grading Order: unknown stage "{d.get("Stage")}" (stages are {STAGES})')
+        else:out['gorder'].append(d['Stage'])
+    for s in STAGES:
+        if s not in out['gorder']:probs.append(f'Grading Order: stage "{s}" is missing')
+out['gplan']=[]
+if 'Grading by Grade' in wb.sheetnames:
+    for d in rows('Grading by Grade'):
+        w=f"Grading by Grade {d.get('Grade')} / {d.get('Stage')}"
+        if d.get('Grade') not in GR:probs.append(f'{w}: unknown grade')
+        if d.get('Stage') not in STAGES:probs.append(f'{w}: unknown stage');continue
+        if d.get('Done?','') not in ('Yes','No'):probs.append(f'{w}: Done? must be Yes or No')
+        e={'g':d.get('Grade',''),'stage':d['Stage'],'done':d.get('Done?')!='No','detail':d.get('Detail','')}
+        det=e['detail']
+        if d['Stage']=='Step sparring' and e['done']:
+            sets=[]
+            for part in det.split(';'):
+                m=_re.match(r'^\s*([123])-step(?:\s+(\d+)-(\d+))?(?:\s*\(top marks (\d+)-(\d+)\))?\s*$',part)
+                if not m:probs.append(f'{w}: cannot read "{part.strip()}" (write e.g. "3-step 1-4" or "2-step 1-2 (top marks 1-4); 1-step")');continue
+                sets.append({'type':int(m.group(1)),'from':int(m.group(2) or 0),'to':int(m.group(3) or 0),'top':int(m.group(5) or 0)})
+            e['sets']=sets
+        if d['Stage']=='Questions' and e['done']:
+            m=_re.match(r'^\s*(\d+) questions?,\s*(side|top) table\s*$',det)
+            if not m:probs.append(f'{w}: cannot read "{det}" (write e.g. "2 questions, side table")')
+            else:e['n']=int(m.group(1));e['where']=m.group(2)
+        out['gplan'].append(e)
 json.dump(out,open(sys.argv[2],'w'),ensure_ascii=False)
-print(len(out.get('questions',[])),'questions,',len(out['body']),'body parts,',len(out['terms']),'terms,',len(out['patterns']),'patterns,',len(out['belts']),'belts,',sum(1 for p in out['patterns'] if p['video']),'videos')
+print(len(out['linework']),'line work,',len(out['stepspar']),'step sparring,',len(out['gplan']),'grading plan rows,',len(out.get('questions',[])),'questions,',len(out['body']),'body parts,',len(out['terms']),'terms,',len(out['patterns']),'patterns,',len(out['belts']),'belts,',sum(1 for p in out['patterns'] if p['video']),'videos')
 print('PROBLEMS:' if probs else 'No problems found.');[print(' -',p) for p in probs]
 print('No video:',[p['name'] for p in out['patterns'] if not p['video']])
