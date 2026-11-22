@@ -6701,7 +6701,7 @@ async function stepSet(run, it) {
     await sleep(1300); guard(run);
     for (let s = 1; s <= it.type; s++) { ssShow(t.moves[s - 1], at(s / it.type)); await sleep(1450); guard(run); }
     const n = Math.max(1, t.counters.length);
-    for (let c = 0; c < n; c++) { ssShow(t.counters[c] || null, at(1)); await sleep(1500); guard(run); }   // each counter picture stays up for a moment
+    for (let c = 0; c < n; c++) { ssShow(t.counters[c] || null, at(1)); await sleep(c < n - 1 ? 750 : 1500); guard(run); }   // 3.106: counters follow each other at twice the speed (a kick then a double punch is one quick combination); the last one stays up
     if (it.ready) { ssShow(it.ready, at(1), true); await sleep(1100); guard(run); }                       // 3.105: and back to ready stance at the end
     await sleep(250); guard(run);
   }
@@ -17702,8 +17702,9 @@ function hmEnd(won){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION='3.105';
+const APP_VERSION='3.106';
 const VERSION_NOTES=[
+['3.106','Grading Simulator (still hidden): when a step sparring number has two or three counter moves, they now follow each other twice as fast.'],
 ['3.105','Grading Simulator (still hidden): new step sparring pictures for all ten 3-step numbers, there and back, with one brown-haired and one black-haired partner. Each number starts and ends with both in ready stance.'],
 ['3.104','Grading Simulator (still hidden): the step sparring pair are 20% bigger, and the main examiner no longer smiles.'],
 ['3.103','Grading Simulator (still hidden): 3-step sparring numbers 1 and 2 now also show the way back, with the other partner attacking.'],
